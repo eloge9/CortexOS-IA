@@ -16,6 +16,7 @@ Quand une décision est prise : la déplacer de « Questions ouvertes » vers «
 | D-41 | Structure de `docs/` numérotée ; un fichier n'est créé que lorsque le travail produit son contenu | 24/09/2026 |
 | D-42 | Graphie officielle : « CortexOS IA » (celle du logo) | 24/09/2026 |
 | D-43 | Charte graphique : variables CSS + Tailwind v4 ; thème sombre par défaut + thème clair ; polices Exo 2 (titres) + Inter (texte) ; ambiance pro et sobre | 24/09/2026 |
+| D-45 | Synchronisation docs / Git / Drive : mises à jour de `docs/` automatiques pour les petits changements ; mot-clé « début de séance » = vérifier les fichiers Drive modifiés et les commentaires depuis la dernière synchronisation ; **avant toute modification ou resynchronisation d'un fichier Drive, vérifier s'il a été modifié (par Eloge ou l'encadreur)** et ne jamais écraser ces modifications : les montrer, puis les reporter dans `docs/` après accord ; mot-clé « fin de séance » = récapitulatif, commit proposé, resynchronisation Drive, mise à jour du classeur de suivi ; l'encadreur commente plutôt que de modifier (sauf le classeur de suivi, qui n'existe que sur Drive) | 24/09/2026 |
 
 ## 2. Questions ouvertes
 

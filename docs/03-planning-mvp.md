@@ -6,7 +6,7 @@
 | **Projet** | CortexOS IA |
 | **Documents de référence** | Cahier des charges v2.0 · Spécification fonctionnelle v1.0 · Développement sur PC seul v1.0 |
 | **Remplace** | Planning MVP v2.0 et « Planning complet MVP CortexOS AI — 1 an jusqu'à la soutenance » |
-| **Suivi** | Classeur « Suivi_CortexOS_IA.xlsx » : une ligne par tâche de ce planning |
+| **Suivi** | Classeur Google Sheets « Tableau de suivi — CortexOS IA » (Drive, dossier « 03 - Planning et suivi ») : une ligne par tâche de ce planning |
 | **Période** | 28 septembre 2026 → soutenance vers juillet-août 2027 `[À DÉFINIR — D-14]` |
 | **Auteur** | GOMINA Eloge |
 | **Version du document** | 3.0 — 23 septembre 2026 |
@@ -311,7 +311,7 @@ Tous les diagrammes sont mis à jour en S33–S35 pour correspondre au code rée
 
 ## 8. Suivi de l'avancement
 
-Le classeur **Suivi_CortexOS_IA.xlsx** contient :
+Le classeur **Tableau de suivi — CortexOS IA** (Google Sheets, dossier Drive « 03 - Planning et suivi ») contient :
 
 - **Suivi** : une ligne par tâche de ce planning (187 tâches), avec la tranche, la référence, la fonctionnalité, la tâche, la semaine, la date prévue, la **date réalisée**, le **statut** (À faire, En cours, Terminé, Bloqué), le mode et des **notes** ;
 - **Avancement** : le pourcentage de tâches terminées par tranche, calculé automatiquement ;

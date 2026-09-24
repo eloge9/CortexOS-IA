@@ -50,3 +50,10 @@ Documents de référence (à lire avant toute modification importante) :
 - `docs/` est la référence. Google Drive n'est qu'une copie de lecture.
 - Diagrammes : en **Mermaid** dans `docs/diagrammes/`. draw.io seulement à la fin pour le rapport.
 - Nouveau document : seulement quand le travail produit son contenu (voir « À venir » dans `docs/00-index.md`), puis l'ajouter à l'index.
+
+## Synchronisation Git / Drive (D-45)
+
+- **« début de séance »** : liste les fichiers Drive (dossier « CortexOS IA ») modifiés depuis la dernière synchronisation et les nouveaux commentaires ; résume-les à Eloge.
+- **Avant de modifier ou de resynchroniser un fichier Drive**, vérifie s'il a été modifié depuis la dernière synchronisation (par Eloge ou l'encadreur). Si oui : ne l'écrase jamais, montre les changements, reporte-les dans `docs/` après accord d'Eloge.
+- **« fin de séance »** : récapitulatif, message de commit proposé (Eloge lance `git`), resynchronisation sur Drive des docs modifiées, mise à jour du classeur « Tableau de suivi — CortexOS IA » (dossier « 03 - Planning et suivi », seule source du suivi, n'existe que sur Drive).
+- L'encadreur commente les documents plutôt que de les modifier (sauf le classeur de suivi).
