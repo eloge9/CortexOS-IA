@@ -5,7 +5,7 @@ Nommage : `diag-01-contexte.md`, `diag-02-cas-utilisation.md`, etc.
 
 | Réf. | Diagramme | Semaine | Mode | Statut |
 |---|---|---|---|---|
-| DIAG-1 | Contexte | S1 | B | À faire |
+| DIAG-1 | [Contexte](diag-01-contexte.md) | S1 | B | À relire par Eloge |
 | DIAG-2 | Cas d'utilisation (3 diagrammes) | S1 | A | À faire |
 | DIAG-3 | Classes de domaine | S2 | A | À faire |
 | DIAG-4 | Composants | S2 | B | À faire |
