@@ -42,7 +42,7 @@ flowchart LR
         U["👤 Utilisateur"]
         A["👤 Accompagnant / opérateur"]
         X["👤 Expérimentateur"]
-        AD["👤 Administrateur<br/>[D-09]"]
+        AD["👤 Administrateur"]
     end
     subgraph NH["Acteurs non humains"]
         direction TB
@@ -299,11 +299,11 @@ flowchart LR
     classDef interne stroke-dasharray: 4 3,fill:#f2f2f2
 ```
 
-### 1.5 Administrateur `[À DÉFINIR — D-09]`
+### 1.5 Administrateur
 
 ```mermaid
 flowchart LR
-    AD["👤 Administrateur<br/>[D-09]"]
+    AD["👤 Administrateur"]
     subgraph SYS["CortexOS IA"]
         UC01(["UC-01 S'authentifier"])
         UC02(["UC-02 Gérer les comptes<br/>et les rôles"])
@@ -314,7 +314,7 @@ flowchart LR
     UC02 -. "«include»" .-> UC01
 ```
 
-L'existence du rôle Administrateur dépend de **D-09** (authentification et rôles, à décider avant S2). Si D-09 retient un seul rôle, ce diagramme disparaît et UC-02 est retiré.
+Le rôle Administrateur est retenu (**D-47**). Le mécanisme d'authentification (UC-01) reste à définir (**D-09**).
 
 ---
 
@@ -328,7 +328,7 @@ L'existence du rôle Administrateur dépend de **D-09** (authentification et rô
 | **Utilisateur** | Humain | Porte le casque, calibre, commande par ses intentions, gère son consentement et ses données |
 | **Accompagnant / opérateur** | Humain | Suit la session, suspend, confirme, arrête · droits `[À DÉFINIR — D-09, D-19, D-24]` |
 | **Expérimentateur** | Humain | Prépare et conduit les sessions, analyse les mesures, règle les paramètres |
-| **Administrateur** | Humain | Gère les comptes et les rôles · existence du rôle `[À DÉFINIR — D-09]` |
+| **Administrateur** | Humain | Gère les comptes et les rôles (D-47) |
 | **Casque EEG** | Non humain | Fournit le signal réel |
 | **Jeu de données EEG public** | Non humain | Fournit des enregistrements rejoués comme source de signal |
 | **Système cible** | Non humain, abstrait | Reçoit les commandes et renvoie un résultat · spécialisations : Ordinateur (via l'agent local), Objet connecté `[D-05]`, Robot / drone simulé (extension, D-11) |
@@ -449,8 +449,8 @@ Colonnes : **Include** = cas toujours exécuté à l'intérieur · **Étendu par
 | **Détecter une intention** est un cas **interne** (UC-42) | Ce n'est pas un objectif d'acteur : c'est une étape obligatoire de « Commander par intention » |
 | **UC-47 Journaliser** noté 📝 au lieu d'une flèche | Il est inclus par 11 cas : les flèches rendraient les diagrammes illisibles |
 | **Utilisateur participant** dans le diagramme Expérimentateur | Il participe aux sessions sans les déclencher : acteur humain secondaire, donc à gauche |
-| L'**Administrateur** est dessiné mais marqué `[D-09]` | Le catalogue le prévoit ; son existence dépend de la décision sur les rôles |
+| L'**Administrateur** est un acteur à part entière | Rôle retenu par D-47 |
 
 ## 4. Points ouverts
 
-D-05 (objet connecté) · D-09 (authentification, rôles, Administrateur) · D-19 (qui déclenche l'arrêt) · D-20 (correspondance modifiable) · D-23 (qui modifie le seuil) · D-24 (qui confirme) · D-25 (pilotage de l'interface) · D-27 (test manuel) · D-29 (reprise après incident) · D-31, D-33, D-34, D-35, D-37, D-38.
+D-05 (objet connecté) · D-09 (authentification, droits par rôle) · D-19 (qui déclenche l'arrêt) · D-20 (correspondance modifiable) · D-23 (qui modifie le seuil) · D-24 (qui confirme) · D-25 (pilotage de l'interface) · D-27 (test manuel) · D-29 (reprise après incident) · D-31, D-33, D-34, D-35, D-37, D-38.

@@ -242,6 +242,7 @@ Les familles, accompagnants et professionnels de la réadaptation constituent un
 | Utilisateur | Porte le casque, réalise la calibration et déclenche des commandes par ses intentions |
 | Accompagnant / opérateur | Suit la session via la supervision et peut interrompre le système `[À DÉFINIR — D-09, D-19]` |
 | Expérimentateur | Prépare et conduit les sessions, analyse les mesures |
+| Administrateur | Gère les comptes et les rôles (D-47) |
 | Casque EEG | Fournit le signal |
 | Système cible | Reçoit et exécute les commandes |
 

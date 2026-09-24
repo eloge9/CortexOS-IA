@@ -42,7 +42,7 @@ flowchart LR
     U["👤 Utilisateur"]
     A["👤 Accompagnant /<br/>opérateur"]
     X["👤 Expérimentateur"]
-    AD["👤 Administrateur<br/>[D-09]"]
+    AD["👤 Administrateur"]
     P["👤 Utilisateur participant"]
     subgraph SYS["CortexOS IA"]
         UC01(["UC-01 S'authentifier [D-09]"])

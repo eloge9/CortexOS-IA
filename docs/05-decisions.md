@@ -18,6 +18,13 @@ Quand une décision est prise : la déplacer de « Questions ouvertes » vers «
 | D-43 | Charte graphique : variables CSS + Tailwind v4 ; thème sombre par défaut + thème clair ; polices Exo 2 (titres) + Inter (texte) ; ambiance pro et sobre | 24/09/2026 |
 | D-45 | Synchronisation docs / Git / Drive : pendant la séance, seuls les fichiers de `docs/` sont mis à jour (économie de tokens) ; mot-clé « ds » (début de séance) = vérifier les fichiers Drive modifiés et les commentaires ; mot-clé « fs » (fin de séance) = vérifier que les copies Drive n'ont pas été modifiées par Eloge ou l'encadreur (ne jamais écraser : montrer, puis reporter dans `docs/` après accord), republier sur Drive les docs modifiés (ancienne version dans « 99 - Archives »), mettre à jour le classeur de suivi, récapitulatif et commit proposé ; l'encadreur commente plutôt que de modifier (sauf le classeur de suivi, qui n'existe que sur Drive) | 24/09/2026 |
 | D-46 | Tous les diagrammes (DIAG-1 à DIAG-14) passent en mode B : Claude les écrit ; Eloge les relit, doit pouvoir les expliquer en soutenance et répond à une question de compréhension après chacun | 25/09/2026 |
+| D-47 | Rôles retenus : Utilisateur, Accompagnant / opérateur, Expérimentateur, **Administrateur** (gère les comptes et les rôles) ; une même personne peut cumuler plusieurs rôles. Restent ouverts dans D-09 : mécanisme d'authentification, droits détaillés par rôle, stockage, conservation, partage | 25/09/2026 |
+| D-48 | Diagrammes de cas d'utilisation : acteurs humains à gauche, acteurs non humains à droite ; deux fichiers — un diagramme par acteur principal (`diag-02a`) et une vue d'ensemble dans un seul cadre avec toutes les généralisations (`diag-02b`) | 25/09/2026 |
+| D-49 | Le catalogue des cas d'utilisation (UC-01 à UC-47) et l'analyse des classes du domaine fournis par Eloge sont les références de DIAG-2 et DIAG-3 ; leurs propositions ont été validées par D-50 à D-53 ; les classes « à confirmer » dépendent des décisions ouvertes indiquées | 25/09/2026 |
+| D-50 | Session : simple attribut `type` (utilisation / expérimentation), pas de sous-classes | 25/09/2026 |
+| D-51 | Une seule classe **Essai**, liée soit à une calibration, soit à une session (`{xor}`) | 25/09/2026 |
+| D-52 | Pas de classe **Incident** dans le MVP : Alerte + événements du journal suffisent | 25/09/2026 |
+| D-53 | Un **profil peut exister sans compte** (participant créé par l'expérimentateur) : Personne `0..1` — `0..1` Profil | 25/09/2026 |
 
 ## 2. Questions ouvertes
 
@@ -30,7 +37,7 @@ Quand une décision est prise : la déplacer de « Questions ouvertes » vers «
 | D-06 | Quel système d'exploitation cible ? | — | S16 |
 | D-07 | Quel langage pour le Core dans le MVP ? | Python, ou C++ dès le départ | S2 |
 | D-08 | Quel sort pour les technologies non confirmées : Django, Flutter, Redis, gRPC, Docker ? L'ouverture du code (open source) est-elle décidée ? | — | — |
-| D-09 | Où stocker les données (local ou distant), quelle authentification et quels rôles, quelle durée de conservation, quel partage des données EEG ? | — | S2 ; détail en S22 |
+| D-09 | Où stocker les données (local ou distant), quelle authentification, quels droits détaillés par rôle (les rôles sont fixés par D-47), quelle durée de conservation, quel partage des données EEG ? | — | S2 ; détail en S22 |
 | D-10 | Quels seuils de réussite et quelles cibles de performance (précision, latence, commandes involontaires) ? | — | Bloc casque (C3) |
 | D-11 | Robot et drone : extension en simulation, ou recherche et futur ? | — | — |
 | D-12 | Quels participants pour le MVP, et comment identifier les besoins des personnes ayant des limitations motrices ? | Option évoquée : volontaires sans limitation motrice d'abord, public cible ensuite | S31 |

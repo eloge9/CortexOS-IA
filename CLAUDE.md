@@ -41,6 +41,7 @@ Documents de référence (à lire avant toute modification importante) :
 6. **Git** : commits petits et clairs, en français, format `type(portée): description` (ex. `feat(core): ajoute la machine à états`). Ne pousse (`git push`) qu'après accord d'Eloge.
 7. Pose parfois une question courte pour vérifier qu'Eloge a compris.
 8. Priorités : compréhension > fonctionnement correct > qualité > architecture > sécurité > maintenabilité > performance > vitesse.
+9. **Consignes et validations d'Eloge** : dès qu'Eloge donne une consigne, valide un livrable ou tranche un point (même en passant, dans une demande), le reporter aussitôt dans `docs/` : registre `05-decisions.md`, retrait des `[À DÉFINIR]` concernés, documents touchés (cahier des charges, spécification, planning, diagrammes). Le signaler en fin de réponse. En cas de doute (« est-ce une décision ou une demande ponctuelle ? »), lui demander : « Je note ça comme décision ? ». Les propositions de Claude restent « proposé » tant qu'Eloge ne les a pas validées.
 
 ## Mise à jour des documents (règle 15)
 

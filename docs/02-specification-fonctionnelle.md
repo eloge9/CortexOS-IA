@@ -103,8 +103,9 @@ Ces principes s'appliquent à toutes les fonctions et à tous les écrans.
 | Utilisateur | Porte le casque, réalise la calibration, déclenche des commandes par ses intentions, gère son consentement et ses données | `[À DÉFINIR — D-09]` |
 | Accompagnant / opérateur | Suit la session, peut suspendre les commandes et, selon décision, confirmer ou arrêter | `[À DÉFINIR — D-09, D-19, D-24]` |
 | Expérimentateur | Prépare et conduit les sessions d'expérimentation, consulte les mesures, exporte les résultats | `[À DÉFINIR — D-09]` |
+| Administrateur | Gère les comptes et les rôles (D-47) | `[À DÉFINIR — D-09]` (authentification) |
 
-Une même personne peut tenir plusieurs rôles, notamment pendant le développement.
+Une même personne peut tenir plusieurs rôles, notamment pendant le développement (D-47).
 
 ### 3.2 Parcours A — Préparer une première utilisation
 
