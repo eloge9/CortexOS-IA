@@ -4,7 +4,7 @@
 |---|---|
 | **Réf.** | DIAG-1 (Planning MVP, S1, mode B) |
 | **Sources** | Cahier des charges 1.6, 4.1, 5.2 · Spécification fonctionnelle 3.1, 4.2, 4.6 · Développement sur PC seul, section 2 |
-| **Version** | 1.0 — 24 septembre 2026 |
+| **Version** | 1.1 — 25 septembre 2026 (intention captée par le casque, activation des commandes par l'utilisateur, verbes du point de vue de l'acteur) |
 
 ## Rôle du diagramme
 
@@ -41,28 +41,29 @@ flowchart LR
         R["🤖 Robot / drone<br/><i>simulés · Ext. ou Futur · D-11</i>"]
     end
 
-    %% ---------- Échanges (verbes du point de vue de CortexOS) ----------
-    U <-- "<b>reçoit :</b> intentions (via le casque), consentement, calibration<br/><b>renvoie :</b> état, détection, confiance, décision, résultat" --> C
-    A <-- "<b>reçoit :</b> suspendre / reprendre, confirmer (D-24), arrêt (D-19)<br/><b>renvoie :</b> supervision en direct, alertes" --> C
-    X <-- "<b>reçoit :</b> sessions, protocole, intention attendue<br/><b>renvoie :</b> mesures, journal, exports" --> C
+    %% ---------- Échanges (verbes du point de vue de l'acteur ou du système externe) ----------
+    U -- "porte le casque,<br/>produit une intention" --> E
+    U <-- "<b>donne :</b> consentement, calibration, activer / suspendre les commandes<br/><b>reçoit :</b> état, détection, confiance, décision, résultat" --> C
+    A <-- "<b>donne :</b> suspendre / reprendre, confirmer (D-24), arrêt (D-19)<br/><b>reçoit :</b> supervision en direct, alertes" --> C
+    X <-- "<b>donne :</b> sessions, protocole, intention attendue<br/><b>reçoit :</b> mesures, journal, exports" --> C
 
-    E -- "signal EEG, qualité" --> C
-    B -- "signal simulé" --> C
-    P -- "enregistrements étiquetés" --> C
+    E -- "<b>donne :</b> signal EEG, qualité" --> C
+    B -- "<b>donne :</b> signal simulé" --> C
+    P -- "<b>donne :</b> enregistrements étiquetés" --> C
 
-    C <-- "<b>envoie :</b> commandes (liste fermée)<br/><b>reçoit :</b> résultat de l'action" --> O
-    C <-- "<b>envoie :</b> commandes<br/><b>reçoit :</b> état, résultat" --> L
-    C <-. "<b>envoie :</b> commandes (extension)<br/><b>reçoit :</b> état" .-> R
+    C <-- "<b>reçoit :</b> commandes (liste fermée)<br/><b>renvoie :</b> résultat de l'action" --> O
+    C <-- "<b>reçoit :</b> commandes<br/><b>renvoie :</b> état, résultat" --> L
+    C <-. "<b>reçoit :</b> commandes (extension)<br/><b>renvoie :</b> état" .-> R
 ```
 
-**Légende** : les verbes (reçoit, renvoie, envoie) sont du point de vue de CortexOS · flèche pleine = MVP ou phase sans matériel · flèche pointillée = extension ou futur. Les références D-xx renvoient au registre des décisions (`05-decisions.md`).
+**Légende** : les verbes (donne, reçoit, renvoie) sont du point de vue de l'acteur ou du système externe · flèche pleine = MVP ou phase sans matériel · flèche pointillée = extension ou futur. Les références D-xx renvoient au registre des décisions (`05-decisions.md`).
 
 ## Lecture
 
 | Élément | Ce qu'il faut retenir |
 |---|---|
 | **Frontière du système** | Tout ce qui est dans la boîte « CortexOS IA » est à construire. Le casque, les jeux de données et les systèmes cibles existent déjà : on s'y connecte. |
-| **Utilisateur** | Il ne « parle » pas directement à CortexOS avec ses intentions : elles passent par le casque. Il interagit aussi avec l'interface Web (consentement, calibration). |
+| **Utilisateur** | Il ne transmet pas ses intentions à CortexOS : il les **produit**, le **casque** capte le signal, et c'est **CortexOS qui détecte** l'intention (le système ne lit pas les pensées, Cahier des charges 4.7). Dans l'interface, il donne son consentement, suit la calibration et active ou suspend les commandes (parcours B). |
 | **Accompagnant** | Son rôle est la **sûreté** : il peut suspendre et, selon D-19 et D-24, confirmer ou arrêter. |
 | **Expérimentateur** | Il fournit l'**intention attendue** : sans elle, la précision ne peut pas être mesurée (spécification 4.7). |
 | **Trois sources de données** | Elles fournissent le même type de données par une même interface (`SourceEEG`) : c'est ce qui permet de développer sans casque. |
