@@ -16,6 +16,7 @@ Documents de référence (à lire avant toute modification importante) :
 - `docs/03-planning-mvp.md` — tranches, semaines, jalons (planning de référence)
 - `docs/04-developpement-pc-seul.md` — ce qui se fait sans casque
 - `docs/05-decisions.md` — **registre unique** des décisions D-xx (à mettre à jour quand Eloge tranche)
+- `docs/06-charte-graphique.md` — couleurs, polices, composants ; **aucune couleur en dur dans le frontend**, toujours les variables de la charte
 - `docs/diagrammes/` — diagrammes Mermaid
 
 ## Architecture (décidée)

@@ -3,7 +3,7 @@
 | | |
 |---|---|
 | **Document** | Planning MVP détaillé par fonctionnalité |
-| **Projet** | CortexOS IA `[À DÉFINIR — D-14 : graphie officielle]` |
+| **Projet** | CortexOS IA |
 | **Documents de référence** | Cahier des charges v2.0 · Spécification fonctionnelle v1.0 · Développement sur PC seul v1.0 |
 | **Remplace** | Planning MVP v2.0 et « Planning complet MVP CortexOS AI — 1 an jusqu'à la soutenance » |
 | **Suivi** | Classeur « Suivi_CortexOS_IA.xlsx » : une ligne par tâche de ce planning |

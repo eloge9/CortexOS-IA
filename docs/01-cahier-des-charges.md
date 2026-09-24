@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| **Projet** | CortexOS IA `[À DÉFINIR — D-14 : graphie officielle]` |
+| **Projet** | CortexOS IA |
 | **Cadre** | PPE — Projet Professionnel Étudiant |
 | **Parcours / Domaine / Spécialité** | Licence — Informatique — Génie Logiciel |
 | **Pays** | République Togolaise |

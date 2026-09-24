@@ -3,7 +3,7 @@
 | | |
 |---|---|
 | **Document** | Fonctionnalités réalisables sans matériel (PC seul) |
-| **Projet** | CortexOS IA `[À DÉFINIR — D-14 : graphie officielle]` |
+| **Projet** | CortexOS IA |
 | **Documents de référence** | Cahier des charges v2.0 · Spécification fonctionnelle v1.0 |
 | **Situation** | Aucun casque EEG, aucun microcontrôleur, aucun robot ni drone : uniquement un ordinateur |
 | **Auteur** | GOMINA Eloge |

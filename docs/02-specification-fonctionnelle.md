@@ -3,7 +3,7 @@
 | | |
 |---|---|
 | **Document** | Spécification fonctionnelle |
-| **Projet** | CortexOS IA `[À DÉFINIR — D-14 : graphie officielle]` |
+| **Projet** | CortexOS IA |
 | **Document de référence** | Cahier des charges — version 2.0 |
 | **Remplace** | « CortexOS AI — Spécification complète des fonctionnalités », version 1.0 |
 | **Auteur** | GOMINA Eloge |

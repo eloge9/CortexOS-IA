@@ -14,6 +14,8 @@ Quand une décision est prise : la déplacer de « Questions ouvertes » vers «
 | D-39 | Diagrammes en Mermaid dans `docs/diagrammes/` ; draw.io seulement à la fin, pour le rapport et la soutenance | 24/09/2026 |
 | D-40 | `docs/` (dépôt Git) est la documentation de référence ; Google Drive n'en est qu'une copie de lecture. Petits changements de doc faits sans demander et signalés ; gros changements validés avant | 24/09/2026 |
 | D-41 | Structure de `docs/` numérotée ; un fichier n'est créé que lorsque le travail produit son contenu | 24/09/2026 |
+| D-42 | Graphie officielle : « CortexOS IA » (celle du logo) | 24/09/2026 |
+| D-43 | Charte graphique : variables CSS + Tailwind v4 ; thème sombre par défaut + thème clair ; polices Exo 2 (titres) + Inter (texte) ; ambiance pro et sobre | 24/09/2026 |
 
 ## 2. Questions ouvertes
 
@@ -31,7 +33,7 @@ Quand une décision est prise : la déplacer de « Questions ouvertes » vers «
 | D-11 | Robot et drone : extension en simulation, ou recherche et futur ? | — | — |
 | D-12 | Quels participants pour le MVP, et comment identifier les besoins des personnes ayant des limitations motrices ? | Option évoquée : volontaires sans limitation motrice d'abord, public cible ensuite | S31 |
 | D-13 | Quel budget, quelle configuration matérielle, quel financement ? | — | — |
-| D-14 | Graphie officielle (CortexOS IA ou AI), année universitaire, encadreurs, projet solo ou en équipe, échéance et dates des jalons | — | Dès qu'elle est connue |
+| D-14 | Année universitaire, encadreurs, projet solo ou en équipe, échéance et dates des jalons | — | Dès qu'elle est connue |
 | D-15 | Faut-il un persona illustratif dans la section 1 ? | — | — |
 | D-18 | Faut-il distinguer un mode expérimentation et un mode utilisation ? | — | S7 |
 | D-19 | Quel mécanisme d'arrêt d'urgence, et qui peut le déclencher (utilisateur, accompagnant, opérateur) ? | — | S9 |
@@ -53,5 +55,6 @@ Quand une décision est prise : la déplacer de « Questions ouvertes » vers «
 | D-36 | Quelle(s) langue(s) pour l'interface ? | Compréhension des messages par tous les profils | — |
 | D-37 | Durée maximale d'une session et pauses obligatoires ? | La fatigue dégrade le signal et le confort | — |
 | D-38 | Que couvre la suppression des données : sessions, modèles, journal, résultats déjà exportés ? | Rendre le droit à l'effacement applicable concrètement | S25 |
+| D-44 | Faut-il une version vectorielle (SVG) du logo, et qui la réalise ? | Les PNG actuels suffisent à l'écran ; le SVG est net à toutes tailles (favicon, impression) | S4 |
 
 « À décider avant » : semaine du Planning MVP (S1 = 28/09/2026).
