@@ -1,0 +1,42 @@
+# --- Python ---
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+env/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+*.egg-info/
+
+# --- Node / Next.js ---
+node_modules/
+.next/
+out/
+npm-debug.log*
+
+# --- Secrets et configuration locale ---
+.env
+.env.*
+!.env.example
+
+# --- Données EEG et modèles (lourds ou personnels) ---
+data/raw/
+data/sessions/
+*.edf
+*.bdf
+*.fif
+*.gdf
+models/*.pkl
+models/*.joblib
+
+# --- Éditeurs et système ---
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# --- Claude Code (réglages locaux) ---
+.claude/settings.local.json
