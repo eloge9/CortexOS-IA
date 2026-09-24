@@ -55,5 +55,23 @@ Documents de référence (à lire avant toute modification importante) :
 
 - **« début de séance »** : liste les fichiers Drive (dossier « CortexOS IA ») modifiés depuis la dernière synchronisation et les nouveaux commentaires ; résume-les à Eloge.
 - **Avant de modifier ou de resynchroniser un fichier Drive**, vérifie s'il a été modifié depuis la dernière synchronisation (par Eloge ou l'encadreur). Si oui : ne l'écrase jamais, montre les changements, reporte-les dans `docs/` après accord d'Eloge.
-- **« fin de séance »** : récapitulatif, message de commit proposé (Eloge lance `git`), resynchronisation sur Drive des docs modifiées, mise à jour du classeur « Tableau de suivi — CortexOS IA » (dossier « 03 - Planning et suivi », seule source du suivi, n'existe que sur Drive).
+- **« fin de séance »** : récapitulatif, message de commit proposé (Eloge lance `git`), republication sur Drive des docs modifiées, mise à jour du classeur « Tableau de suivi — CortexOS IA » (dossier « 03 - Planning et suivi », seule source du suivi, n'existe que sur Drive).
+- **Claude tient à jour toutes les copies Drive** : un doc modifié dans `docs/` est republié (nouvelle version au même endroit, titre « Nom — CortexOS IA (vX.Y) », ancienne version dans « 99 - Archives »), puis la carte ci-dessous est mise à jour.
 - L'encadreur commente les documents plutôt que de les modifier (sauf le classeur de suivi).
+
+### Carte des documents Drive (dossier « CortexOS IA »)
+
+| `docs/` (référence) | Copie Drive (dossier · ID) |
+|---|---|
+| `01-cahier-des-charges.md` | 01 - Cadrage · `1YAuKbNX3-9_ZF_Z80BdNfu6YOL0KJaDVpPESpel15Is` |
+| `02-specification-fonctionnelle.md` | 02 - Spécification · `1MwV1iNlHBxeHjsg7yZgfuM-eP8O58QQjjvPdfwwqlBI` |
+| `03-planning-mvp.md` | 03 - Planning et suivi · `1Ay3PJus_fMYBYIuDENmJpi9w1eQclvaQ-JA3if6cfLI` |
+| `04-developpement-pc-seul.md` | 03 - Planning et suivi · `1FlKusLkbv9Atd55LNp2xuuV8Ua4wyKwDP6FXJOoDiGU` |
+| `05-decisions.md` | 01 - Cadrage · `1OxMgBtLVMQvwQjzchhe15n0M8ZgN8ZiFBlrOVeT9RcM` |
+| `06-charte-graphique.md` | 04 - Conception · `1DlstuQh8dYu96B44tQtIUgXbnecW-2sc_PQTaO7J7NQ` |
+| `assets/logo/` | 04 - Conception / Logos (8 PNG) |
+| `diagrammes/` | 04 - Conception / Diagrammes (vide) |
+| — (Drive seul) | Racine : « 00 - À lire d'abord » `1Ud5XyZidiOY9jMmFKxTQLu14is15NYe2DgUA0m2A6Eg` |
+| — (Drive seul) | 03 - Planning et suivi : « Tableau de suivi » `1YYopxwHtpu-pPZV-6wcIV2saAVnL8ywu5iKx6Q3veBE` |
+
+Dossiers : 05 - Documentation technique et 06 - Rapport et soutenance (vides), 99 - Archives (anciennes versions). Nouvelle version d'un doc Drive : l'ancienne va dans 99 - Archives. Tenir cette carte à jour. Dernière republication complète : 24/09/2026 (docs 01 à 05 et « 00 - À lire d'abord » ; charte graphique déjà à jour).
