@@ -56,7 +56,7 @@ Ce qui est conservé : départ le 28 septembre 2026, 8 h par semaine, casque à 
 | Architecture | Monolithe modulaire ; agent ordinateur séparé |
 | Méthode | Contrat d'API défini pendant la conception, puis développement par tranches |
 | Système cible réel du MVP | L'ordinateur, avec une lampe simulée en complément `[À CONFIRMER — D-05]` |
-| Langage du Core pour le MVP | Python `[À CONFIRMER — D-07]` |
+| Langage du Core pour le MVP | Python (D-62) |
 | Stratégie sans matériel | Simulation BrainFlow et jeu de données public `[À CONFIRMER — D-21]` |
 | Diagrammes | En Mermaid, versionnés dans `docs/` ; autre format si l'école l'exige `[D-02]` |
 
@@ -143,13 +143,13 @@ Chaque ligne correspond à une fonctionnalité ; ses tâches sont reprises une p
 | S1 | 28/09 → 04/10 | — | **Commande du casque EEG** | Confirmer le modèle (D-04) · Passer la commande · Noter le délai de livraison annoncé | — |
 | S1 | 28/09 → 04/10 | — | **Environnement de travail** | Installer Git, Python 3, Node.js LTS, VS Code · Créer le dépôt CortexOS et le premier commit · Créer docs/ avec Cahier des charges, Spécification, Planning | A |
 | S1 | 28/09 → 04/10 | DIAG-1 | **Diagramme de contexte** | Lister les acteurs et systèmes externes · Dessiner en Mermaid · Relire et expliquer | B |
-| S1 | 28/09 → 04/10 | DIAG-2 | **Diagrammes de cas d'utilisation** | Lister les cas par acteur (parcours A à E) · Découper en 3 diagrammes : Préparer, Utiliser, Mesurer · Relecture avec Claude || B |
-| S2 | 05/10 → 11/10 | DIAG-3 | **Diagramme de classes de domaine** | Reprendre les classes de la Spécification · Définir les relations et multiplicités · Relecture avec Claude || B |
+| S1 | 28/09 → 04/10 | DIAG-2 | **Diagrammes de cas d'utilisation** | Lister les cas par acteur (parcours A à E) · Découper en 3 diagrammes : Préparer, Utiliser, Mesurer · Relecture avec Claude | B |
+| S2 | 05/10 → 11/10 | DIAG-3 | **Diagramme de classes de domaine** | Reprendre les classes de la Spécification · Définir les relations et multiplicités · Relecture avec Claude | B |
 | S2 | 05/10 → 11/10 | DIAG-4 | **Diagramme de composants** | Modules du monolithe modulaire et leurs interfaces · Place de l'agent ordinateur · Explication et relecture | B |
-| S2 | 05/10 → 11/10 | DIAG-5 | **Diagrammes d'états-transitions** | États globaux de CortexOS (spéc. 4.1) · Cycle de vie d'une commande (spéc. 4.5) · Relecture avec Claude || B |
+| S2 | 05/10 → 11/10 | DIAG-5 | **Diagrammes d'états-transitions** (5 diagrammes, D-63) | États globaux de CortexOS (spéc. 4.1) · Cycle de vie d'une commande depuis la détection (spéc. 4.5) · Session · Calibration · Source de signal · Relecture avec Claude | B |
 | S2 | 05/10 → 11/10 | ARCH-0 | **Architecture technique v0** | Rédiger à partir des diagrammes 1 à 5 · Trancher D-05, D-07 et D-09 (version minimale) | B |
-| S3 | 12/10 → 18/10 | DIAG-6 | **Diagrammes de séquence** | (a) Intention acceptée → action · (b) Rejet pour confiance insuffisante · (c) Commande sensible : confirmation ou expiration · (d) Perte du signal → état sûr || B |
-| S3 | 12/10 → 18/10 | DIAG-7 | **Diagramme d'activité** | Déroulement d'une session d'expérimentation (parcours C) || B |
+| S3 | 12/10 → 18/10 | DIAG-6 | **Diagrammes de séquence** | (a) Intention acceptée → action · (b) Rejet pour confiance insuffisante · (c) Commande sensible : confirmation ou expiration · (d) Perte du signal → état sûr | B |
+| S3 | 12/10 → 18/10 | DIAG-7 | **Diagramme d'activité** | Déroulement d'une session d'expérimentation (parcours C) | B |
 | S3 | 12/10 → 18/10 | DIAG-8 | **Diagramme de déploiement** | Ce qui tourne sur le PC maintenant · Ajouts futurs : casque, ESP32 | B |
 | S3 | 12/10 → 18/10 | API-0 | **Contrat d'API v0** | Routes REST et messages temps réel déduits des FW-01 à FW-50 · Format des objets : détection, décision, commande, événement | B |
 | S3 | 12/10 → 18/10 | MAQ | **Maquettes des écrans** | Maquettes basse fidélité : supervision, signal, calibration, commandes, sessions, journal, profil | A/B |
@@ -178,7 +178,7 @@ Chaque ligne correspond à une fonctionnalité ; ses tâches sont reprises une p
 
 | Sem. | Dates | Réf. | Fonctionnalité | Tâches | Mode |
 |---|---|---|---|---|---|
-| S5 | 26/10 → 01/11 | DIAG-9 | **Classes de conception du Core** | Classes, attributs typés, méthodes · Relecture avec Claude || B |
+| S5 | 26/10 → 01/11 | DIAG-9 | **Classes de conception du Core** | Classes, attributs typés, méthodes · Relecture avec Claude | B |
 | S5 | 26/10 → 01/11 | 4.1 | **États de CortexOS** | Modéliser les 7 états · Coder les transitions autorisées · Refuser les transitions interdites · Tests unitaires | A |
 | S6 | 02/11 → 08/11 | F-19 · FW-25 · FW-26 | **Activer, suspendre, reprendre les commandes** | Méthodes du Core · Routes API · Indicateur d'état toujours visible · Boutons Activer / Suspendre / Reprendre · Tests | A (Core) · B (API, écran) |
 
@@ -198,7 +198,7 @@ Chaque ligne correspond à une fonctionnalité ; ses tâches sont reprises une p
 
 | Sem. | Dates | Réf. | Fonctionnalité | Tâches | Mode |
 |---|---|---|---|---|---|
-| S10 | 30/11 → 06/12 | DIAG-10 | **Classes de l'interface SourceEEG** | Interface et implémentations · Relecture avec Claude || B |
+| S10 | 30/11 → 06/12 | DIAG-10 | **Classes de l'interface SourceEEG** | Interface et implémentations · Relecture avec Claude | B |
 | S10 | 30/11 → 06/12 | F-01 · F-03 | **Source de données simulée** | Interface SourceEEG : démarrer, lire, arrêter · Implémentation « carte synthétique » BrainFlow · Caractéristiques : canaux, fréquence · Tests | A |
 | S11 | 07/12 → 13/12 | F-02 · F-04 · F-05 | **Qualité du signal et incidents** | Indicateur de qualité · Qualité insuffisante → aucune commande · Déconnexion → état sûr · Simulation d'incidents · Tests | A |
 | S11 | 07/12 → 13/12 | DIAG-11 | **Temps réel backend → frontend** | Diagramme de séquence temps réel · Canal WebSocket · Test | B |
@@ -209,7 +209,7 @@ Chaque ligne correspond à une fonctionnalité ; ses tâches sont reprises une p
 
 | Sem. | Dates | Réf. | Fonctionnalité | Tâches | Mode |
 |---|---|---|---|---|---|
-| S15 | 04/01 → 10/01 | DIAG-12 | **Classes de l'interface Connecteur** | Interface et implémentations · Relecture avec Claude || B |
+| S15 | 04/01 → 10/01 | DIAG-12 | **Classes de l'interface Connecteur** | Interface et implémentations · Relecture avec Claude | B |
 | S15 | 04/01 → 10/01 | F-23 · F-24 · F-25 | **Lampe simulée** | Interface Connecteur · Lampe simulée · Liste fermée de commandes · Disponibilité de la cible · Tests | A |
 | S16 | 11/01 → 17/01 | F-23 | **Agent ordinateur** | Programme agent séparé (D-06) · Commandes : curseur, sélection (liste fermée) · Liaison backend ↔ agent · Tests manuels | A/B |
 | S17 | 18/01 → 24/01 | F-26 · FW-20 à FW-24 | **Écrans des commandes et systèmes cibles** | Correspondance consultable (modifiable si D-20) · Liste des cibles et leur état · Test manuel si D-27 · Types de systèmes cibles | B |
@@ -287,22 +287,22 @@ Le bloc dure **4 semaines** et commence **dès la réception** du casque, quelle
 | Réf. | Document | Quand | Mode |
 |---|---|---|---|
 | DIAG-1 | Contexte | S1 | B |
-| DIAG-2 | Cas d'utilisation (3 diagrammes) | S1 || B |
-| DIAG-3 | Classes de domaine | S2 || B |
+| DIAG-2 | Cas d'utilisation (3 diagrammes) | S1 | B |
+| DIAG-3 | Classes de domaine | S2 | B |
 | DIAG-4 | Composants | S2 | B |
-| DIAG-5 | États-transitions (2 diagrammes) | S2 || B |
+| DIAG-5 | États-transitions (5 diagrammes, D-63) | S2 | B |
 | ARCH-0 | Architecture technique v0 | S2 | B |
-| DIAG-6 | Séquences (4 scénarios) | S3 || B |
-| DIAG-7 | Activité | S3 || B |
+| DIAG-6 | Séquences (4 scénarios) | S3 | B |
+| DIAG-7 | Activité | S3 | B |
 | DIAG-8 | Déploiement | S3 | B |
 | API-0 | Contrat d'API v0 | S3 | B |
 | MAQ | Maquettes des écrans | S3 | A/B |
-| DIAG-9 | Classes de conception du Core | S5, avant le Core || B |
-| DIAG-10 | Classes de l'interface SourceEEG | S10 || B |
+| DIAG-9 | Classes de conception du Core | S5, avant le Core | B |
+| DIAG-10 | Classes de l'interface SourceEEG | S10 | B |
 | DIAG-11 | Séquence temps réel | S11 | B |
-| DIAG-12 | Classes de l'interface Connecteur | S15 || B |
-| DIAG-13 | Modèle de données | S22 || B |
-| DIAG-14 | Séquence de la calibration | S26 || B |
+| DIAG-12 | Classes de l'interface Connecteur | S15 | B |
+| DIAG-13 | Modèle de données | S22 | B |
+| DIAG-14 | Séquence de la calibration | S26 | B |
 | — | Robot et drone | Seulement si l'extension est réalisée | — |
 
 Tous les diagrammes sont mis à jour en S33–S35 pour correspondre au code réellement écrit.
@@ -353,7 +353,7 @@ Tu remplis uniquement les cellules jaunes : date réalisée, statut, notes. **Un
 | FW-46 | Pilotage de l'interface par intentions (Futur) |
 | Robot, drone | En simulation, après validation de la chaîne (D-11) |
 
-Restent hors projet pour l'instant : deep learning (CNN, LSTM), Core en C++ (D-07), Rust, contrôle d'applications précises (Cahier des charges 4.6), ESP32 physique (option si achat, D-05), Docker (D-08, utile en fin de projet pour l'installation).
+Restent hors projet pour l'instant : deep learning (CNN, LSTM), Core en C++ (D-62 : piste pour plus tard), Rust, contrôle d'applications précises (Cahier des charges 4.6), ESP32 physique (option si achat, D-05), Docker (D-08, utile en fin de projet pour l'installation).
 
 ---
 

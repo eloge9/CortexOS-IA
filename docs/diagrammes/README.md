@@ -10,8 +10,8 @@ Cas d'utilisation : acteurs humains à gauche, non humains à droite (D-48).
 | DIAG-1 | [Contexte](diag-01-contexte.md) | S1 | B | Validé (24/09/2026, v1.1 le 25/09) |
 | DIAG-2 | Cas d'utilisation : [par acteur](diag-02a-cas-utilisation-par-acteur.md) · [vue d'ensemble](diag-02b-cas-utilisation-vue-ensemble.md) | S1 | B | Par acteur : validé (25/09/2026) · Vue d'ensemble : à relire |
 | DIAG-3 | [Classes de domaine](diag-03-classes-domaine.md) | S2 | B | Validé (25/09/2026) |
-| DIAG-4 | Composants | S2 | B | À faire |
-| DIAG-5 | États-transitions (2 diagrammes) | S2 | B | À faire |
+| DIAG-4 | [Composants](diag-04-composants.md) | S2 | B | À relire par Eloge |
+| DIAG-5 | [États-transitions](diag-05-etats-transitions.md) (5 diagrammes, D-63) | S2 | B | À relire par Eloge |
 | DIAG-6 | Séquences (4 scénarios) | S3 | B | À faire |
 | DIAG-7 | Activité | S3 | B | À faire |
 | DIAG-8 | Déploiement | S3 | B | À faire |

@@ -424,10 +424,10 @@ Le matériel est limité aux éléments indispensables au MVP. Les technologies 
 | Traitement EEG et IA | Python | Retenu |
 | Backend / API | FastAPI | Retenu |
 | Interface de supervision | Next.js (TypeScript) | Retenu |
-| CortexOS Core | C++ | Retenu à terme ; langage du MVP `[À DÉFINIR — D-07]` |
+| CortexOS Core | Python pour le MVP ; C++ envisagé à terme | Retenu (D-62) |
 | Acquisition EEG | Bibliothèque compatible avec plusieurs casques (ex. BrainFlow) | Envisagé `[À DÉFINIR — D-04]` |
-| Base de données | PostgreSQL | Envisagé |
-| Objets connectés / embarqué | MQTT, ESP32 | Envisagé `[À DÉFINIR — D-05]` |
+| Base de données | PostgreSQL (+ fichiers pour signal, modèles, exports) | Retenu (D-58) |
+| Objets connectés / embarqué | MQTT, ESP32 | Envisagé `[À DÉFINIR — D-05]` ; lampe simulée en appel direct d'abord (D-56) |
 | Robotique | ROS 2 | Extension `[À DÉFINIR — D-11]` |
 | Autres (Django, Flutter, Redis, gRPC, Docker) | — | `[À DÉFINIR — D-08]` |
 

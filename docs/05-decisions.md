@@ -25,6 +25,19 @@ Quand une décision est prise : la déplacer de « Questions ouvertes » vers «
 | D-51 | Une seule classe **Essai**, liée soit à une calibration, soit à une session (`{xor}`) | 25/09/2026 |
 | D-52 | Pas de classe **Incident** dans le MVP : Alerte + événements du journal suffisent | 25/09/2026 |
 | D-53 | Un **profil peut exister sans compte** (participant créé par l'expérimentateur) : Personne `0..1` — `0..1` Profil | 25/09/2026 |
+| D-54 | Composant **Orchestrateur de la chaîne** dans le backend, distinct du Core : il enchaîne source → qualité → prétraitement → détection → Core et enregistre dans la session | 25/09/2026 |
+| D-55 | Liaison **backend ↔ agent ordinateur** : WebSocket en local | 25/09/2026 |
+| D-56 | **Lampe simulée** : appel direct en S15 ; MQTT seulement si l'objet connecté réel (ESP32) est retenu (D-05) | 25/09/2026 |
+| D-57 | **Arrêt d'urgence** : raccourci clavier global géré par un petit programme local (ou par l'agent), qui agit directement sur le Core sans passer par l'interface Web ; qui peut le déclencher reste ouvert (D-19) | 25/09/2026 |
+| D-58 | **Stockage** : base de données **PostgreSQL** pour les données métier ; signal EEG enregistré, modèles et exports en **fichiers** sur disque | 25/09/2026 |
+| D-59 | **Entraînement** des modèles dans le processus du backend, en tâche de fond (pas de service séparé) | 25/09/2026 |
+| D-60 | **Accès et comptes** : authentification minimale en S25, comme prévu au planning | 25/09/2026 |
+| D-61 | **Contrôle qualité** du signal : composant séparé du prétraitement (il sert le Core, la calibration et la supervision) | 25/09/2026 |
+| D-62 | **Core en Python** pour le MVP ; C++ reste une piste pour plus tard (tranche l'ancienne question D-07) | 25/09/2026 |
+| D-63 | DIAG-5 comprend **5 diagrammes d'états** : ① états globaux de CortexOS et ② cycle de vie d'une commande (essentiels) ; ③ session, ④ calibration, ⑤ source de signal (utiles). Pas de diagramme pour le système cible ni pour l'alerte (2 à 3 états : attributs) | 25/09/2026 |
+| D-64 | Le diagramme ② modélise le **cycle de vie d'une commande depuis la détection** (de « Détectée » à « Exécutée », rejet compris), fidèle à la spécification 4.5 | 25/09/2026 |
+| D-65 | La calibration comporte un sous-état **Entraînement** entre la fin des essais et le résultat | 25/09/2026 |
+| D-66 | Dans les diagrammes, les comportements non tranchés sont marqués ⚠ avec leur décision `[D-xx]`, sans être décidés | 25/09/2026 |
 
 ## 2. Questions ouvertes
 
@@ -35,9 +48,8 @@ Quand une décision est prise : la déplacer de « Questions ouvertes » vers «
 | D-04 | Quel casque EEG (modèle, nombre de canaux, coût) ? | — | S1 (commande) |
 | D-05 | Quels scénarios de démonstration et quel système cible pour le MVP ? | S1 : allumer ou éteindre un équipement via un microcontrôleur · S2 : déplacer ou sélectionner un élément à l'écran · S3 : supervision en direct (signal, intention, confiance, commande) · S4 : démonstration des garde-fous · S5 : évaluation sur des données enregistrées · S6 : robot simulé (extension) | S2 |
 | D-06 | Quel système d'exploitation cible ? | — | S16 |
-| D-07 | Quel langage pour le Core dans le MVP ? | Python, ou C++ dès le départ | S2 |
 | D-08 | Quel sort pour les technologies non confirmées : Django, Flutter, Redis, gRPC, Docker ? L'ouverture du code (open source) est-elle décidée ? | — | — |
-| D-09 | Où stocker les données (local ou distant), quelle authentification, quels droits détaillés par rôle (les rôles sont fixés par D-47), quelle durée de conservation, quel partage des données EEG ? | — | S2 ; détail en S22 |
+| D-09 | Quelle authentification précise (S25, D-60), quels droits détaillés par rôle (rôles : D-47), quelle durée de conservation, quel partage des données EEG, stockage local ou distant ? (base et fichiers : D-58) | — | S2 ; détail en S22 |
 | D-10 | Quels seuils de réussite et quelles cibles de performance (précision, latence, commandes involontaires) ? | — | Bloc casque (C3) |
 | D-11 | Robot et drone : extension en simulation, ou recherche et futur ? | — | — |
 | D-12 | Quels participants pour le MVP, et comment identifier les besoins des personnes ayant des limitations motrices ? | Option évoquée : volontaires sans limitation motrice d'abord, public cible ensuite | S31 |
@@ -45,7 +57,7 @@ Quand une décision est prise : la déplacer de « Questions ouvertes » vers «
 | D-14 | Année universitaire, encadreurs, projet solo ou en équipe, échéance et dates des jalons | — | Dès qu'elle est connue |
 | D-15 | Faut-il un persona illustratif dans la section 1 ? | — | — |
 | D-18 | Faut-il distinguer un mode expérimentation et un mode utilisation ? | — | S7 |
-| D-19 | Quel mécanisme d'arrêt d'urgence, et qui peut le déclencher (utilisateur, accompagnant, opérateur) ? | — | S9 |
+| D-19 | Qui peut déclencher l'arrêt d'urgence (utilisateur, accompagnant, opérateur) ? Le mécanisme est fixé par D-57 | — | S9 |
 | D-20 | L'association intention → commande est-elle configurable par profil dès le MVP ou en extension ? | — | S17 |
 | D-21 | Quelle stratégie de repli si le casque est indisponible ou si la précision est insuffisante ? | Simulateur, données enregistrées, jeux de données publics | Appliquée ici ; à confirmer dans le Cahier des charges |
 | D-23 | Qui peut modifier le seuil de confiance, et depuis quel rôle ? | Le seuil agit directement sur le risque de commande involontaire | — |
@@ -65,5 +77,10 @@ Quand une décision est prise : la déplacer de « Questions ouvertes » vers «
 | D-37 | Durée maximale d'une session et pauses obligatoires ? | La fatigue dégrade le signal et le confort | — |
 | D-38 | Que couvre la suppression des données : sessions, modèles, journal, résultats déjà exportés ? | Rendre le droit à l'effacement applicable concrètement | S25 |
 | D-44 | Faut-il une version vectorielle (SVG) du logo, et qui la réalise ? | Les PNG actuels suffisent à l'écran ; le SVG est net à toutes tailles (favicon, impression) | S4 |
+| D-67 | **État global** : perte du signal en *Préparation* → État sûr ou Arrêté ? Quelles conditions vérifier avant d'accepter l'activation (qualité, cible disponible) ? | — | S5 |
+| D-68 | **Commande** : délai d'attente du résultat ; que faire si la cible devient indisponible entre la décision et l'envoi ; peut-on annuler une action déjà envoyée (arrêt d'urgence) ? | — | S8 |
+| D-69 | **Calibration** : une erreur d'entraînement donne « Interrompue » ou « Insuffisante » ? | — | S26 |
+| D-70 | **Source de signal** : reconnexion automatique ou manuelle ; que se passe-t-il à la fin d'un enregistrement rejoué ? | — | S10 |
+| D-71 | **Session** : effet d'une perte du signal (pause, interrompue, continue ?) ; une session interrompue peut-elle reprendre ? l'enregistrement continue-t-il pendant la pause ? à la reprise, les commandes restent-elles suspendues jusqu'à une reprise explicite ? | — | S22 |
 
 « À décider avant » : semaine du Planning MVP (S1 = 28/09/2026).
