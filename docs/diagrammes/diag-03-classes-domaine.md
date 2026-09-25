@@ -4,7 +4,7 @@
 |---|---|
 | **Réf.** | DIAG-3 (Planning MVP, S2, mode B — D-46) |
 | **Sources** | Analyse des classes du domaine v1.0 (24/09/2026) · Cahier des charges v2.0 (§ 4, 5, 6, glossaire) · Spécification fonctionnelle v1.0 (§ 1.4, 2, 3, 4.1 à 4.9) · Cas d'utilisation (DIAG-2) · Registre des décisions |
-| **Version** | 2.1 — 25 septembre 2026 (validé ; D-50 à D-53) |
+| **Version** | 2.2 — 25 septembre 2026 (validé ; D-50 à D-53 ; toutes les associations nommées) |
 
 ## Rôle du diagramme
 
@@ -25,6 +25,8 @@ Il décrit les **concepts métier** de CortexOS IA, leurs **attributs** et leurs
 | `«abstract»` | classe abstraite : on ne crée que ses sous-classes |
 | `«à confirmer»` | classe dont l'existence ou la forme dépend d'une décision ouverte |
 | `[D-xx]` | décision non prise (`05-decisions.md`) |
+
+Toutes les associations et compositions portent un **nom** (verbe lu dans le sens de la déclaration, ex. « Session *enregistre* Détection »). Les **héritages** n'ont pas de nom : le triangle se lit toujours « est une sorte de ».
 
 Une multiplicité se lit **depuis la classe opposée** : `Session "1" *-- "0..*" Detection` = « une session contient 0 à plusieurs détections ; une détection appartient à exactement une session ».
 
@@ -206,13 +208,13 @@ classDiagram
     SourceDonnees <|-- CasqueEEG
     SourceDonnees <|-- Simulation
     SourceDonnees <|-- EnregistrementEEG
-    CasqueEEG "1" *-- "1..*" Canal
+    CasqueEEG "1" *-- "1..*" Canal : comporte
 
     %% ================= Relations : calibration et modèle =================
-    Profil "1" *-- "0..*" Calibration
+    Profil "1" *-- "0..*" Calibration : réalise
     Calibration "0..*" -- "1..*" Intention : calibre
     Calibration "0..*" -- "1" SourceDonnees : utilise
-    Calibration "1" *-- "0..*" Essai
+    Calibration "1" *-- "0..*" Essai : se déroule en
     Calibration "1" -- "0..1" ModeleDetection : produit si exploitable
     Profil "1" -- "0..*" ModeleDetection : versions
     Profil "1" -- "0..1" ModeleDetection : modèle actif
@@ -224,25 +226,25 @@ classDiagram
     Session "0..*" -- "1" SourceDonnees : utilise
     Session "1" -- "0..1" EnregistrementEEG : produit
     Session "0..*" -- "0..1" ModeleDetection : version utilisée
-    Session "0..*" -- "0..1" Scenario
-    Session "0..*" -- "0..1" Protocole
-    Session "1" *-- "0..*" Essai
+    Session "0..*" -- "0..1" Scenario : suit
+    Session "0..*" -- "0..1" Protocole : applique
+    Session "1" *-- "0..*" Essai : se déroule en
     Essai "0..*" -- "1" Intention : attendue
-    Session "1" *-- "0..*" Mesure
+    Session "1" *-- "0..*" Mesure : calcule
 
     %% ================= Relations : chaîne =================
-    Session "1" *-- "0..*" Detection
+    Session "1" *-- "0..*" Detection : enregistre
     Detection "0..*" -- "1" Intention : reconnue
     Essai "0..1" -- "0..*" Detection : pendant
-    Detection "1" *-- "1" Decision
+    Detection "1" *-- "1" Decision : donne lieu à
     Decision "0..*" -- "0..1" ParametresSurete : appliqués
     Decision "1" -- "0..1" Commande : si acceptée
     Commande "1" *-- "0..1" Confirmation : si sensible
     Confirmation "0..*" -- "0..1" Personne : confirmée par [D-24]
-    Commande "1" *-- "0..1" Resultat
-    Commande "0..*" -- "1" TypeCommande
+    Commande "1" *-- "0..1" Resultat : reçoit
+    Commande "0..*" -- "1" TypeCommande : est de type
     Commande "0..*" -- "1" SystemeCible : envoyée à
-    Commande "0..*" -- "0..1" Session
+    Commande "0..*" -- "0..1" Session : émise pendant
     Commande "0..*" -- "0..1" Personne : auteur si manuelle
 
     %% ================= Relations : cibles et correspondance =================
@@ -250,13 +252,13 @@ classDiagram
     SystemeCible <|-- ObjetConnecte
     SystemeCible <|-- RobotDrone
     SystemeCible "1" *-- "1..*" TypeCommande : liste fermée
-    Correspondance "1" *-- "1..*" RegleCorrespondance
-    RegleCorrespondance "0..*" -- "1" Intention
-    RegleCorrespondance "0..*" -- "1" TypeCommande
-    Profil "0..1" -- "0..1" Correspondance : [D-20]
+    Correspondance "1" *-- "1..*" RegleCorrespondance : contient
+    RegleCorrespondance "0..*" -- "1" Intention : si intention
+    RegleCorrespondance "0..*" -- "1" TypeCommande : alors commande
+    Profil "0..1" -- "0..1" Correspondance : utilise [D-20]
 
     %% ================= Relations : journal =================
-    EvenementJournal "0..*" -- "0..1" Session
+    EvenementJournal "0..*" -- "0..1" Session : concerne
     EvenementJournal "0..*" -- "0..1" Personne : auteur
     Alerte "1" -- "1" EvenementJournal : naît de
 
