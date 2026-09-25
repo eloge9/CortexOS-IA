@@ -27,7 +27,8 @@ Documents de référence (à lire avant toute modification importante) :
 - Interfaces interchangeables : `SourceEEG` (simulation, fichier, casque) et `Connecteur` (ordinateur, lampe simulée…).
 - Stack : Python (EEG/IA : BrainFlow, MNE, scikit-learn), FastAPI, Next.js/TypeScript.
 - Développement par **tranches verticales**, contrat d'API défini avant le code.
-- Non tranché : D-05 (système cible), D-07 (langage du Core, Python recommandé), D-09 (stockage/auth). Ne décide pas à la place d'Eloge.
+- Décidé : Core en Python (D-62), PostgreSQL + fichiers (D-58), orchestrateur de la chaîne (D-54), agent en WebSocket local (D-55), arrêt d'urgence par raccourci global (D-57).
+- Non tranché : D-05 (système cible), D-09 (authentification précise, droits, conservation), D-19 (qui déclenche l'arrêt). Ne décide pas à la place d'Eloge.
 
 ## Règles de travail
 
