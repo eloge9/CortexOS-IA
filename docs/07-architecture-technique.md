@@ -5,7 +5,7 @@
 | **Réf.** | ARCH-0 (Planning MVP, S2, mode A — D-96) |
 | **Sources** | Cahier des charges v2.2 (§ 7, 10) · Spécification fonctionnelle v1.2 · DIAG-1 à DIAG-5 · Décisions D-54 à D-62 et D-72 à D-76 |
 | **Version** | 0.1 — 25 septembre 2026 |
-| **Statut** | À relire par Eloge · les éléments marqués **(Proposé — Px)** attendent sa validation (section 12) |
+| **Statut** | Terminé (27/09/2026) · propositions P1 à P8 validées le 03/10/2026 (D-101) |
 
 > Ce document dit **comment CortexOS IA est construit** : quels programmes tournent, avec quelles technologies, comment ils communiquent, comment le code est rangé et comment il est sécurisé. Il ne répète pas les diagrammes : il y renvoie. Il sera complété au fil des tranches (v1 à la fin du MVP).
 
@@ -34,7 +34,7 @@ config:
   layout: elk
 ---
 flowchart LR
-    CASQUE["🧠 Casque EEG (D-04)"]
+    CASQUE["🧠 Module EEG ADS1299 8 canaux (D-04)"]
     subgraph PC["💻 PC Windows (D-73) — tout écoute sur 127.0.0.1"]
         NAV["🌐 Navigateur"]
         WEB["① Frontend Next.js<br/>:3000"]
@@ -59,7 +59,7 @@ flowchart LR
 | # | Programme | Rôle | Démarré par |
 |---|---|---|---|
 | ① | **Frontend** (Next.js) | Toutes les pages, dont la page vitrine (FW-51, D-76) | `npm run dev` |
-| ② | **Backend** (FastAPI + Uvicorn) | API, passerelle temps réel, orchestrateur (D-54), Core, IA, connecteurs, **lampe simulée** (Proposé — P4) | `uvicorn` |
+| ② | **Backend** (FastAPI + Uvicorn) | API, passerelle temps réel, orchestrateur (D-54), Core, IA, connecteurs, **lampe simulée** (P4, D-101) | `uvicorn` |
 | ③ | **Agent ordinateur** | Exécute la liste fermée de commandes sur Windows (curseur, sélection) | `python -m agent` |
 | ④ | **Arrêt d'urgence** (C18) | Écoute un raccourci clavier global et envoie l'ordre d'arrêt (D-57, D-75) | `python -m arret_urgence` |
 | — | **PostgreSQL** | Données métier (D-58) | service Windows |
@@ -83,7 +83,7 @@ flowchart LR
 | Tests Python | pytest | Développement PC seul § 8 |
 | Système | Windows | D-73 |
 
-### 3.2 Bibliothèques proposées (Proposé — P3)
+### 3.2 Bibliothèques proposées (P3, D-101)
 
 Chacune répond à un besoin précis ; aucune n'ajoute un nouveau service à installer.
 
@@ -114,7 +114,7 @@ Ton PC a **Python 3.14.3**. BrainFlow, MNE et scikit-learn ne publient pas toujo
 
 ---
 
-## 4. Organisation du dépôt (Proposé — P1)
+## 4. Organisation du dépôt (P1, D-101)
 
 Un seul dépôt Git (monodépôt), un dossier par programme :
 
@@ -156,7 +156,7 @@ Correspondance avec DIAG-4 : chaque composant C1 à C24 a un dossier indiqué en
 
 ## 5. Communication
 
-| Liaison | Protocole | Adresse (Proposé — P2) | Sécurité |
+| Liaison | Protocole | Adresse (P2, D-101) | Sécurité |
 |---|---|---|---|
 | Navigateur → Frontend | HTTP | `http://localhost:3000` | — |
 | Navigateur → Backend | HTTP REST (JSON) | `http://localhost:8000/api/v1/…` | Cookie de session (section 7) |
@@ -170,7 +170,7 @@ Le détail des routes et des messages sera fixé dans le **Contrat d'API v0** (A
 
 - **REST** pour les actions ponctuelles (créer une session, activer les commandes, lire le journal) ;
 - **WebSocket `/ws/flux`** pour tout ce qui change en continu (état global, qualité, signal, détections, décisions, commandes, alertes) : le backend pousse, le navigateur ne demande pas ;
-- **l'agent se connecte au backend** (il est client, le backend est serveur) (Proposé — P5) : tant qu'il est connecté, la cible « Ordinateur » est disponible ; s'il se déconnecte, elle devient indisponible (F-23) et les commandes vers elle sont rejetées.
+- **l'agent se connecte au backend** (il est client, le backend est serveur) (P5, D-101) : tant qu'il est connecté, la cible « Ordinateur » est disponible ; s'il se déconnecte, elle devient indisponible (F-23) et les commandes vers elle sont rejetées.
 
 ---
 
@@ -190,7 +190,7 @@ flowchart LR
     J --> W["/ws/flux → navigateur"]
 ```
 
-| Étape | Où | Comment ça tourne (Proposé — P6) |
+| Étape | Où | Comment ça tourne (P6, D-101) |
 |---|---|---|
 | Lecture de la source | `backend/app/eeg/` | BrainFlow lit dans un **fil d'exécution séparé** (*thread*), pour ne pas bloquer FastAPI |
 | Qualité, prétraitement, détection | `eeg/`, `ia/` | Une **tâche asynchrone** de l'orchestrateur, à chaque fenêtre de signal (durée de fenêtre `[À DÉFINIR — Documentation technique]`) |
@@ -210,10 +210,10 @@ Les états et transitions sont ceux de **DIAG-5** : `core/etats.py` (① état g
 | Comptes | Comptes locaux dans PostgreSQL : identifiant + **mot de passe haché (Argon2id)**, jamais stocké en clair | D-74 |
 | Session | Après connexion, le backend crée une session et envoie un **cookie** `HttpOnly` (illisible par JavaScript), `SameSite=Strict` ; la session est vérifiée à chaque requête et à l'ouverture du WebSocket | D-74 |
 | Rôles | Rôles en base (Utilisateur, Accompagnant, Expérimentateur, Administrateur, D-47) ; droits détaillés `[À DÉFINIR — D-09]` | D-47, D-09 |
-| Premier administrateur | Créé par une commande en ligne de commande au premier lancement (pas d'inscription publique, spéc. § 8) | Proposé — P7 |
+| Premier administrateur | Créé par une commande en ligne de commande au premier lancement (pas d'inscription publique, spéc. § 8) | P7, D-101 |
 | Page vitrine | **Seule page publique** ; elle n'appelle aucune route protégée | D-76 |
-| Arrêt d'urgence | Route `/api/local/arret-urgence` : refusée si la requête ne vient pas de `127.0.0.1` ou si le jeton est faux ; le jeton est généré au démarrage du backend dans `data/jeton-arret.txt` (Proposé — P8) | D-75 |
-| Agent | Jeton local de l'agent, même principe | Proposé — P8 |
+| Arrêt d'urgence | Route `/api/local/arret-urgence` : refusée si la requête ne vient pas de `127.0.0.1` ou si le jeton est faux ; le jeton est généré au démarrage du backend dans `data/jeton-arret.txt` (P8, D-101) | D-75 |
+| Agent | Jeton local de l'agent, même principe | P8, D-101 |
 | Secrets | Mots de passe et jetons dans `.env` ou `data/`, **jamais commités** ; `.env.example` montre les clés sans valeurs | — |
 | CORS | Le backend n'accepte les appels de navigateur que depuis `http://localhost:3000` | — |
 | Données EEG | Restent dans `data/` et PostgreSQL sur le PC ; export seulement si le consentement le permet (F-35) ; conservation `[À DÉFINIR — D-09]` | D-74, D-09 |
@@ -269,14 +269,14 @@ Le README (S4) donnera les commandes exactes. Un script unique de lancement pour
 
 ---
 
-## 12. Propositions à valider
+## 12. Propositions (validées le 03/10/2026, D-101)
 
 | ID | Proposition | Alternative |
 |---|---|---|
 | **P1** | Monodépôt avec les dossiers `core/`, `backend/`, `agent/`, `arret_urgence/`, `frontend/`, `docs/`, `data/` (section 4) | Plusieurs dépôts : plus lourd pour une personne |
 | **P2** | Ports : frontend 3000, backend 8000, PostgreSQL 5432 ; préfixes `/api/v1`, `/api/local`, `/ws/flux`, `/ws/agent` | Autres ports si déjà pris sur ton PC |
 | **P3** | Bibliothèques de la section 3.2 | Écrire le SQL à la main (psycopg seul), bcrypt au lieu d'Argon2 |
-| **P4** | La **lampe simulée tourne dans le processus du backend** (classe Python appelée directement, D-56) ; son état s'affiche dans l'interface Web. DIAG-4 la classait « programme séparé » : on corrigerait DIAG-4 | Un petit programme séparé avec sa fenêtre : il faudrait alors un protocole (HTTP local), ce qui contredit « appel direct » |
+| **P4** | La **lampe simulée tourne dans le processus du backend** (classe Python appelée directement, D-56) ; son état s'affiche dans l'interface Web. DIAG-4 a été corrigé en conséquence (v1.3) | Un petit programme séparé avec sa fenêtre : il faudrait alors un protocole (HTTP local), ce qui contredit « appel direct » |
 | **P5** | L'agent est **client** WebSocket et se connecte au backend ; connexion = cible disponible | Le backend se connecte à l'agent : il faudrait qu'il sache quand l'agent démarre |
 | **P6** | Lecture BrainFlow et entraînement dans des fils séparés ; orchestrateur en tâche asynchrone | Processus séparé pour l'IA : plus complexe, non nécessaire au MVP |
 | **P7** | Premier compte administrateur créé en ligne de commande | Page « premier lancement » dans l'interface |
@@ -288,6 +288,6 @@ Semaine de réalisation de la page vitrine : `[À DÉFINIR]` (proposition : S4, 
 
 ## 13. Décisions et points ouverts
 
-**Décisions qui fondent ce document :** D-54 (orchestrateur) · D-55 (agent en WebSocket) · D-56 (lampe en appel direct) · D-57 (arrêt par raccourci global) · D-58 (PostgreSQL + fichiers) · D-59 (entraînement en tâche de fond) · D-60 (authentification en S25) · D-61 (contrôle qualité séparé) · D-62 (Core Python) · **D-72** (ordinateur + lampe simulée) · **D-73** (Windows) · **D-74** (comptes locaux, tout sur le PC) · **D-75** (canal de l'arrêt d'urgence) · **D-76** (page vitrine).
+**Décisions qui fondent ce document :** D-54 (orchestrateur) · D-55 (agent en WebSocket) · D-56 (lampe en appel direct) · D-57 (arrêt par raccourci global) · D-58 (PostgreSQL + fichiers) · D-59 (entraînement en tâche de fond) · D-60 (authentification en S25) · D-61 (contrôle qualité séparé) · D-62 (Core Python) · **D-72** (ordinateur + lampe simulée) · **D-73** (Windows) · **D-74** (comptes locaux, tout sur le PC) · **D-75** (canal de l'arrêt d'urgence) · **D-76** (page vitrine) · **D-101** (P1 à P8).
 
-**Encore ouverts :** D-04 (casque, donc liaison physique) · D-05 (scénarios de démonstration) · D-09 (droits par rôle, conservation, partage) · D-10 (seuils, latence cible) · D-19 (qui déclenche l'arrêt) · D-67 à D-71 (comportements de DIAG-5) · formats de fichiers · version de Python (section 3.4).
+**Encore ouverts :** liaison physique et compatibilité BrainFlow du module ADS1299 (D-04, à vérifier) · D-05 (scénarios de démonstration) · D-09 (droits par rôle, conservation, partage) · D-10 (seuils, latence cible) · D-19 (qui déclenche l'arrêt) · D-67 à D-71 (comportements de DIAG-5) · formats de fichiers · version de Python (section 3.4).

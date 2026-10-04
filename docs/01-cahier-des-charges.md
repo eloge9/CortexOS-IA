@@ -6,10 +6,10 @@
 | **Cadre** | PPE — Projet Professionnel Étudiant |
 | **Parcours / Domaine / Spécialité** | Licence — Informatique — Génie Logiciel |
 | **Pays** | République Togolaise |
-| **Année universitaire** | `[À DÉFINIR — D-14]` |
+| **Année universitaire** | 2026-2027 |
 | **Auteur** | GOMINA Eloge |
 | **Encadreur junior / senior** | `[À DÉFINIR — D-14]` |
-| **Version du document** | 2.2 — 25 septembre 2026 (rôle Administrateur D-47 ; Core Python D-62 ; PostgreSQL D-58 ; lampe D-56 ; cible ordinateur + lampe simulée D-72 ; Windows D-73) |
+| **Version du document** | 2.2 — 25 septembre 2026 (rôle Administrateur D-47 ; Core Python D-62 ; PostgreSQL D-58 ; lampe D-56 ; cible ordinateur + lampe simulée D-72 ; Windows D-73 ; casque D-04 et année universitaire le 03/10) |
 
 > Convention : `[À DÉFINIR — D-xx]` signale une décision non encore prise, détaillée dans [05-decisions.md](05-decisions.md). `[SOURCE À AJOUTER]` signale une affirmation factuelle qui doit être sourcée avant diffusion.
 
@@ -178,7 +178,7 @@ Au moins un système cible réel fait partie du MVP. La progression suit un prin
 - La journalisation des détections, commandes et erreurs.
 - La gestion des profils et du consentement `[À DÉFINIR — D-09 : forme]`.
 
-Les intentions retenues (`[À DÉFINIR — D-03]`) et le casque utilisé (`[À DÉFINIR — D-04]`) ne sont pas encore décidés.
+Les intentions retenues ne sont pas encore décidées (`[À DÉFINIR — D-03]`). Le casque retenu est un module d'acquisition ADS1299 à 8 canaux (D-04).
 
 ### 4.3 MVP : ce qui est démontré et ce qui ne l'est pas
 
@@ -334,7 +334,7 @@ Priorités : **MVP**, **Ext.** (extension), **Futur**.
 | ENF-05 | Sécurité | L'accès aux données et aux fonctions d'administration est contrôlé `[À DÉFINIR — D-09]` ; les échanges réseau sont protégés |
 | ENF-06 | Confidentialité | Les données EEG ne sont collectées et utilisées qu'avec le consentement explicite de l'utilisateur ; leur lieu de stockage et leur durée de conservation sont définis `[À DÉFINIR — D-09]` |
 | ENF-07 | Maintenabilité et évolutivité | L'architecture est modulaire : un nouveau système cible ou une nouvelle méthode de détection s'ajoute sans modifier le Core |
-| ENF-08 | Compatibilité | La plateforme fonctionne avec le casque `[À DÉFINIR — D-04]` et le système d'exploitation Windows (D-73) retenus |
+| ENF-08 | Compatibilité | La plateforme fonctionne avec le module EEG ADS1299 8 canaux (D-04) et le système d'exploitation Windows (D-73) retenus |
 | ENF-09 | Utilisabilité et accessibilité | L'état du système et la raison de chaque rejet ou commande sont compréhensibles par l'utilisateur et l'accompagnant ; les fonctions d'usage ne nécessitent pas de geste physique fin |
 | ENF-10 | Traçabilité | Toute session peut être rejouée ou analysée à partir de ses enregistrements |
 
@@ -350,7 +350,7 @@ Priorités : **MVP**, **Ext.** (extension), **Futur**.
 
 ### 8.2 Matérielles
 
-Le casque doit être non invasif, permettre une acquisition en temps réel et disposer d'un SDK ou d'une compatibilité avec une bibliothèque d'acquisition ouverte. Le modèle et le nombre de canaux sont `[À DÉFINIR — D-04]`.
+Le casque doit être non invasif, permettre une acquisition en temps réel et disposer d'un SDK ou d'une compatibilité avec une bibliothèque d'acquisition ouverte. Le module retenu est un module d'acquisition ADS1299 à 8 canaux (D-04) ; sa compatibilité avec une bibliothèque ouverte (BrainFlow) est `[À VÉRIFIER]`.
 
 ### 8.3 Temporelles et humaines
 
@@ -425,7 +425,7 @@ Le matériel est limité aux éléments indispensables au MVP. Les technologies 
 | Backend / API | FastAPI | Retenu |
 | Interface de supervision | Next.js (TypeScript) | Retenu |
 | CortexOS Core | Python pour le MVP ; C++ envisagé à terme | Retenu (D-62) |
-| Acquisition EEG | Bibliothèque compatible avec plusieurs casques (ex. BrainFlow) | Envisagé `[À DÉFINIR — D-04]` |
+| Acquisition EEG | Bibliothèque compatible avec plusieurs casques (ex. BrainFlow) | Envisagé ; compatibilité avec le module ADS1299 `[À VÉRIFIER — D-04]` |
 | Base de données | PostgreSQL (+ fichiers pour signal, modèles, exports) | Retenu (D-58) |
 | Objets connectés / embarqué | MQTT, ESP32 | Extension (D-72) ; au MVP, lampe simulée en appel direct (D-56) |
 | Robotique | ROS 2 | Extension `[À DÉFINIR — D-11]` |
@@ -476,7 +476,7 @@ Le découpage détaillé en tâches et en itérations est décrit dans le **Plan
 
 | Poste | Estimation |
 |---|---|
-| Casque EEG | `[À DÉFINIR — D-04, D-13]` |
+| Casque EEG | Module ADS1299 8 canaux (D-04) ; coût `[À DÉFINIR — D-13]` |
 | Matériel de démonstration pour le système cible (microcontrôleur, composants) | Aucun au MVP (D-72) ; extension ESP32 `[À DÉFINIR — D-13]` |
 | Ordinateur de développement | `[À DÉFINIR — D-13 : matériel existant ou achat]` |
 | Logiciels | Open source ou gratuits |

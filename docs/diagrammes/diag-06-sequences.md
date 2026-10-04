@@ -5,7 +5,7 @@
 | **Réf.** | DIAG-6 (Planning MVP, S3, mode A — D-96) |
 | **Sources** | Analyses textuelles des séquences (a) à (d) par Eloge (25/09/2026) · Spécification § 1.4, 2, 4.1 à 4.8 · DIAG-4 (composants) · DIAG-5 (états) · ARCH-0 · Décisions D-54, D-55, D-72, D-73, D-24, D-29, D-31, D-77 à D-95 |
 | **Version** | 1.0 — 26 septembre 2026 · les 4 séquences sont faites |
-| **Statut** | (a) à (d) : à relire par Eloge |
+| **Statut** | Validé par Eloge (04/10/2026, D-103) |
 
 ## Rôle de ces diagrammes
 

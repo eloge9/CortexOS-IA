@@ -4,7 +4,7 @@
 |---|---|
 | **Réf.** | DIAG-4 (Planning MVP, S2, mode A — D-96) |
 | **Sources** | Analyse des composants v1.0 (25/09/2026) · Cahier des charges § 10 · Spécification § 4 · Planning § 2 · Décisions D-54 à D-62 · DIAG-1, DIAG-2, DIAG-3 |
-| **Version** | 1.2 — 25 septembre 2026 (canal de l'arrêt d'urgence D-75 ; Windows D-73 ; MQTT et ESP32 en extension D-72) |
+| **Version** | 1.3 — 3 octobre 2026 (lampe simulée dans le processus du backend, D-101) · 1.2 : D-75, D-73, D-72 |
 
 ## Rôle du diagramme
 
@@ -63,6 +63,7 @@ flowchart LR
             end
             C17["📦 C17 CortexOS Core<br/><i>Python pur</i>"]
             C19["📦 C19–C20 Registre des cibles<br/>et connecteurs"]
+            C24["📦 C24 Lampe simulée<br/>«simulator» (D-101)"]
 
             I_REST(("IApiRest"))
             I_WS(("IFluxTempsRéel"))
@@ -84,7 +85,6 @@ flowchart LR
         subgraph PS["Programmes séparés"]
             C18["📦 C18 Arrêt d'urgence<br/><i>raccourci global</i>"]
             C23["📦 C23 Agent ordinateur"]
-            C24["📦 C24 Lampe simulée<br/>«simulator»"]
             I_AG(("IAgentOrdinateur"))
         end
     end
@@ -353,13 +353,13 @@ flowchart LR
         K2["📦 Connecteur lampe"]
         K3["📦 Connecteur MQTT<br/>extension (D-72)"]:::opt
         K4["📦 Connecteur robot ROS 2<br/>[D-11]"]:::opt
+        C24["📦 C24 Lampe simulée<br/>«simulator» — dans le processus du backend (D-101)"]
+        I_SIMU(("ICibleSimulée"))
     end
 
     subgraph PS["Programmes séparés"]
         C23["📦 C23 Agent ordinateur"]
         I_AG(("IAgentOrdinateur"))
-        C24["📦 C24 Lampe simulée<br/>«simulator»"]
-        I_SIMU(("ICibleSimulée"))
     end
 
     E4["💻 Windows (D-73)"]:::ext
@@ -389,7 +389,7 @@ flowchart LR
     classDef extopt fill:#ffffff,stroke:#999999,stroke-dasharray: 4 3,color:#555555
 ```
 
-Ajouter un type de cible = ajouter un **connecteur** qui réalise `IConnecteur`, **sans modifier le Core** (F-25).
+Ajouter un type de cible = ajouter un **connecteur** qui réalise `IConnecteur`, **sans modifier le Core** (F-25). La lampe simulée (C24) est dans l'intégration, **dans le processus du backend** (D-101).
 
 ---
 
@@ -419,9 +419,9 @@ Ajouter un type de cible = ajouter un **connecteur** qui réalise `IConnecteur`,
 | C21 | Base de données | Stockage | Données métier | Décidé : PostgreSQL (D-58) |
 | C22 | Stockage de fichiers | Stockage | Signal enregistré, modèles, exports | Décidé (D-58) |
 | C23 | Agent ordinateur | Programme séparé | Exécuter les commandes sur le système d'exploitation | Confirmé · liaison D-55 |
-| C24 | Lampe simulée | Programme séparé | Cible simulée | Confirmé · appel direct D-56 |
+| C24 | Lampe simulée | Backend (même processus) | Cible simulée | Confirmé · appel direct D-56 · dans le processus du backend (P4, D-101) |
 
-**Systèmes externes :** E1 Navigateur · E2 Casque EEG (D-04) · E3 Jeu de données EEG public · E4 Système d'exploitation Windows (D-73) · E5 Broker MQTT et E6 ESP32 (extension, D-72) · E7 Simulateur robot ROS 2 (extension, D-11).
+**Systèmes externes :** E1 Navigateur · E2 Casque EEG : module ADS1299 8 canaux (D-04) · E3 Jeu de données EEG public · E4 Système d'exploitation Windows (D-73) · E5 Broker MQTT et E6 ESP32 (extension, D-72) · E7 Simulateur robot ROS 2 (extension, D-11).
 
 ## 4. Interfaces principales
 
@@ -460,7 +460,7 @@ Ajouter un type de cible = ajouter un **connecteur** qui réalise `IConnecteur`,
 
 ## 6. Points encore ouverts
 
-- **D-04** : casque, donc liaison physique et pilote éventuel.
+- **D-04** : module ADS1299 8 canaux retenu ; liaison physique et pilote à vérifier.
 - **D-09** : authentification précise, droits par rôle, conservation.
 - **D-11** : robot et drone.
 - **D-19** : qui peut déclencher l'arrêt d'urgence.

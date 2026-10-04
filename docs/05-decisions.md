@@ -11,7 +11,7 @@ Quand une décision est prise : la déplacer de « Questions ouvertes » vers «
 | D-16 | Pas de document dédié au contenu retiré : il est repris dans les documents compagnons | 23/09/2026 |
 | D-17 | Les trois dimensions sont des objectifs à part entière, avec des rôles complémentaires (cahier des charges, section 1.6) | 23/09/2026 |
 | D-22 | Le Planning MVP v3.0 (`03-planning-mvp.md`) est le planning de référence | 23/09/2026 |
-| D-39 | Diagrammes en Mermaid dans `docs/diagrammes/` ; draw.io seulement à la fin, pour le rapport et la soutenance | 24/09/2026 |
+| D-39 | Diagrammes en Mermaid dans `docs/diagrammes/` ; draw.io seulement à la fin, pour le rapport et la soutenance. **Complétée par D-102** : une V1 draw.io et PDF existe déjà sur Drive | 24/09/2026 |
 | D-40 | `docs/` (dépôt Git) est la documentation de référence ; Google Drive n'en est qu'une copie de lecture. Petits changements de doc faits sans demander et signalés ; gros changements validés avant | 24/09/2026 |
 | D-41 | Structure de `docs/` numérotée ; un fichier n'est créé que lorsque le travail produit son contenu | 24/09/2026 |
 | D-42 | Graphie officielle : « CortexOS IA » (celle du logo) | 24/09/2026 |
@@ -69,6 +69,10 @@ Quand une décision est prise : la déplacer de « Questions ouvertes » vers «
 | D-98 | Pendant une session d'**expérimentation**, les commandes sont **réellement exécutées**, sur la lampe simulée comme sur l'ordinateur (permet de mesurer les commandes involontaires) | 27/09/2026 |
 | D-99 | Si le profil n'a **pas de modèle exploitable** à la création d'une session, la calibration (activité A3) est faite **avant** de démarrer la session | 27/09/2026 |
 | D-100 | Le contrôle « **une commande attend déjà sa confirmation** » (D-85) se place **après le garde-fou 4** de D-79 : une intention « oui » ne confirme que si la qualité et la confiance sont suffisantes | 27/09/2026 |
+| D-04 | **Casque EEG** : module d'acquisition **ADS1299, 8 canaux** (lien noté dans le classeur de suivi). Commande bloquée au 27/09/2026 (raison `[À DÉFINIR]`). **À vérifier avant la commande** : électrodes et bonnet fournis ou non ; liaison avec le PC ; compatibilité avec BrainFlow (D-21) | 27/09/2026 |
+| D-101 | **Propositions P1 à P8 d'ARCH-0 validées** : monodépôt (P1) ; ports 3000 / 8000 / 5432 et routes `/api/v1`, `/api/local`, `/ws/flux`, `/ws/agent` (P2) ; bibliothèques Uvicorn, Pydantic, SQLAlchemy 2, psycopg 3, Alembic, argon2-cffi, pynput, websockets, httpx (P3) ; lampe simulée dans le processus du backend (P4) ; l'agent se connecte au backend (P5) ; lecture BrainFlow et entraînement dans des fils séparés (P6) ; premier administrateur créé en ligne de commande (P7) ; jetons locaux générés au démarrage dans `data/` (P8) | 03/10/2026 |
+| D-102 | Les versions **draw.io et PDF** des diagrammes (dossier Drive « 04 - Conception / Diagrammes / V1 (pdf et drawio) ») restent **sur Drive seulement** ; la référence versionnée reste le Mermaid de `docs/diagrammes/` | 03/10/2026 |
+| D-103 | **Diagrammes DIAG-1 à DIAG-8 terminés et validés** : DIAG-6 (séquences a à d), DIAG-7 (8 diagrammes d'activité) et DIAG-8 (déploiement 8a et 8b) validés par Eloge ; la conception d'analyse (mode A, D-96) est close. Suite : contrat d'API (API-0) et maquettes | 04/10/2026 |
 
 ## 2. Questions ouvertes
 
@@ -76,7 +80,6 @@ Quand une décision est prise : la déplacer de « Questions ouvertes » vers «
 |---|---|---|---|
 | D-02 | La table des matières est-elle imposée par l'établissement ? | — | S1 |
 | D-03 | Quelles intentions pour le MVP, combien, et quel rôle pour les signaux oculaires (commande ou artefact) ? | Candidats évoqués : imagerie motrice (main gauche, main droite, pieds), repos, états de concentration ou de relaxation, clignement volontaire, ouverture ou fermeture des yeux | Bloc casque (C2) |
-| D-04 | Quel casque EEG (modèle, nombre de canaux, coût) ? | — | S1 (commande) |
 | D-05 | Quels scénarios de démonstration pour le MVP ? (système cible tranché par D-72) | S1 : allumer ou éteindre un équipement via un microcontrôleur · S2 : déplacer ou sélectionner un élément à l'écran · S3 : supervision en direct (signal, intention, confiance, commande) · S4 : démonstration des garde-fous · S5 : évaluation sur des données enregistrées · S6 : robot simulé (extension) | S2 |
 | D-08 | Quel sort pour les technologies non confirmées : Django, Flutter, Redis, gRPC, Docker ? L'ouverture du code (open source) est-elle décidée ? | — | — |
 | D-09 | Quels droits détaillés par rôle (rôles : D-47), quelle durée de conservation, quel partage des données EEG ? (accès minimal et stockage local : D-74 ; base et fichiers : D-58) | — | S22 |
@@ -84,7 +87,7 @@ Quand une décision est prise : la déplacer de « Questions ouvertes » vers «
 | D-11 | Robot et drone : extension en simulation, ou recherche et futur ? | — | — |
 | D-12 | Quels participants pour le MVP, et comment identifier les besoins des personnes ayant des limitations motrices ? | Option évoquée : volontaires sans limitation motrice d'abord, public cible ensuite | S31 |
 | D-13 | Quel budget, quelle configuration matérielle, quel financement ? | — | — |
-| D-14 | Année universitaire, encadreurs, projet solo ou en équipe, échéance et dates des jalons | — | Dès qu'elle est connue |
+| D-14 | Encadreurs, projet solo ou en équipe, échéance et dates des jalons (année universitaire : 2026-2027, indiquée par Eloge le 30/09/2026) | — | Dès qu'elle est connue |
 | D-15 | Faut-il un persona illustratif dans la section 1 ? | — | — |
 | D-18 | Faut-il distinguer un mode expérimentation et un mode utilisation ? (exécution des commandes en expérimentation : tranchée par D-98) | — | S7 |
 | D-19 | Qui peut déclencher l'arrêt d'urgence (utilisateur, accompagnant, opérateur) ? Le mécanisme est fixé par D-57 | — | S9 |

@@ -4,8 +4,8 @@
 |---|---|
 | **Réf.** | DIAG-7 (Planning MVP, S3, mode A — D-96) |
 | **Sources** | Analyse des diagrammes d'activité v1.1 par Eloge (27/09/2026) · Spécification § 2, 3, 4.1, 4.3, 4.5, 4.7, 4.9 · DIAG-5 (états) · DIAG-6 (séquences (a) à (d)) · Décisions D-24, D-29, D-31, D-59, D-77 à D-100 |
-| **Version** | 0.1 — 27 septembre 2026 |
-| **Statut** | À relire par Eloge · 8 diagrammes validés (D-97) |
+| **Version** | 1.0 — 4 octobre 2026 (validé ; 0.1 du 27/09) |
+| **Statut** | Validé par Eloge (04/10/2026, D-103) · 8 diagrammes (D-97) |
 
 ## Rôle de ces diagrammes
 

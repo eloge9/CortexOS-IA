@@ -4,8 +4,8 @@
 |---|---|
 | **Réf.** | DIAG-8, vue 1 (Planning MVP, S3, mode A — D-96) · vue 2 : `diag-08b-deploiement-materiel.md` |
 | **Sources** | Analyse du déploiement v1.0 par Eloge (27/09/2026) · ARCH-0 (§ 2, 5, 7, 8, 11) · DIAG-4 (composants C1 à C24) · Décisions D-54 à D-62, D-72 à D-76 |
-| **Version** | 0.1 — 27 septembre 2026 |
-| **Statut** | À relire par Eloge |
+| **Version** | 1.0 — 4 octobre 2026 (validé ; 0.1 du 27/09) |
+| **Statut** | Validé par Eloge (04/10/2026, D-103) |
 
 ## Rôle du diagramme
 
@@ -26,7 +26,6 @@ Mermaid n'a pas de diagramme de déploiement UML : on utilise un `flowchart` ave
 | «artifact» (fichier ou dossier déployé) | rectangle blanc, avec les composants qu'il réalise (C1…) |
 | «database» | cylindre |
 | Chemin de communication | flèche avec le protocole, le port ou la route |
-| Jaune pointillé | élément proposé, pas encore validé |
 
 > `«execEnv»` est l'abréviation de «executionEnvironment», raccourcie pour que Mermaid ne superpose pas les cadres.
 
@@ -49,7 +48,7 @@ flowchart LR
       aBack["«artifact» backend/ — processus unique (monolithe)<br/>API REST · passerelle WebSocket · orchestrateur<br/>modules · traitement EEG · IA · registre · connecteurs<br/>(C2–C16, C19, C20)"]
       aCore["«artifact» core/<br/>Python pur (C17, D-62)"]
       aSrc["«artifact» sources EEG sans matériel :<br/>carte synthétique BrainFlow · lecture de fichiers (C11)"]
-      aLampe["«artifact» lampe simulée (C24)<br/>appel direct (D-56) — dans ce processus (P4, proposé)"]
+      aLampe["«artifact» lampe simulée (C24)<br/>appel direct (D-56) — dans ce processus (P4, D-101)"]
     end
     subgraph AGP["«execEnv» Python"]
       aAgent["«artifact» agent/ (C23)"]
@@ -78,7 +77,6 @@ flowchart LR
   classDef art fill:#fff,stroke:#444
   classDef prop fill:#fff8e1,stroke:#c79100,stroke-dasharray:4 3
   class aWeb,aFront,aBack,aCore,aSrc,aAgent,aAU,fData art
-  class aLampe prop
   style PC fill:#f4f6fb,stroke:#334
   style NAV fill:#fbf7ea,stroke:#b9a45a
   style NODE fill:#eef7f1,stroke:#5a9a70
@@ -96,7 +94,7 @@ flowchart LR
 | «device» **PC d'Eloge** | tout ; Windows ; tout écoute sur 127.0.0.1 | — | D-73, D-74 ; configuration `[D-13]` |
 | «execEnv» **Navigateur** | Application Web (C1) : page vitrine publique et pages `/app/…` | l'utilisateur | D-76 |
 | «execEnv» **Node.js :3000** | `frontend/` : serveur Next.js | `npm run dev` | ARCH-0 |
-| «execEnv» **Python · Uvicorn :8000** | **un seul processus** : `backend/` (C2–C16, C19, C20), `core/` (C17), sources sans matériel, lampe simulée | `uvicorn` | D-62, monolithe ; lampe dans ce processus : P4 (proposé) |
+| «execEnv» **Python · Uvicorn :8000** | **un seul processus** : `backend/` (C2–C16, C19, C20), `core/` (C17), sources sans matériel, lampe simulée | `uvicorn` | D-62, monolithe ; lampe dans ce processus : D-101 (P4) |
 | «execEnv» **Python (agent)** | `agent/` (C23) | `python -m agent` | D-55 |
 | «execEnv» **Python (arrêt d'urgence)** | `arret_urgence/` (C18) | `python -m arret_urgence` | D-57, D-75 |
 | «execEnv» **PostgreSQL :5432** | base CortexOS (C21) | service Windows | D-58 |
@@ -118,7 +116,7 @@ flowchart LR
 | Agent | Windows | API du système (pynput) | liste fermée de commandes | D-73, P3 |
 | Backend | PostgreSQL | SQL `127.0.0.1:5432` | mot de passe dans `.env` | D-58, P3 |
 | Backend | data/ | fichiers | — | D-58 |
-| Backend | Lampe simulée | appel de fonction Python (pas de réseau) | — | D-56, P4 |
+| Backend | Lampe simulée | appel de fonction Python (pas de réseau) | — | D-56, D-101 |
 
 ## Ordre de démarrage (proposé, ARCH-0 § 11)
 
@@ -156,16 +154,15 @@ Le backend démarre avant l'agent et l'arrêt d'urgence, car ce sont eux qui s'y
 | Système d'exploitation | `[D-06]` | **Windows** | D-73 |
 | Tout sur `localhost` | Proposition (Q3) | Décidé | D-74 |
 | Navigateur → backend | Direct ou via Next.js (Q2) | **Direct**, CORS limité à `localhost:3000` | ARCH-0 § 5 et § 7 |
-| Lampe simulée | Processus séparé ; directe ou MQTT (Q5) | **Appel direct**, dans le processus backend | D-56 ; « dans le backend » reste la proposition P4 |
+| Lampe simulée | Processus séparé ; directe ou MQTT (Q5) | **Appel direct**, dans le processus backend | D-56 ; « dans le backend » : P4, validé (D-101) |
 | Broker MQTT en vue 1 | Optionnel | **Retiré** de la vue 1 (passe en vue 2) | La lampe est en appel direct (D-56) ; MQTT et ESP32 sont une extension (D-72) |
 | Artefact `lampe_simulee/` | Dossier séparé | Dans `backend/app/cibles/` | ARCH-0 § 4 (P1, P4) |
-| Uvicorn, SQLAlchemy, pynput | Déduits | Écrits sur les flèches | Bibliothèques proposées (P3) |
+| Uvicorn, SQLAlchemy, pynput | Déduits | Écrits sur les flèches | Bibliothèques P3, validées (D-101) |
 | Version de Python | — | 3.14 ou 3.12, à vérifier en S4 | ARCH-0 § 3.4 |
 | Lancement | Script (Q8) | Ordre ARCH-0 § 11 (proposé) ; Docker `[D-08]` | Déjà proposé dans ARCH-0 |
 
 ## Points encore ouverts
 
-- **P1 à P8** d'ARCH-0 (dont P4 : la lampe dans le processus backend).
 - **D-13** : configuration du PC (processeur, mémoire, Bluetooth).
 - **D-08** : Docker en fin de projet ; script de lancement unique ou non.
 - **Machine de soutenance** : même PC ou non.

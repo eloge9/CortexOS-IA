@@ -9,7 +9,7 @@
 | **Suivi** | Classeur Google Sheets « Tableau de suivi — CortexOS IA » (Drive, dossier « 03 - Planning et suivi ») : une ligne par tâche de ce planning |
 | **Période** | 28 septembre 2026 → soutenance vers juillet-août 2027 `[À DÉFINIR — D-14]` |
 | **Auteur** | GOMINA Eloge |
-| **Version du document** | 3.2 — 25 septembre 2026 (diagrammes : D-46, D-96 ; Core Python D-62 ; DIAG-5 D-63 ; cible, OS, accès D-72 à D-74 ; page vitrine D-76 ; DIAG-7 : D-97, le 27/09) |
+| **Version du document** | 3.2 — 25 septembre 2026 (diagrammes : D-46, D-96 ; Core Python D-62 ; DIAG-5 D-63 ; cible, OS, accès D-72 à D-74 ; page vitrine D-76 ; DIAG-7 : D-97, le 27/09 ; DIAG-1 à DIAG-8 validés le 04/10, D-103) |
 
 > Situation de départ : aucun code écrit, casque choisi mais pas commandé, un PC seul, environ 8 heures de travail par semaine, développement avec Claude (explications, revue) et Claude Code (écriture de code), la compréhension restant la priorité.
 
@@ -52,7 +52,7 @@ Ce qui est conservé : départ le 28 septembre 2026, 8 h par semaine, casque à 
 |---|---|
 | Temps disponible | Environ 8 h par semaine ; périodes d'examens `[À COMPLÉTER]` |
 | Matériel | Un PC, configuration `[À COMPLÉTER]` |
-| Casque | Modèle choisi `[À COMPLÉTER — D-04]`, commande en S1, délai de livraison `[À DÉFINIR]` |
+| Casque | Module ADS1299 8 canaux (D-04) ; commande bloquée (raison `[À DÉFINIR]`) ; délai de livraison `[À DÉFINIR]` ; compatibilité BrainFlow `[À VÉRIFIER]` |
 | Architecture | Monolithe modulaire ; agent ordinateur séparé |
 | Méthode | Contrat d'API défini pendant la conception, puis développement par tranches |
 | Système cible réel du MVP | L'ordinateur sous Windows, avec une lampe simulée en complément (D-72, D-73) |

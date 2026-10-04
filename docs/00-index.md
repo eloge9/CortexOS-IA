@@ -8,7 +8,7 @@
 | 04 | [Développement sur PC seul](04-developpement-pc-seul.md) | Ce qui se développe sans casque EEG | v1.0 |
 | 05 | [Décisions](05-decisions.md) | Registre unique des décisions D-xx | à jour |
 | 06 | [Charte graphique](06-charte-graphique.md) | Logo, couleurs, polices, composants, thèmes | v1.0 |
-| 07 | [Architecture technique](07-architecture-technique.md) | Programmes, technologies, communication, dépôt, sécurité (ARCH-0) | v0.1 à relire |
+| 07 | [Architecture technique](07-architecture-technique.md) | Programmes, technologies, communication, dépôt, sécurité (ARCH-0) | Terminé (27/09) · P1–P8 validées (D-101) |
 | — | [Logos](assets/logo/) | 8 versions du logo (voir charte, section 2) | — |
 | — | [Diagrammes](diagrammes/) | Diagrammes Mermaid DIAG-1 à DIAG-14 | en cours |
 

@@ -4,8 +4,8 @@
 |---|---|
 | **Réf.** | DIAG-8, vue 2 (Planning MVP, S3, mode A — D-96) · vue 1 : `diag-08a-deploiement-pc.md` |
 | **Sources** | Analyse du déploiement v1.0 par Eloge (27/09/2026) · Cahier des charges § 8 · ARCH-0 · Décisions D-04, D-11, D-19, D-72 |
-| **Version** | 0.1 — 27 septembre 2026 |
-| **Statut** | À relire par Eloge |
+| **Version** | 1.0 — 4 octobre 2026 (validé ; 0.1 du 27/09) |
+| **Statut** | Validé par Eloge (04/10/2026, D-103) |
 
 ## Rôle de cette vue
 
@@ -32,7 +32,7 @@ flowchart LR
       aSrc["«artifact» sources EEG (C11) :<br/>carte synthétique · fichiers · <b>casque</b> (BrainFlow)"]
       aSdk["«artifact» pilote / SDK du fabricant<br/>si le casque l'exige [D-04]"]
       aMqtt["«artifact» connecteur MQTT (C20)<br/>nouveau connecteur, Core inchangé (F-25)"]
-      aLampe["«artifact» lampe simulée (C24)<br/>appel direct (D-56) — dans ce processus (P4, proposé)"]
+      aLampe["«artifact» lampe simulée (C24)<br/>appel direct (D-56) — dans ce processus (P4, D-101)"]
     end
     subgraph AGP["«execEnv» Python"]
       aAgent["«artifact» agent/ (C23)"]
@@ -51,7 +51,7 @@ flowchart LR
     end
     os["Windows<br/>(curseur, clic)"]
   end
-  subgraph CASQUE["«device» Casque EEG [D-04]"]
+  subgraph CASQUE["«device» Module EEG ADS1299 8 canaux (D-04)"]
     fwC["«artifact» firmware du fabricant<br/>(hors projet)"]
   end
   subgraph WIFI["«device» Box / point d'accès Wi-Fi"]
@@ -70,7 +70,7 @@ flowchart LR
   aAgent -- "API Windows (pynput)" --> os
   aBack -- "SQL (SQLAlchemy + psycopg, P3)" --> db
   aBack -- "fichiers" --> fData
-  fwC -- "Bluetooth, dongle USB ou Wi-Fi [D-04]" --> aSdk
+  fwC -- "liaison [À VÉRIFIER — D-04]" --> aSdk
   aSdk -- "appel de bibliothèque" --> aSrc
   aMqtt -- "MQTT (127.0.0.1)" --> aBrk
   aBrk -- "MQTT sur Wi-Fi" --> lan
@@ -80,7 +80,6 @@ flowchart LR
   classDef art fill:#fff,stroke:#444
   classDef prop fill:#fff8e1,stroke:#c79100,stroke-dasharray:4 3
   class aWeb,aFront,aBack,aCore,aSrc,aAgent,aAU,fData art
-  class aLampe prop
   classDef futur fill:#fff,stroke:#2c5aa0,stroke-dasharray:5 5
   class aSdk,aMqtt,aBrk,fwC,fwE,act,lan futur
   style PC fill:#f4f6fb,stroke:#334
@@ -101,7 +100,7 @@ flowchart LR
 
 | Élément | Type | Rôle | Liaison | Statut |
 |---|---|---|---|---|
-| **Casque EEG** | «device» + firmware du fabricant (hors projet) | Mesure le signal | Bluetooth, dongle USB ou Wi-Fi | Modèle et liaison `[D-04]` ; bloc casque S27–S30 |
+| **Casque EEG** | «device» + firmware du fabricant (hors projet) | Mesure le signal | Bluetooth, dongle USB ou Wi-Fi | Module ADS1299 8 canaux (D-04) ; liaison `[À VÉRIFIER]` ; bloc casque S27–S30 |
 | **Pilote / SDK du fabricant** | «artifact» sur le PC | Nécessaire si le casque l'exige ; appelé par BrainFlow **dans** le processus backend | appel de bibliothèque | `[D-04]` (Cahier § 8.2) |
 | Source « casque » | dans `backend/` | Troisième implémentation de `ISourceEEG` : **le reste du code ne change pas** | — | DIAG-4, A3 d'ARCH-0 |
 | **Connecteur MQTT** | «artifact» dans `backend/` | Nouveau connecteur ; le Core ne change pas (F-25) | MQTT vers le broker en 127.0.0.1 | Extension (D-72) |
@@ -141,6 +140,6 @@ flowchart LR
 
 ## Points encore ouverts
 
-- **D-04** : casque, donc liaison (Bluetooth, USB, Wi-Fi) et besoin d'un pilote. **À commander avant le 04/10.**
+- **D-04** : module ADS1299 8 canaux retenu ; liaison avec le PC, électrodes et compatibilité BrainFlow **à vérifier avant la commande** (commande bloquée au 27/09).
 - Langage du firmware ESP32 (Arduino C++ ou MicroPython) et choix du broker : à décider seulement si l'extension est réalisée.
 - **D-19** (bouton physique), **D-11** (robot, drone), **D-08** (Docker), **D-13** (achats).
