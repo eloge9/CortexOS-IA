@@ -158,7 +158,7 @@ Le backend démarre avant l'agent et l'arrêt d'urgence, car ce sont eux qui s'y
 | Broker MQTT en vue 1 | Optionnel | **Retiré** de la vue 1 (passe en vue 2) | La lampe est en appel direct (D-56) ; MQTT et ESP32 sont une extension (D-72) |
 | Artefact `lampe_simulee/` | Dossier séparé | Dans `backend/app/cibles/` | ARCH-0 § 4 (P1, P4) |
 | Uvicorn, SQLAlchemy, pynput | Déduits | Écrits sur les flèches | Bibliothèques P3, validées (D-101) |
-| Version de Python | — | 3.14 ou 3.12, à vérifier en S4 | ARCH-0 § 3.4 |
+| Version de Python | — | 3.14.3 ; paquets vérifiés le 04/10 | ARCH-0 § 3.4 |
 | Lancement | Script (Q8) | Ordre ARCH-0 § 11 (proposé) ; Docker `[D-08]` | Déjà proposé dans ARCH-0 |
 
 ## Points encore ouverts
