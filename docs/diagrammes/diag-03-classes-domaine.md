@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| **Réf.** | DIAG-3 (Planning MVP, S2, mode B — D-46) |
+| **Réf.** | DIAG-3 (Planning MVP, S2, mode A — D-96) |
 | **Sources** | Analyse des classes du domaine v1.0 (24/09/2026) · Cahier des charges v2.0 (§ 4, 5, 6, glossaire) · Spécification fonctionnelle v1.0 (§ 1.4, 2, 3, 4.1 à 4.9) · Cas d'utilisation (DIAG-2) · Registre des décisions |
 | **Version** | 2.2 — 25 septembre 2026 (validé ; D-50 à D-53 ; toutes les associations nommées) |
 

@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| **Réf.** | DIAG-2 (Planning MVP, S1, mode B — D-46) |
+| **Réf.** | DIAG-2 (Planning MVP, S1, mode A — D-96) |
 | **Sources** | Catalogue des cas d'utilisation (section 2 de `diag-02a-cas-utilisation-par-acteur.md`) |
 | **Version** | 1.0 — 25 septembre 2026 |
 

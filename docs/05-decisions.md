@@ -17,7 +17,7 @@ Quand une décision est prise : la déplacer de « Questions ouvertes » vers «
 | D-42 | Graphie officielle : « CortexOS IA » (celle du logo) | 24/09/2026 |
 | D-43 | Charte graphique : variables CSS + Tailwind v4 ; thème sombre par défaut + thème clair ; polices Exo 2 (titres) + Inter (texte) ; ambiance pro et sobre | 24/09/2026 |
 | D-45 | Synchronisation docs / Git / Drive : pendant la séance, seuls les fichiers de `docs/` sont mis à jour (économie de tokens) ; mot-clé « ds » (début de séance) = vérifier les fichiers Drive modifiés et les commentaires ; mot-clé « fs » (fin de séance) = vérifier que les copies Drive n'ont pas été modifiées par Eloge ou l'encadreur (ne jamais écraser : montrer, puis reporter dans `docs/` après accord), republier sur Drive les docs modifiés (ancienne version dans « 99 - Archives »), mettre à jour le classeur de suivi, récapitulatif et commit proposé ; l'encadreur commente plutôt que de modifier (sauf le classeur de suivi, qui n'existe que sur Drive) | 24/09/2026 |
-| D-46 | Tous les diagrammes (DIAG-1 à DIAG-14) passent en mode B : Claude les écrit ; Eloge les relit, doit pouvoir les expliquer en soutenance et répond à une question de compréhension après chacun | 25/09/2026 |
+| D-46 | Tous les diagrammes (DIAG-1 à DIAG-14) passent en mode B : Claude les écrit ; Eloge les relit, doit pouvoir les expliquer en soutenance et répond à une question de compréhension après chacun. **Modifiée par D-96** : DIAG-1 à DIAG-8 et ARCH-0 en mode A | 25/09/2026 |
 | D-47 | Rôles retenus : Utilisateur, Accompagnant / opérateur, Expérimentateur, **Administrateur** (gère les comptes et les rôles) ; une même personne peut cumuler plusieurs rôles. Restent ouverts dans D-09 : mécanisme d'authentification, droits détaillés par rôle, stockage, conservation, partage | 25/09/2026 |
 | D-48 | Diagrammes de cas d'utilisation : acteurs humains à gauche, acteurs non humains à droite ; deux fichiers — un diagramme par acteur principal (`diag-02a`) et une vue d'ensemble dans un seul cadre avec toutes les généralisations (`diag-02b`) | 25/09/2026 |
 | D-49 | Le catalogue des cas d'utilisation (UC-01 à UC-47) et l'analyse des classes du domaine fournis par Eloge sont les références de DIAG-2 et DIAG-3 ; leurs propositions ont été validées par D-50 à D-53 ; les classes « à confirmer » dépendent des décisions ouvertes indiquées | 25/09/2026 |
@@ -38,6 +38,37 @@ Quand une décision est prise : la déplacer de « Questions ouvertes » vers «
 | D-64 | Le diagramme ② modélise le **cycle de vie d'une commande depuis la détection** (de « Détectée » à « Exécutée », rejet compris), fidèle à la spécification 4.5 | 25/09/2026 |
 | D-65 | La calibration comporte un sous-état **Entraînement** entre la fin des essais et le résultat | 25/09/2026 |
 | D-66 | Dans les diagrammes, les comportements non tranchés sont marqués ⚠ avec leur décision `[D-xx]`, sans être décidés | 25/09/2026 |
+| D-72 | **Système cible du MVP** : l'**ordinateur** (réel, via l'agent) **+ une lampe simulée** ; objet connecté réel (ESP32, MQTT) en extension. Tranche la partie « système cible » de D-05 | 25/09/2026 |
+| D-73 | **Système d'exploitation** de l'agent ordinateur : **Windows** (celui du PC de développement) ; autres OS plus tard. Tranche D-06 | 25/09/2026 |
+| D-74 | **Accès (version minimale de D-09)** : comptes **locaux** (identifiant + mot de passe haché) dans PostgreSQL, **session par cookie**, rôles en base, **toutes les données restent sur le PC** (aucun cloud) | 25/09/2026 |
+| D-75 | **Canal de l'arrêt d'urgence** : le programme C18 envoie un **POST sur une route HTTP locale dédiée** du backend, acceptée **uniquement depuis 127.0.0.1** et avec un **jeton local dédié** ; canal indépendant de l'interface Web **et** de l'agent ordinateur, pour rester disponible si l'agent tombe | 25/09/2026 |
+| D-76 | L'application Web comporte une **page vitrine publique** (FW-51), seule page accessible sans compte ; contenu et semaine `[À DÉFINIR]` | 25/09/2026 |
+| D-77 | Une commande EEG peut partir **hors session** (utilisation libre) ; elle est **toujours journalisée** | 25/09/2026 |
+| D-78 | **Journal des détections** : en session d'**expérimentation**, toutes les détections sont journalisées ; en **utilisation**, seulement celles qui mènent à une décision (pas le « repos ») | 25/09/2026 |
+| D-79 | **Ordre des garde-fous** du Core (et motif affiché si plusieurs échouent : le premier) : 1 intention « repos », 2 état Actif, 3 qualité, 4 confiance ≥ seuil, 5 cible disponible / commande autorisée / non sensible, 6 délai minimal | 25/09/2026 |
+| D-80 | Une confiance **égale au seuil** est **acceptée** (règle « confiance ≥ seuil ») | 25/09/2026 |
+| D-81 | En cas de rejet, l'interface affiche le **motif**, la **confiance** et la **valeur du seuil** | 25/09/2026 |
+| D-82 | **Rejets répétés** : au MVP, aucune alerte ; ils sont seulement comptés dans les mesures (recommandation de recalibration : extension, F-10, D-33) | 25/09/2026 |
+| D-83 | En expérimentation, une détection **rejetée compte dans la précision** (la précision porte sur les détections, pas sur les commandes) | 25/09/2026 |
+| D-24 | **Confirmation des commandes sensibles** : par l'**accompagnant** (clic dans l'interface) **ou** par l'**utilisateur** avec une **intention EEG « oui »** ; le clic de l'utilisateur est accepté en développement. Liste des commandes sensibles `[À DÉFINIR]` (S7) | 25/09/2026 |
+| D-31 | **Délai d'expiration** d'une confirmation : valeur par défaut, **réglable par profil** (accessibilité A-06) ; valeur par défaut `[À DÉFINIR]` (S7) | 25/09/2026 |
+| D-85 | Pendant qu'une commande attend sa confirmation, les nouvelles détections sont **rejetées** (nouveau motif « confirmation en attente ») ; une seule commande en attente à la fois ; exception : l'intention « oui » confirme | 25/09/2026 |
+| D-86 | L'**expiration** d'une confirmation est décidée par le **minuteur du Core** ; l'interface affiche seulement le compte à rebours calculé à partir de l'échéance | 25/09/2026 |
+| D-87 | `confirmer` et `annuler` sont **idempotents** : une deuxième demande sur la même commande répond « déjà traitée » | 25/09/2026 |
+| D-88 | Le **temps de décision humaine** (attente d'une confirmation) est mesuré à part et **exclu** de la latence de bout en bout | 25/09/2026 |
+| D-89 | **Auteur** d'une confirmation ou d'une annulation : le compte connecté (D-74) ; « intention EEG » pour une confirmation par EEG | 25/09/2026 |
+| D-29 | Au **démarrage**, les commandes sont suspendues (état Prêt). **Après un incident résolu**, CortexOS passe en **Suspendu** ; les commandes ne reprennent que par une **action explicite** (« Reprendre ») | 26/09/2026 |
+| D-90 | Le **chien de garde du signal** est dans le **Contrôle qualité (C12)**, avec sa **propre minuterie**, indépendante de la boucle d'acquisition ; délai sans échantillon `[À DÉFINIR — Documentation technique]` | 26/09/2026 |
+| D-91 | **Conditions pour reprendre** les commandes : signal présent, qualité suffisante, modèle chargé, cible disponible | 26/09/2026 |
+| D-92 | Après une reconnexion du casque, l'interface **propose** (sans l'imposer) une **recalibration** si le casque a été retiré | 26/09/2026 |
+| D-93 | Une commande **déjà envoyée** au moment d'un passage en état sûr n'est **pas rappelée** : on la laisse finir et son résultat est journalisé « reçu en état sûr » | 26/09/2026 |
+| D-94 | **Reconnexion du casque** : tentatives **automatiques** périodiques **et** bouton « Reconnecter » ; dans tous les cas, jamais de reprise automatique des commandes (F-05) | 26/09/2026 |
+| D-95 | **Perte du signal pendant une session** : la session passe **En pause** automatiquement ; la période sans signal est **exclue des mesures** | 26/09/2026 |
+| D-96 | **DIAG-1 à DIAG-8 et ARCH-0 passent en mode A** : Eloge rédige l'analyse textuelle ; Claude écrit le Mermaid, complète et corrige. D-46 (mode B) reste valable pour DIAG-9 à DIAG-14. Relectures de DIAG-2 (vue d'ensemble), DIAG-4 et DIAG-5 validées le 25/09/2026 | 26/09/2026 |
+| D-97 | **DIAG-7 compte 8 diagrammes d'activité** : A1 session d'expérimentation (vue d'ensemble) et A1-b boucle des essais, A2 traitement d'une fenêtre jusqu'à la décision, A3 première utilisation, A4 à A7 activités des séquences (a) à (d) | 27/09/2026 |
+| D-98 | Pendant une session d'**expérimentation**, les commandes sont **réellement exécutées**, sur la lampe simulée comme sur l'ordinateur (permet de mesurer les commandes involontaires) | 27/09/2026 |
+| D-99 | Si le profil n'a **pas de modèle exploitable** à la création d'une session, la calibration (activité A3) est faite **avant** de démarrer la session | 27/09/2026 |
+| D-100 | Le contrôle « **une commande attend déjà sa confirmation** » (D-85) se place **après le garde-fou 4** de D-79 : une intention « oui » ne confirme que si la qualité et la confiance sont suffisantes | 27/09/2026 |
 
 ## 2. Questions ouvertes
 
@@ -46,29 +77,25 @@ Quand une décision est prise : la déplacer de « Questions ouvertes » vers «
 | D-02 | La table des matières est-elle imposée par l'établissement ? | — | S1 |
 | D-03 | Quelles intentions pour le MVP, combien, et quel rôle pour les signaux oculaires (commande ou artefact) ? | Candidats évoqués : imagerie motrice (main gauche, main droite, pieds), repos, états de concentration ou de relaxation, clignement volontaire, ouverture ou fermeture des yeux | Bloc casque (C2) |
 | D-04 | Quel casque EEG (modèle, nombre de canaux, coût) ? | — | S1 (commande) |
-| D-05 | Quels scénarios de démonstration et quel système cible pour le MVP ? | S1 : allumer ou éteindre un équipement via un microcontrôleur · S2 : déplacer ou sélectionner un élément à l'écran · S3 : supervision en direct (signal, intention, confiance, commande) · S4 : démonstration des garde-fous · S5 : évaluation sur des données enregistrées · S6 : robot simulé (extension) | S2 |
-| D-06 | Quel système d'exploitation cible ? | — | S16 |
+| D-05 | Quels scénarios de démonstration pour le MVP ? (système cible tranché par D-72) | S1 : allumer ou éteindre un équipement via un microcontrôleur · S2 : déplacer ou sélectionner un élément à l'écran · S3 : supervision en direct (signal, intention, confiance, commande) · S4 : démonstration des garde-fous · S5 : évaluation sur des données enregistrées · S6 : robot simulé (extension) | S2 |
 | D-08 | Quel sort pour les technologies non confirmées : Django, Flutter, Redis, gRPC, Docker ? L'ouverture du code (open source) est-elle décidée ? | — | — |
-| D-09 | Quelle authentification précise (S25, D-60), quels droits détaillés par rôle (rôles : D-47), quelle durée de conservation, quel partage des données EEG, stockage local ou distant ? (base et fichiers : D-58) | — | S2 ; détail en S22 |
+| D-09 | Quels droits détaillés par rôle (rôles : D-47), quelle durée de conservation, quel partage des données EEG ? (accès minimal et stockage local : D-74 ; base et fichiers : D-58) | — | S22 |
 | D-10 | Quels seuils de réussite et quelles cibles de performance (précision, latence, commandes involontaires) ? | — | Bloc casque (C3) |
 | D-11 | Robot et drone : extension en simulation, ou recherche et futur ? | — | — |
 | D-12 | Quels participants pour le MVP, et comment identifier les besoins des personnes ayant des limitations motrices ? | Option évoquée : volontaires sans limitation motrice d'abord, public cible ensuite | S31 |
 | D-13 | Quel budget, quelle configuration matérielle, quel financement ? | — | — |
 | D-14 | Année universitaire, encadreurs, projet solo ou en équipe, échéance et dates des jalons | — | Dès qu'elle est connue |
 | D-15 | Faut-il un persona illustratif dans la section 1 ? | — | — |
-| D-18 | Faut-il distinguer un mode expérimentation et un mode utilisation ? | — | S7 |
+| D-18 | Faut-il distinguer un mode expérimentation et un mode utilisation ? (exécution des commandes en expérimentation : tranchée par D-98) | — | S7 |
 | D-19 | Qui peut déclencher l'arrêt d'urgence (utilisateur, accompagnant, opérateur) ? Le mécanisme est fixé par D-57 | — | S9 |
 | D-20 | L'association intention → commande est-elle configurable par profil dès le MVP ou en extension ? | — | S17 |
 | D-21 | Quelle stratégie de repli si le casque est indisponible ou si la précision est insuffisante ? | Simulateur, données enregistrées, jeux de données publics | Appliquée ici ; à confirmer dans le Cahier des charges |
 | D-23 | Qui peut modifier le seuil de confiance, et depuis quel rôle ? | Le seuil agit directement sur le risque de commande involontaire | — |
-| D-24 | Quelles commandes sont sensibles, et comment les confirmer (intention EEG, autre moyen, accompagnant) ? | Une confirmation par clic est contraire à l'objectif d'accessibilité | S7 |
 | D-25 | L'interface Web doit-elle être pilotable par intentions, et à quel horizon ? | Frontière entre CortexOS outil d'accessibilité et interface accessible | — |
 | D-26 | Quel niveau d'accessibilité vise-t-on pour l'interface ? | Sans cible, ENF-09 n'est pas vérifiable | — |
 | D-27 | Autorise-t-on le test manuel d'un système cible sans EEG ? | Utile au diagnostic, mais risque de fausser une démonstration | S17 |
 | D-28 | Le repos est-il une intention sans commande, ou peut-il déclencher une action ? | Associer le repos à une action augmente le risque de commande involontaire | S7 |
-| D-29 | Les commandes sont-elles suspendues au démarrage et après tout incident, jusqu'à une reprise explicite ? | Évite qu'une reconnexion réactive les commandes sans contrôle humain | S7 |
 | D-30 | Faut-il un délai minimal entre deux commandes, et lequel ? | Évite des répétitions involontaires d'une même commande | S7 |
-| D-31 | Quel délai d'expiration pour une confirmation, et est-il ajustable ? | Sûreté d'un côté, accessibilité (A-06) de l'autre | S7 |
 | D-32 | Que fait la plateforme si l'interface Web est fermée ou déconnectée pendant une session active ? | Sans interface, plus personne ne voit l'état ni ne peut suspendre depuis l'écran | — |
 | D-33 | Combien de temps une calibration reste-t-elle valable, et quand recommander une recalibration ? | Les signaux varient d'une session à l'autre | — |
 | D-34 | Les données exportées ou partagées sont-elles pseudonymisées ? | Protection des données EEG, données personnelles sensibles | S25 |
@@ -78,9 +105,10 @@ Quand une décision est prise : la déplacer de « Questions ouvertes » vers «
 | D-38 | Que couvre la suppression des données : sessions, modèles, journal, résultats déjà exportés ? | Rendre le droit à l'effacement applicable concrètement | S25 |
 | D-44 | Faut-il une version vectorielle (SVG) du logo, et qui la réalise ? | Les PNG actuels suffisent à l'écran ; le SVG est net à toutes tailles (favicon, impression) | S4 |
 | D-67 | **État global** : perte du signal en *Préparation* → État sûr ou Arrêté ? Quelles conditions vérifier avant d'accepter l'activation (qualité, cible disponible) ? | — | S5 |
-| D-68 | **Commande** : délai d'attente du résultat ; que faire si la cible devient indisponible entre la décision et l'envoi ; peut-on annuler une action déjà envoyée (arrêt d'urgence) ? | — | S8 |
+| D-68 | **Commande** : délai d'attente du résultat ; que faire si la cible devient indisponible entre la décision et l'envoi ? (action déjà envoyée : jamais rappelée, D-93) | — | S8 |
 | D-69 | **Calibration** : une erreur d'entraînement donne « Interrompue » ou « Insuffisante » ? | — | S26 |
-| D-70 | **Source de signal** : reconnexion automatique ou manuelle ; que se passe-t-il à la fin d'un enregistrement rejoué ? | — | S10 |
-| D-71 | **Session** : effet d'une perte du signal (pause, interrompue, continue ?) ; une session interrompue peut-elle reprendre ? l'enregistrement continue-t-il pendant la pause ? à la reprise, les commandes restent-elles suspendues jusqu'à une reprise explicite ? | — | S22 |
+| D-70 | **Source de signal** : que se passe-t-il à la fin d'un enregistrement rejoué ? (reconnexion : tranchée par D-94) | — | S10 |
+| D-71 | **Session** : une session interrompue peut-elle reprendre ? l'enregistrement continue-t-il pendant la pause ? (effet d'une perte du signal : tranché par D-95) | — | S22 |
+| D-84 | **Mesures** : une détection « repos » est-elle comptée comme un rejet ou dans une catégorie à part (« aucune commande attendue ») ? | Proposition : catégorie à part, pour ne pas fausser le taux de rejet | S24 |
 
 « À décider avant » : semaine du Planning MVP (S1 = 28/09/2026).

@@ -4,12 +4,12 @@
 |---|---|
 | **Document** | Planning MVP détaillé par fonctionnalité |
 | **Projet** | CortexOS IA |
-| **Documents de référence** | Cahier des charges v2.0 · Spécification fonctionnelle v1.0 · Développement sur PC seul v1.0 |
+| **Documents de référence** | Cahier des charges v2.2 · Spécification fonctionnelle v1.2 · Développement sur PC seul v1.0 |
 | **Remplace** | Planning MVP v2.0 et « Planning complet MVP CortexOS AI — 1 an jusqu'à la soutenance » |
 | **Suivi** | Classeur Google Sheets « Tableau de suivi — CortexOS IA » (Drive, dossier « 03 - Planning et suivi ») : une ligne par tâche de ce planning |
 | **Période** | 28 septembre 2026 → soutenance vers juillet-août 2027 `[À DÉFINIR — D-14]` |
 | **Auteur** | GOMINA Eloge |
-| **Version du document** | 3.0 — 23 septembre 2026 |
+| **Version du document** | 3.2 — 25 septembre 2026 (diagrammes : D-46, D-96 ; Core Python D-62 ; DIAG-5 D-63 ; cible, OS, accès D-72 à D-74 ; page vitrine D-76 ; DIAG-7 : D-97, le 27/09) |
 
 > Situation de départ : aucun code écrit, casque choisi mais pas commandé, un PC seul, environ 8 heures de travail par semaine, développement avec Claude (explications, revue) et Claude Code (écriture de code), la compréhension restant la priorité.
 
@@ -55,7 +55,7 @@ Ce qui est conservé : départ le 28 septembre 2026, 8 h par semaine, casque à 
 | Casque | Modèle choisi `[À COMPLÉTER — D-04]`, commande en S1, délai de livraison `[À DÉFINIR]` |
 | Architecture | Monolithe modulaire ; agent ordinateur séparé |
 | Méthode | Contrat d'API défini pendant la conception, puis développement par tranches |
-| Système cible réel du MVP | L'ordinateur, avec une lampe simulée en complément `[À CONFIRMER — D-05]` |
+| Système cible réel du MVP | L'ordinateur sous Windows, avec une lampe simulée en complément (D-72, D-73) |
 | Langage du Core pour le MVP | Python (D-62) |
 | Stratégie sans matériel | Simulation BrainFlow et jeu de données public `[À CONFIRMER — D-21]` |
 | Diagrammes | En Mermaid, versionnés dans `docs/` ; autre format si l'école l'exige `[D-02]` |
@@ -77,7 +77,7 @@ Répartition d'une semaine type de 8 h :
 | Mode | Qui écrit | Pour quoi |
 |---|---|---|
 | **A — Tu codes** | Toi, guidé étape par étape ; Claude relit et explique | Ce que tu dois savoir expliquer en soutenance : Core, IA, source de données, mesures, consentement |
-| **B — Claude Code code** | Claude Code ; tu relis chaque fichier avec le compte rendu pédagogique | Squelettes, backend, écrans Web, **tous les diagrammes** (D-46), chacun suivi d'une explication et d'une question de compréhension |
+| **B — Claude Code code** | Claude Code ; tu relis chaque fichier avec le compte rendu pédagogique | Squelettes, backend, écrans Web, diagrammes DIAG-9 à DIAG-14 (D-46), chacun suivi d'une explication et d'une question de compréhension. DIAG-1 à DIAG-8 et ARCH-0 : mode A (D-96), tu rédiges l'analyse, Claude écrit le Mermaid |
 
 **Règle** : aucun code n'entre dans le projet si tu ne peux pas l'expliquer.
 
@@ -134,7 +134,7 @@ Préparer (tâche et concept, 10 min) → coder (mode A ou B) → tester → com
 
 ## 5. Planning détaillé par fonctionnalité
 
-Chaque ligne correspond à une fonctionnalité ; ses tâches sont reprises une par une dans le classeur de suivi. Les références (F-xx, FW-xx) sont celles de la Spécification fonctionnelle : **les 44 fonctions et les 50 fonctionnalités Web y figurent toutes**, dans ce planning ou dans les extensions (section 10).
+Chaque ligne correspond à une fonctionnalité ; ses tâches sont reprises une par une dans le classeur de suivi. Les références (F-xx, FW-xx) sont celles de la Spécification fonctionnelle : **les 44 fonctions et les 51 fonctionnalités Web y figurent toutes**, dans ce planning ou dans les extensions (section 10). Seule exception : la page vitrine (FW-51, D-76), ajoutée le 25/09/2026, dont la semaine de réalisation est `[À DÉFINIR]` (proposition : S4, avec le squelette du frontend).
 
 ### Tranche 0 — Démarrage et conception (S1–S4)
 
@@ -142,17 +142,17 @@ Chaque ligne correspond à une fonctionnalité ; ses tâches sont reprises une p
 |---|---|---|---|---|---|
 | S1 | 28/09 → 04/10 | — | **Commande du casque EEG** | Confirmer le modèle (D-04) · Passer la commande · Noter le délai de livraison annoncé | — |
 | S1 | 28/09 → 04/10 | — | **Environnement de travail** | Installer Git, Python 3, Node.js LTS, VS Code · Créer le dépôt CortexOS et le premier commit · Créer docs/ avec Cahier des charges, Spécification, Planning | A |
-| S1 | 28/09 → 04/10 | DIAG-1 | **Diagramme de contexte** | Lister les acteurs et systèmes externes · Dessiner en Mermaid · Relire et expliquer | B |
-| S1 | 28/09 → 04/10 | DIAG-2 | **Diagrammes de cas d'utilisation** | Lister les cas par acteur (parcours A à E) · Découper en 3 diagrammes : Préparer, Utiliser, Mesurer · Relecture avec Claude | B |
-| S2 | 05/10 → 11/10 | DIAG-3 | **Diagramme de classes de domaine** | Reprendre les classes de la Spécification · Définir les relations et multiplicités · Relecture avec Claude | B |
-| S2 | 05/10 → 11/10 | DIAG-4 | **Diagramme de composants** | Modules du monolithe modulaire et leurs interfaces · Place de l'agent ordinateur · Explication et relecture | B |
-| S2 | 05/10 → 11/10 | DIAG-5 | **Diagrammes d'états-transitions** (5 diagrammes, D-63) | États globaux de CortexOS (spéc. 4.1) · Cycle de vie d'une commande depuis la détection (spéc. 4.5) · Session · Calibration · Source de signal · Relecture avec Claude | B |
-| S2 | 05/10 → 11/10 | ARCH-0 | **Architecture technique v0** | Rédiger à partir des diagrammes 1 à 5 · Trancher D-05, D-07 et D-09 (version minimale) | B |
-| S3 | 12/10 → 18/10 | DIAG-6 | **Diagrammes de séquence** | (a) Intention acceptée → action · (b) Rejet pour confiance insuffisante · (c) Commande sensible : confirmation ou expiration · (d) Perte du signal → état sûr | B |
-| S3 | 12/10 → 18/10 | DIAG-7 | **Diagramme d'activité** | Déroulement d'une session d'expérimentation (parcours C) | B |
-| S3 | 12/10 → 18/10 | DIAG-8 | **Diagramme de déploiement** | Ce qui tourne sur le PC maintenant · Ajouts futurs : casque, ESP32 | B |
+| S1 | 28/09 → 04/10 | DIAG-1 | **Diagramme de contexte** | Lister les acteurs et systèmes externes · Dessiner en Mermaid · Relire et expliquer | A |
+| S1 | 28/09 → 04/10 | DIAG-2 | **Diagrammes de cas d'utilisation** | Lister les cas par acteur (parcours A à E) · Un diagramme par acteur principal + une vue d'ensemble (D-48) · Relecture avec Claude | A |
+| S2 | 05/10 → 11/10 | DIAG-3 | **Diagramme de classes de domaine** | Reprendre les classes de la Spécification · Définir les relations et multiplicités · Relecture avec Claude | A |
+| S2 | 05/10 → 11/10 | DIAG-4 | **Diagramme de composants** | Modules du monolithe modulaire et leurs interfaces · Place de l'agent ordinateur · Explication et relecture | A |
+| S2 | 05/10 → 11/10 | DIAG-5 | **Diagrammes d'états-transitions** (5 diagrammes, D-63) | États globaux de CortexOS (spéc. 4.1) · Cycle de vie d'une commande depuis la détection (spéc. 4.5) · Session · Calibration · Source de signal · Relecture avec Claude | A |
+| S2 | 05/10 → 11/10 | ARCH-0 | **Architecture technique v0** | Rédiger à partir des diagrammes 1 à 5 · Trancher le système cible (D-72), l'OS (D-73), l'accès minimal (D-74) ; D-07 déjà tranchée par D-62 | A |
+| S3 | 12/10 → 18/10 | DIAG-6 | **Diagrammes de séquence** | (a) Intention acceptée → action · (b) Rejet pour confiance insuffisante · (c) Commande sensible : confirmation ou expiration · (d) Perte du signal → état sûr | A |
+| S3 | 12/10 → 18/10 | DIAG-7 | **Diagrammes d'activité** (8 diagrammes, D-97) | Session d'expérimentation : vue d'ensemble et boucle des essais (parcours C, A1, A1-b) · Traitement d'une fenêtre jusqu'à la décision (A2) · Première utilisation (A3) · Activités des séquences (a) à (d) (A4 à A7) | A |
+| S3 | 12/10 → 18/10 | DIAG-8 | **Diagramme de déploiement** | Ce qui tourne sur le PC maintenant · Ajouts futurs : casque, ESP32 | A |
 | S3 | 12/10 → 18/10 | API-0 | **Contrat d'API v0** | Routes REST et messages temps réel déduits des FW-01 à FW-50 · Format des objets : détection, décision, commande, événement | B |
-| S3 | 12/10 → 18/10 | MAQ | **Maquettes des écrans** | Maquettes basse fidélité : supervision, signal, calibration, commandes, sessions, journal, profil | A/B |
+| S3 | 12/10 → 18/10 | MAQ | **Maquettes des écrans** | Maquettes basse fidélité : page vitrine (D-76), supervision, signal, calibration, commandes, sessions, journal, profil | A/B |
 | S4 | 19/10 → 25/10 | SQL | **Squelette du projet** | Package core/ en Python pur, avec tests · Backend FastAPI : GET /api/health et son test · Frontend Next.js qui affiche le statut · README : installation et lancement | B |
 
 ### Piste IA — en parallèle, environ 2 h par semaine (S1–S16)
@@ -211,7 +211,7 @@ Chaque ligne correspond à une fonctionnalité ; ses tâches sont reprises une p
 |---|---|---|---|---|---|
 | S15 | 04/01 → 10/01 | DIAG-12 | **Classes de l'interface Connecteur** | Interface et implémentations · Relecture avec Claude | B |
 | S15 | 04/01 → 10/01 | F-23 · F-24 · F-25 | **Lampe simulée** | Interface Connecteur · Lampe simulée · Liste fermée de commandes · Disponibilité de la cible · Tests | A |
-| S16 | 11/01 → 17/01 | F-23 | **Agent ordinateur** | Programme agent séparé (D-06) · Commandes : curseur, sélection (liste fermée) · Liaison backend ↔ agent · Tests manuels | A/B |
+| S16 | 11/01 → 17/01 | F-23 | **Agent ordinateur** | Programme agent séparé, Windows (D-73) · Commandes : curseur, sélection (liste fermée) · Liaison backend ↔ agent · Tests manuels | A/B |
 | S17 | 18/01 → 24/01 | F-26 · FW-20 à FW-24 | **Écrans des commandes et systèmes cibles** | Correspondance consultable (modifiable si D-20) · Liste des cibles et leur état · Test manuel si D-27 · Types de systèmes cibles | B |
 | S18 | 25/01 → 31/01 | — | **Intégration de la chaîne** | Détecteur de test → Core → lampe · Détecteur de test → Core → ordinateur · Tests d'intégration | A |
 | S19 | 01/02 → 07/02 | — | **Démonstration interne** | Scénario de bout en bout en simulation · Corrections | A |
@@ -286,15 +286,15 @@ Le bloc dure **4 semaines** et commence **dès la réception** du casque, quelle
 
 | Réf. | Document | Quand | Mode |
 |---|---|---|---|
-| DIAG-1 | Contexte | S1 | B |
-| DIAG-2 | Cas d'utilisation (3 diagrammes) | S1 | B |
-| DIAG-3 | Classes de domaine | S2 | B |
-| DIAG-4 | Composants | S2 | B |
-| DIAG-5 | États-transitions (5 diagrammes, D-63) | S2 | B |
-| ARCH-0 | Architecture technique v0 | S2 | B |
-| DIAG-6 | Séquences (4 scénarios) | S3 | B |
-| DIAG-7 | Activité | S3 | B |
-| DIAG-8 | Déploiement | S3 | B |
+| DIAG-1 | Contexte | S1 | A |
+| DIAG-2 | Cas d'utilisation (par acteur + vue d'ensemble, D-48) | S1 | A |
+| DIAG-3 | Classes de domaine | S2 | A |
+| DIAG-4 | Composants | S2 | A |
+| DIAG-5 | États-transitions (5 diagrammes, D-63) | S2 | A |
+| ARCH-0 | Architecture technique v0 | S2 | A |
+| DIAG-6 | Séquences (4 scénarios) | S3 | A |
+| DIAG-7 | Activités (8 diagrammes, D-97) | S3 | A |
+| DIAG-8 | Déploiement | S3 | A |
 | API-0 | Contrat d'API v0 | S3 | B |
 | MAQ | Maquettes des écrans | S3 | A/B |
 | DIAG-9 | Classes de conception du Core | S5, avant le Core | B |

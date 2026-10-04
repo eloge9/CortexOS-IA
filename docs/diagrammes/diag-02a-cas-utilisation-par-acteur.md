@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| **Réf.** | DIAG-2 (Planning MVP, S1, mode B — D-46) |
+| **Réf.** | DIAG-2 (Planning MVP, S1, mode A — D-96) |
 | **Sources** | Catalogue des cas d'utilisation v1.0 (24/09/2026, repris en section 2) · Spécification fonctionnelle : acteurs et parcours A à E (section 3), F-01 à F-44, FW-01 à FW-50 |
 | **Version** | 2.1 — 25 septembre 2026 (un diagramme par acteur principal, Administrateur) · vue d'ensemble dans `diag-02b-cas-utilisation-vue-ensemble.md` |
 

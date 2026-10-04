@@ -2,10 +2,10 @@
 
 | | |
 |---|---|
-| **Réf.** | DIAG-5 (Planning MVP, S2, mode B) |
+| **Réf.** | DIAG-5 (Planning MVP, S2, mode A — D-96) |
 | **Sources** | Analyse des états fournie par Eloge · Spécification fonctionnelle 4.2 à 4.7 · DIAG-3 (classes du domaine) · Registre des décisions D-63 à D-71 |
 | **Version** | 1.0 — 25 septembre 2026 |
-| **Statut** | À relire par Eloge |
+| **Statut** | Validé par Eloge (25/09/2026) |
 
 ## Rôle de ces diagrammes
 
@@ -69,7 +69,7 @@ stateDiagram-v2
     Suspendu --> EtatSur : T13 perte du signal ou erreur
     Preparation --> EtatSur : ⚠ T14 perte du signal [D-67]
     Actif --> EtatSur : ⚠ T15 arrêt d'urgence [D-19] ou interface perdue [D-32]
-    EtatSur --> Pret : ⚠ T16 incident résolu, retour Prêt ou Suspendu [D-29]
+    EtatSur --> Suspendu : T16 incident résolu → Suspendu (D-29)
     Pret --> Arrete : T17 arrêter
     Suspendu --> Arrete : T17 arrêter
     EtatSur --> Arrete : T17 arrêter
@@ -93,7 +93,7 @@ stateDiagram-v2
 | **Actif** | Le seul état où l'orchestrateur transmet une commande. Dans tous les autres états, une intention détectée est affichée mais rejetée (voir ②). |
 | **Prêt → Actif** | Toujours par une **action explicite** de l'utilisateur ou de l'accompagnant (parcours B). Le système ne s'active jamais tout seul. |
 | **Suspendu** | Différent de *Prêt* : on garde la session et le modèle, on coupe seulement les commandes. La pause de session y mène aussi. |
-| **État sûr** | État de repli après un incident. On n'en sort que par une décision humaine (D-29 à trancher : retour à *Prêt* ou à *Suspendu*). |
+| **État sûr** | État de repli après un incident. Après résolution, on passe en *Suspendu* (D-29) ; la reprise reste explicite et n'est possible que si signal, qualité, modèle et cible sont prêts (D-91). |
 | **Qualité insuffisante** | Ne change **pas** l'état global : elle est signalée (diagramme ⑤) et la chaîne rejette les détections pendant ce temps. |
 | **T14** | En *Préparation*, aucune commande n'est active : faut-il vraiment passer en État sûr, ou simplement revenir à *Arrêté* ? → D-67. |
 
@@ -151,7 +151,7 @@ stateDiagram-v2
 |---|---|
 | **C2 / C3** | C'est ici que les **trois garde-fous** s'appliquent : seuil de confiance, état global *Actif* (diagramme ①), qualité du signal (diagramme ⑤). Il suffit d'un seul « non » pour rejeter. |
 | **Rejetée** | Ce n'est pas une erreur : c'est le fonctionnement normal quand le système n'est pas sûr. Chaque rejet est journalisé avec sa raison (utile pour les mesures de l'expérimentateur). |
-| **Commande sensible** | Passe par *En attente de confirmation*. Le moyen de confirmer (EEG, accompagnant…) n'est pas décidé : D-24. |
+| **Commande sensible** | Passe par *En attente de confirmation*. Confirmation par l'accompagnant ou par l'intention EEG « oui » (D-24) ; délai réglable par profil (D-31). |
 | **Cinq états finaux** | Rejetée, Annulée, Expirée, Exécutée, Échouée : une commande finit **toujours** dans l'un d'eux, ce qui garantit une trace complète dans le journal. |
 | **C0** | Le test manuel d'une cible sans EEG (D-27) entrerait directement en *Envoyée*, sans passer par la détection. |
 
@@ -177,7 +177,7 @@ stateDiagram-v2
     EnCours --> Terminee : S5 terminer
     EnPause --> Terminee : S6 terminer
     EnCours --> Interrompue : S7 erreur bloquante ou arrêt d'urgence
-    EnCours --> EnPause : ⚠ S8 perte du signal [D-71]
+    EnCours --> EnPause : S8 perte du signal (D-95)
     EnCours --> EnPause : ⚠ S9 durée maximale atteinte [D-37]
     Interrompue --> EnCours : ⚠ S10 reprendre une session interrompue ? [D-71]
     Terminee --> [*]
@@ -195,7 +195,7 @@ stateDiagram-v2
 |---|---|
 | **Pause ≠ Suspendu** | Mettre la session en pause suspend aussi les commandes (① T8), mais l'inverse n'est pas vrai : on peut suspendre les commandes sans mettre la session en pause. |
 | **Terminée / Interrompue** | Toutes deux sont des fins de session ; la différence est la **cause** (volontaire ou incident), enregistrée dans le journal. |
-| **D-71** | Plusieurs questions ouvertes : effet de la perte du signal, reprise d'une session interrompue, enregistrement pendant la pause, état des commandes à la reprise. |
+| **D-95 / D-71** | Perte du signal → *En pause* automatiquement, période exclue des mesures (S8, D-95). Restent ouverts : reprise d'une session interrompue, enregistrement pendant la pause (D-71). |
 
 ---
 
@@ -268,7 +268,7 @@ stateDiagram-v2
     Connexion --> Connectee : ⚠ E2 connexion établie [D-04]
     Connexion --> Deconnectee : E3 échec de connexion
     Connectee --> Perdu : E4 plus de données reçues
-    Perdu --> Connexion : ⚠ E5 reconnexion auto ou manuelle [D-70]
+    Perdu --> Connexion : E5 reconnexion auto ou bouton (D-94)
     Perdu --> Deconnectee : E6 abandonner
     Connectee --> Fin : ⚠ E7 fin du fichier rejoué [D-70]
     Fin --> Deconnectee : E8 fermer la source
@@ -291,9 +291,9 @@ stateDiagram-v2
 | Événement | ① Global | ② Commande | ③ Session | ④ Calibration | ⑤ Source |
 |---|---|---|---|---|---|
 | Qualité insuffisante | pas de changement | C2 rejet | — | K1 refus | Q2 |
-| Perte du signal | T12/T13 État sûr, ⚠ T14 | — | ⚠ S8 | K5 Interrompue | E4 |
+| Perte du signal | T12/T13 État sûr, ⚠ T14 | — | S8 En pause (D-95) | K5 Interrompue | E4 |
 | Suspendre / pause | T8 Suspendu | C7 Annulée si en attente | S3 (pause) | — | — |
-| Arrêt d'urgence | ⚠ T15 | ⚠ D-68 (annuler une action envoyée ?) | S7 Interrompue | — | — |
+| Arrêt d'urgence | ⚠ T15 | action envoyée non rappelée (D-93) | S7 Interrompue | — | — |
 | Calibration terminée | T5 ou T6 | — | — | Exploitable / Insuffisante | — |
 
 Ce tableau vérifie qu'un même événement a un effet cohérent partout. Il servira de base aux tests de la machine à états.
@@ -305,15 +305,14 @@ Pas de diagramme pour le **système cible** ni pour l'**alerte** (D-63) : leurs 
 ## Points à définir
 
 - **D-19** : qui peut déclencher l'arrêt d'urgence.
-- **D-24** : commandes sensibles et moyen de confirmation.
+- **D-24** : liste des commandes sensibles (moyen de confirmation tranché).
 - **D-27** : test manuel d'une cible sans EEG.
-- **D-29** : sortie de l'État sûr (retour à *Prêt* ou à *Suspendu*).
-- **D-31** : délai d'expiration de la confirmation.
+- **D-31** : valeur par défaut du délai de confirmation (réglable par profil, tranché).
 - **D-32** : interface Web fermée pendant une session active.
 - **D-37** : durée maximale d'une session.
 - **D-04 / D-10** : casque ; critère de calibration exploitable.
 - **D-67** : perte du signal en Préparation ; conditions d'activation.
-- **D-68** : délai du résultat, cible indisponible, annulation d'une action envoyée.
+- **D-68** : délai du résultat, cible indisponible (action envoyée jamais rappelée : D-93).
 - **D-69** : erreur d'entraînement.
-- **D-70** : reconnexion ; fin d'un enregistrement rejoué.
-- **D-71** : session et perte du signal, reprise, enregistrement en pause.
+- **D-70** : fin d'un enregistrement rejoué (reconnexion : D-94).
+- **D-71** : reprise d'une session interrompue, enregistrement en pause (perte du signal : D-95).

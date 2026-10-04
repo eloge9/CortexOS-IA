@@ -4,10 +4,10 @@
 |---|---|
 | **Document** | Spécification fonctionnelle |
 | **Projet** | CortexOS IA |
-| **Document de référence** | Cahier des charges — version 2.0 |
+| **Document de référence** | Cahier des charges — version 2.2 |
 | **Remplace** | « CortexOS AI — Spécification complète des fonctionnalités », version 1.0 |
 | **Auteur** | GOMINA Eloge |
-| **Version du document** | 1.0 — 23 septembre 2026 |
+| **Version du document** | 1.2 — 25 septembre 2026 (rôle Administrateur D-47 ; cible D-72 ; comptes locaux D-74 ; page vitrine FW-51, D-76 ; précisions D-98, D-99 le 27/09) |
 
 > Convention : `[À DÉFINIR — D-xx]` signale une décision non encore prise (voir [05-decisions.md](05-decisions.md)). `[SOURCE À AJOUTER]` signale une affirmation à sourcer. **(Proposé)** signale un élément ajouté par ce document sans décision explicite : il doit être validé ou retiré.
 
@@ -142,7 +142,7 @@ Une même personne peut tenir plusieurs rôles, notamment pendant le développem
 2. Le système passe dans l'**état sûr** ou refuse les commandes concernées (F-04, F-05, F-16).
 3. Une alerte est affichée, avec sa gravité et l'action possible (FW-06, FW-37).
 4. L'utilisateur ou l'accompagnant peut suspendre les commandes, ou utiliser l'arrêt indépendant de l'EEG (F-19, F-20).
-5. Après résolution, les commandes restent suspendues jusqu'à une reprise explicite `[À DÉFINIR — D-29]`.
+5. Après résolution, le système passe en **Suspendu** : les commandes restent coupées jusqu'à une reprise explicite (D-29), possible seulement si le signal, la qualité, le modèle et la cible sont prêts (D-91).
 6. L'incident est enregistré dans le journal (F-36).
 
 ### 3.6 Parcours E — Gérer ses données
@@ -170,7 +170,7 @@ Règles :
 
 - Seul l'état **Actif** permet d'exécuter des commandes.
 - Le passage à **Actif** demande toujours une action explicite d'une personne.
-- Au démarrage et après tout retour de l'**état sûr**, le système se place dans un état où les commandes sont suspendues **(Proposé)** `[À DÉFINIR — D-29]`.
+- Au démarrage, les commandes sont suspendues (Prêt) ; après un incident résolu, le système passe en **Suspendu** ; la reprise est toujours explicite (D-29).
 - L'état courant est toujours visible dans l'interface (FW-25).
 
 ### 4.2 Acquisition et qualité du signal
@@ -181,7 +181,7 @@ Règles :
 | F-02 | Évaluer en continu la qualité du signal, globale et, si le casque le permet, par canal | MVP (par canal : `[D-04]`) | BF-02 |
 | F-03 | Identifier la source des données : casque réel, simulation ou enregistrement rejoué | MVP si la simulation ou le rejeu existe `[D-21]` | ENF-09 |
 | F-04 | Quand la qualité est insuffisante, ne pas utiliser les détections pour déclencher des commandes et émettre une alerte | MVP | ENF-02, ENF-03 |
-| F-05 | En cas de perte du signal ou de déconnexion du casque, passer à l'état sûr et émettre une alerte ; une reconnexion ne réactive pas les commandes | MVP (reprise : `[D-29]`) | ENF-02 |
+| F-05 | En cas de perte du signal ou de déconnexion du casque, passer à l'état sûr et émettre une alerte ; une reconnexion ne réactive pas les commandes | MVP (reprise : D-29, D-91 ; reconnexion : D-94) | ENF-02 |
 
 Le calcul de la qualité du signal relève de la Documentation technique.
 
@@ -219,7 +219,7 @@ La méthode de calibration et d'entraînement relève de la Documentation techni
 | 4. Envoi | Envoyée |
 | 5. Résultat | Exécutée (succès) · Échouée |
 
-**Motifs de rejet** : confiance insuffisante, qualité du signal insuffisante, système non actif (Prêt, Suspendu, état sûr), système cible indisponible, délai minimal entre deux commandes non écoulé **(Proposé)**, commande non autorisée.
+**Motifs de rejet** : confiance insuffisante, qualité du signal insuffisante, système non actif (Prêt, Suspendu, état sûr), système cible indisponible, délai minimal entre deux commandes non écoulé **(Proposé)**, commande non autorisée, confirmation déjà en attente (D-85).
 
 | ID | Fonction | Priorité | Exigence |
 |---|---|---|---|
@@ -227,7 +227,7 @@ La méthode de calibration et d'entraînement relève de la Documentation techni
 | F-15 | Rejeter toute détection dont la confiance est inférieure au seuil | MVP (valeur : `[D-10]` ; modification : `[D-23]`) | BF-11 |
 | F-16 | Rejeter toute détection quand le système n'est pas Actif, quand le signal est insuffisant ou quand la cible est indisponible | MVP | ENF-03 |
 | F-17 | Imposer un délai minimal entre deux commandes pour éviter les répétitions involontaires | **(Proposé)** `[D-30]` | ENF-03 |
-| F-18 | Demander une confirmation avant toute commande sensible ; sans confirmation dans le délai prévu, la commande expire | MVP (liste et modalité : `[D-24]` ; délai : `[D-31]`) | BF-12 |
+| F-18 | Demander une confirmation avant toute commande sensible ; sans confirmation dans le délai prévu, la commande expire | MVP (confirmation par l'accompagnant ou par intention EEG « oui », D-24 ; délai réglable par profil, D-31 ; liste des commandes sensibles et délai par défaut `[À DÉFINIR]`) | BF-12 |
 | F-19 | Permettre de suspendre et de reprendre l'exécution des commandes ; la reprise est toujours explicite | MVP | BF-13 |
 | F-20 | Disposer d'un moyen d'arrêt indépendant de la détection EEG et de l'interface Web | MVP (mécanisme et déclencheur : `[D-19]`) | ENF-04 |
 | F-21 | Enregistrer et afficher le motif de chaque rejet | MVP | BF-18, ENF-09 |
@@ -239,7 +239,7 @@ Le seuil de confiance ne garantit pas qu'une détection est correcte. Il réduit
 
 | ID | Fonction | Priorité | Exigence |
 |---|---|---|---|
-| F-23 | Connaître l'état de chaque système cible (disponible, indisponible) et transmettre les commandes à au moins un système cible réel | MVP `[D-05]` | BF-15 |
+| F-23 | Connaître l'état de chaque système cible (disponible, indisponible) et transmettre les commandes à au moins un système cible réel | MVP (ordinateur + lampe simulée, D-72) | BF-15 |
 | F-24 | Limiter chaque système cible à une liste fermée de commandes définies par son connecteur **(Proposé)** | MVP | ENF-03 |
 | F-25 | Ajouter un nouveau type de système cible sous forme de connecteur, sans modifier le Core | Ext. | BF-16, ENF-07 |
 | F-26 | Permettre un test manuel d'un système cible, sans EEG ; ces commandes sont signalées comme manuelles et exclues des mesures | `[À DÉFINIR — D-27]` | — |
@@ -248,8 +248,8 @@ Le seuil de confiance ne garantit pas qu'une détection est correcte. Il réduit
 
 | Système cible | Horizon |
 |---|---|
-| Ordinateur | MVP ou Ext. `[D-05]` |
-| Objets connectés | MVP ou Ext. `[D-05]` |
+| Ordinateur | MVP (D-72) |
+| Objets connectés | MVP en simulation ; ESP32 réel : Ext. (D-72) |
 | Systèmes embarqués | Ext. |
 | Robot en simulation | Ext. ou Futur `[D-11]` |
 | Robot réel, drone | Futur `[D-11]` |
@@ -283,6 +283,8 @@ Le seuil de confiance ne garantit pas qu'une détection est correcte. Il réduit
 
 La précision et les commandes involontaires ne peuvent être mesurées que si l'intention attendue est connue. **Elles ne sont donc pas affichées en direct lors d'une session d'utilisation.**
 
+En session d'expérimentation, les commandes sont **réellement exécutées**, sur la lampe simulée comme sur l'ordinateur (D-98) ; si le profil n'a pas de modèle exploitable, la calibration est faite avant de démarrer la session (D-99).
+
 ### 4.8 Journal et alertes
 
 | ID | Fonction | Priorité | Exigence |
@@ -301,7 +303,7 @@ Le journal fonctionnel est destiné aux utilisateurs. Les journaux techniques du
 | F-40 | Exiger un consentement explicite avant tout enregistrement de données EEG ; préciser sa portée (utilisation, expérimentation, export) ; le consentement est consultable | MVP (portée : `[D-09, D-34]`) | BF-23, ENF-06 |
 | F-41 | Permettre de retirer son consentement et de supprimer ses données ; le retrait arrête tout nouvel enregistrement | MVP (périmètre de la suppression : `[D-38]`) | BF-24 |
 | F-42 | Limiter l'accès aux données et aux fonctions selon le rôle | `[D-09]` | ENF-05 |
-| F-43 | Authentifier les personnes qui accèdent à l'interface | `[D-09]` | ENF-05 |
+| F-43 | Authentifier les personnes qui accèdent à l'interface | MVP : comptes locaux (D-74) | ENF-05 |
 | F-44 | Ne collecter que les données nécessaires aux fonctions décrites ici **(Proposé)** | MVP | ENF-06 |
 
 ---
@@ -402,7 +404,8 @@ Elle est organisée en **9 types de fonctionnalités**, regroupés en trois fami
 | FW-39 | Choix ou création d'un profil | Associer calibration et modèle à une personne | MVP (forme : `[D-09]`) | F-39 |
 | FW-40 | Recueil et consultation du consentement | Respecter l'utilisateur | MVP | F-40 |
 | FW-41 | Retrait du consentement et suppression des données | Maîtrise de ses données | MVP | F-41 |
-| FW-42 | Authentification, rôles, administration des comptes | Sécuriser l'accès | `[D-09]` | F-42, F-43 |
+| FW-42 | Authentification, rôles, administration des comptes | Sécuriser l'accès | MVP : comptes locaux, identifiant + mot de passe (D-74) ; droits détaillés `[D-09]` | F-42, F-43 |
+| FW-51 | Page vitrine publique : présente CortexOS IA et mène à la connexion ; seule page accessible sans compte | Présenter le projet sans exposer de données | MVP (D-76) ; contenu `[À DÉFINIR]` | — |
 
 ### 5.9 Accessibilité et aide
 
@@ -511,7 +514,7 @@ Le niveau de conformité visé, par exemple un niveau des règles WCAG, est `[À
 |---|---|---|
 | D-03 | Intentions du MVP | Consignes de calibration (F-06), libellés affichés |
 | D-04 | Casque | Qualité par canal (F-02, FW-11), caractéristiques affichées (FW-09) |
-| D-05 | Scénarios et système cible du MVP | F-23, F-27, FW-22, FW-24 |
+| D-05 | Scénarios de démonstration (système cible : D-72) | F-27, FW-24 |
 | D-09 | Stockage, authentification, rôles, conservation | Section 3.1, F-38 à F-43, FW-42 |
 | D-10 | Seuils et cibles de performance | F-09, F-15, F-31, Q-01 |
 | D-11 | Robot et drone | Trajectoire (4.6) |

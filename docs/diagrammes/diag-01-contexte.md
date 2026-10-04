@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| **Réf.** | DIAG-1 (Planning MVP, S1, mode B) |
+| **Réf.** | DIAG-1 (Planning MVP, S1, mode A — D-96) |
 | **Sources** | Cahier des charges 1.6, 4.1, 5.2 · Spécification fonctionnelle 3.1, 4.2, 4.6 · Développement sur PC seul, section 2 |
 | **Version** | 1.1 — 25 septembre 2026 (intention captée par le casque, activation des commandes par l'utilisateur, verbes du point de vue de l'acteur) |
 

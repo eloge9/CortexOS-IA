@@ -2,9 +2,9 @@
 
 | | |
 |---|---|
-| **Réf.** | DIAG-4 (Planning MVP, S2, mode B — D-46) |
+| **Réf.** | DIAG-4 (Planning MVP, S2, mode A — D-96) |
 | **Sources** | Analyse des composants v1.0 (25/09/2026) · Cahier des charges § 10 · Spécification § 4 · Planning § 2 · Décisions D-54 à D-62 · DIAG-1, DIAG-2, DIAG-3 |
-| **Version** | 1.1 — 25 septembre 2026 (relecture : détections soumises par l'orchestrateur, canal de l'arrêt d'urgence, passerelle temps réel) |
+| **Version** | 1.2 — 25 septembre 2026 (canal de l'arrêt d'urgence D-75 ; Windows D-73 ; MQTT et ESP32 en extension D-72) |
 
 ## Rôle du diagramme
 
@@ -23,7 +23,7 @@ Il ne montre ni les classes (DIAG-3), ni les tables, ni les routes une par une, 
 | Interface **requise** | flèche pointillée d'un composant vers le cercle | Ce que le composant **utilise** (« demi-lune » UML) |
 | «datastore» | cylindre | Stockage |
 | Système externe | rectangle gris, hors du cadre CortexOS IA | Matériel ou logiciel qui n'est pas construit dans le projet |
-| Pointillés | trait ou bordure pointillés | À confirmer (D-05) ou extension (D-11) |
+| Pointillés | trait ou bordure pointillés | Extension (D-72, D-11) |
 | Libellé d'une liaison | texte sur la flèche | Protocole, quand la liaison sort du processus du backend |
 
 Tout ce qui est dans le cadre **Backend** tourne dans **un seul processus** (monolithe) : les liaisons internes sont des appels de fonctions Python. Seules les liaisons qui **sortent** du backend ont un protocole réseau.
@@ -90,9 +90,9 @@ flowchart LR
     end
 
     %% ===== Systèmes externes (droite) =====
-    E4["💻 Système d'exploitation<br/>[D-06]"]:::ext
-    E5["Broker MQTT<br/>[D-05]"]:::extopt
-    E6["ESP32<br/>[D-05]"]:::extopt
+    E4["💻 Windows (D-73)"]:::ext
+    E5["Broker MQTT<br/>extension (D-72)"]:::extopt
+    E6["ESP32<br/>extension (D-72)"]:::extopt
     E7["Simulateur robot ROS 2<br/>[D-11]"]:::extopt
 
     %% ===== Interface Web =====
@@ -125,7 +125,7 @@ flowchart LR
     C2 -.-> I_CORE
     C17 -.-> I_QUA
     C17 -.-> C19
-    C18 -. "ordre d'arrêt<br/>canal local [À DÉFINIR]" .-> I_CORE
+    C18 -. "ordre d'arrêt<br/>HTTP POST local, 127.0.0.1 + jeton (D-75)" .-> I_CORE
 
     %% ===== Cibles =====
     C19 --- I_CON
@@ -322,7 +322,7 @@ flowchart LR
     C2 -. "activer, suspendre, reprendre,<br/>confirmer, annuler" .-> I_CORE
     C7 -. "pause de session" .-> I_CORE
     C15 -. "état Calibration" .-> I_CORE
-    C18 -. "arrêt prioritaire<br/>canal local [À DÉFINIR]" .-> I_CORE
+    C18 -. "arrêt prioritaire<br/>HTTP POST local, 127.0.0.1 + jeton (D-75)" .-> I_CORE
     C4 -. "soumettre une détection" .-> I_CORE
     I_CORE -. "transmise au" .-> DEC
 
@@ -351,7 +351,7 @@ flowchart LR
         I_CON(("IConnecteur"))
         K1["📦 Connecteur ordinateur"]
         K2["📦 Connecteur lampe"]
-        K3["📦 Connecteur MQTT<br/>[D-05]"]:::opt
+        K3["📦 Connecteur MQTT<br/>extension (D-72)"]:::opt
         K4["📦 Connecteur robot ROS 2<br/>[D-11]"]:::opt
     end
 
@@ -362,7 +362,7 @@ flowchart LR
         I_SIMU(("ICibleSimulée"))
     end
 
-    E4["💻 Système d'exploitation<br/>[D-06]"]:::ext
+    E4["💻 Windows (D-73)"]:::ext
     E5["Broker MQTT"]:::extopt
     E6["ESP32"]:::extopt
     E7["Simulateur robot ROS 2"]:::extopt
@@ -408,20 +408,20 @@ Ajouter un type de cible = ajouter un **connecteur** qui réalise `IConnecteur`,
 | C9 | Paramètres de sûreté et correspondance | Backend | Seuil, délais, correspondance ; trace l'auteur des modifications | Déduit · rattachement D-20, D-23 |
 | C10 | Persistance | Backend | Accès à PostgreSQL pour tous les modules | Décidé (D-58) |
 | C11 | Acquisition | Traitement EEG | Lire une source interchangeable (casque, simulation, enregistrement) | Confirmé |
-| C12 | Contrôle qualité | Traitement EEG | Qualité globale et par canal, perte du signal | Décidé (D-61) |
+| C12 | Contrôle qualité | Traitement EEG | Qualité globale et par canal ; **chien de garde** du signal avec sa propre minuterie (perte du signal) | Décidé (D-61, D-90) |
 | C13 | Prétraitement | Traitement EEG | Filtrage, réduction du bruit | Confirmé |
 | C14 | Détection d'intention | IA | Inférence (détecteur IA) ou détecteur de test | Confirmé |
 | C15 | Calibration et entraînement | IA | Essais guidés, entraînement en tâche de fond, évaluation | Décidé (D-59) |
 | C16 | Gestion des modèles | IA | Versions, modèle actif | Déduit |
 | C17 | CortexOS Core | Core | État global, décision, garde-fous, confirmation, routage | Confirmé · Python (D-62) |
-| C18 | Arrêt d'urgence | Programme séparé | Raccourci clavier global → ordre d'arrêt au Core par un canal local, sans passer par l'interface Web | Décidé (D-57) · canal local `[À DÉFINIR]` · déclencheur D-19 |
-| C19–C20 | Registre des cibles et connecteurs | Intégration | Cibles, disponibilité, liste fermée ; traduction des commandes | Confirmé · MQTT D-05, robot D-11 |
+| C18 | Arrêt d'urgence | Programme séparé | Raccourci clavier global → ordre d'arrêt au Core par un canal local, sans passer par l'interface Web | Décidé (D-57) · canal : route HTTP locale + jeton (D-75) · déclencheur D-19 |
+| C19–C20 | Registre des cibles et connecteurs | Intégration | Cibles, disponibilité, liste fermée ; traduction des commandes | Confirmé · MQTT en extension (D-72), robot D-11 |
 | C21 | Base de données | Stockage | Données métier | Décidé : PostgreSQL (D-58) |
 | C22 | Stockage de fichiers | Stockage | Signal enregistré, modèles, exports | Décidé (D-58) |
 | C23 | Agent ordinateur | Programme séparé | Exécuter les commandes sur le système d'exploitation | Confirmé · liaison D-55 |
 | C24 | Lampe simulée | Programme séparé | Cible simulée | Confirmé · appel direct D-56 |
 
-**Systèmes externes :** E1 Navigateur · E2 Casque EEG (D-04) · E3 Jeu de données EEG public · E4 Système d'exploitation (D-06) · E5 Broker MQTT et E6 ESP32 (D-05, à confirmer) · E7 Simulateur robot ROS 2 (extension, D-11).
+**Systèmes externes :** E1 Navigateur · E2 Casque EEG (D-04) · E3 Jeu de données EEG public · E4 Système d'exploitation Windows (D-73) · E5 Broker MQTT et E6 ESP32 (extension, D-72) · E7 Simulateur robot ROS 2 (extension, D-11).
 
 ## 4. Interfaces principales
 
@@ -437,7 +437,7 @@ Ajouter un type de cible = ajouter un **connecteur** qui réalise `IConnecteur`,
 | `IDétecteur` | C14 (IA, test) | C4 (qui soumet les détections au Core) | en processus |
 | `ICalibration` | C15 | C2 | en processus |
 | `IRegistreModèles` | C16 | C14, C15 | en processus |
-| `IContrôleCore` (soumettre une détection, activer, suspendre, reprendre, état sûr, confirmer, annuler, lire l'état) | C17 | C4, C2, C7, C15, C18 | en processus ; C18 : canal local `[À DÉFINIR]` |
+| `IContrôleCore` (soumettre une détection, activer, suspendre, reprendre, état sûr, confirmer, annuler, lire l'état) | C17 | C4, C2, C7, C15, C18 | en processus ; C18 : HTTP local 127.0.0.1 + jeton (D-75) |
 | `IParamètresSûreté` | C9 | C17, C2 | en processus |
 | `IRegistreCibles` | C19 | C17, C2 | en processus |
 | `IConnecteur` | connecteurs (C20) | C19 | en processus |
@@ -461,11 +461,9 @@ Ajouter un type de cible = ajouter un **connecteur** qui réalise `IConnecteur`,
 ## 6. Points encore ouverts
 
 - **D-04** : casque, donc liaison physique et pilote éventuel.
-- **D-05** : objet connecté réel (MQTT, ESP32) dans le MVP ou non.
-- **D-06** : système d'exploitation, donc API utilisée par l'agent.
 - **D-09** : authentification précise, droits par rôle, conservation.
 - **D-11** : robot et drone.
 - **D-19** : qui peut déclencher l'arrêt d'urgence.
-- **Canal de l'arrêt d'urgence** : C18 est un programme séparé ; il ne peut donc pas appeler le Core « en direct ». Il faut choisir un canal local vers le backend (par exemple une route HTTP réservée à `localhost`, ou un WebSocket local comme l'agent). `[À DÉFINIR]` — à trancher avec D-19, avant S9.
+- ~~Canal de l'arrêt d'urgence~~ : tranché par **D-75** (route HTTP locale dédiée, 127.0.0.1 + jeton).
 - **D-20 / D-23** : paramètres et correspondance globaux ou par profil.
 - **D-32** : que fait le Core si l'interface Web est perdue pendant une session (chien de garde ?).

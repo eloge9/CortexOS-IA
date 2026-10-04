@@ -9,7 +9,7 @@
 | **Année universitaire** | `[À DÉFINIR — D-14]` |
 | **Auteur** | GOMINA Eloge |
 | **Encadreur junior / senior** | `[À DÉFINIR — D-14]` |
-| **Version du document** | 2.0 — 23 septembre 2026 |
+| **Version du document** | 2.2 — 25 septembre 2026 (rôle Administrateur D-47 ; Core Python D-62 ; PostgreSQL D-58 ; lampe D-56 ; cible ordinateur + lampe simulée D-72 ; Windows D-73) |
 
 > Convention : `[À DÉFINIR — D-xx]` signale une décision non encore prise, détaillée dans [05-decisions.md](05-decisions.md). `[SOURCE À AJOUTER]` signale une affirmation factuelle qui doit être sourcée avant diffusion.
 
@@ -160,8 +160,8 @@ Le bénéfice réel pour des personnes en situation de handicap **n'est pas un c
 
 | Système cible | Horizon |
 |---|---|
-| Ordinateur | MVP ou extension `[À DÉFINIR — D-05]` |
-| Objets connectés | MVP ou extension `[À DÉFINIR — D-05]` |
+| Ordinateur | MVP : système cible réel (D-72) |
+| Objets connectés | MVP en simulation (lampe simulée) ; objet réel (ESP32) en extension (D-72) |
 | Systèmes embarqués | Extension |
 | Robotique | Extension en simulation ou recherche et futur `[À DÉFINIR — D-11]` |
 | Drones | Recherche et futur `[À DÉFINIR — D-11]` |
@@ -172,7 +172,7 @@ Au moins un système cible réel fait partie du MVP. La progression suit un prin
 
 - La chaîne complète : acquisition EEG, traitement, détection d'intention avec niveau de confiance, association intention → commande, exécution.
 - Les garde-fous : rejet des détections de confiance insuffisante, confirmation des commandes sensibles, arrêt `[À DÉFINIR — D-19]`.
-- Un connecteur vers au moins un système cible réel `[À DÉFINIR — D-05]`.
+- Un connecteur vers au moins un système cible réel : l'ordinateur, sous Windows (D-72, D-73), complété par une lampe simulée.
 - La supervision en temps réel de la chaîne.
 - L'enregistrement des sessions et le calcul des mesures de la section 3.3.
 - La journalisation des détections, commandes et erreurs.
@@ -195,7 +195,7 @@ L'accessibilité reste une dimension du projet et une contrainte de conception d
 
 Extensions envisagées après validation du MVP, sans ordre ni engagement :
 
-- d'autres systèmes cibles (ordinateur ou objets connectés, selon D-05) ;
+- un objet connecté réel (ESP32, MQTT) (D-72) ;
 - des systèmes embarqués ;
 - le robot en simulation `[À DÉFINIR — D-11]` ;
 - l'adaptation progressive du modèle à l'utilisateur ;
@@ -294,7 +294,7 @@ Priorités : **MVP**, **Ext.** (extension), **Futur**.
 
 | ID | Exigence | Priorité |
 |---|---|---|
-| BF-15 | Transmettre une commande à au moins un système cible réel et recevoir son résultat `[À DÉFINIR — D-05]` | MVP |
+| BF-15 | Transmettre une commande à au moins un système cible réel et recevoir son résultat (l'ordinateur, D-72) | MVP |
 | BF-16 | Ajouter un nouveau type de système cible sous forme de connecteur | Ext. |
 
 ### 6.6 Supervision
@@ -334,7 +334,7 @@ Priorités : **MVP**, **Ext.** (extension), **Futur**.
 | ENF-05 | Sécurité | L'accès aux données et aux fonctions d'administration est contrôlé `[À DÉFINIR — D-09]` ; les échanges réseau sont protégés |
 | ENF-06 | Confidentialité | Les données EEG ne sont collectées et utilisées qu'avec le consentement explicite de l'utilisateur ; leur lieu de stockage et leur durée de conservation sont définis `[À DÉFINIR — D-09]` |
 | ENF-07 | Maintenabilité et évolutivité | L'architecture est modulaire : un nouveau système cible ou une nouvelle méthode de détection s'ajoute sans modifier le Core |
-| ENF-08 | Compatibilité | La plateforme fonctionne avec le casque `[À DÉFINIR — D-04]` et le système d'exploitation `[À DÉFINIR — D-06]` retenus |
+| ENF-08 | Compatibilité | La plateforme fonctionne avec le casque `[À DÉFINIR — D-04]` et le système d'exploitation Windows (D-73) retenus |
 | ENF-09 | Utilisabilité et accessibilité | L'état du système et la raison de chaque rejet ou commande sont compréhensibles par l'utilisateur et l'accompagnant ; les fonctions d'usage ne nécessitent pas de geste physique fin |
 | ENF-10 | Traçabilité | Toute session peut être rejouée ou analysée à partir de ses enregistrements |
 
@@ -427,7 +427,7 @@ Le matériel est limité aux éléments indispensables au MVP. Les technologies 
 | CortexOS Core | Python pour le MVP ; C++ envisagé à terme | Retenu (D-62) |
 | Acquisition EEG | Bibliothèque compatible avec plusieurs casques (ex. BrainFlow) | Envisagé `[À DÉFINIR — D-04]` |
 | Base de données | PostgreSQL (+ fichiers pour signal, modèles, exports) | Retenu (D-58) |
-| Objets connectés / embarqué | MQTT, ESP32 | Envisagé `[À DÉFINIR — D-05]` ; lampe simulée en appel direct d'abord (D-56) |
+| Objets connectés / embarqué | MQTT, ESP32 | Extension (D-72) ; au MVP, lampe simulée en appel direct (D-56) |
 | Robotique | ROS 2 | Extension `[À DÉFINIR — D-11]` |
 | Autres (Django, Flutter, Redis, gRPC, Docker) | — | `[À DÉFINIR — D-08]` |
 
@@ -477,7 +477,7 @@ Le découpage détaillé en tâches et en itérations est décrit dans le **Plan
 | Poste | Estimation |
 |---|---|
 | Casque EEG | `[À DÉFINIR — D-04, D-13]` |
-| Matériel de démonstration pour le système cible (microcontrôleur, composants) | `[À DÉFINIR — D-05, D-13]` |
+| Matériel de démonstration pour le système cible (microcontrôleur, composants) | Aucun au MVP (D-72) ; extension ESP32 `[À DÉFINIR — D-13]` |
 | Ordinateur de développement | `[À DÉFINIR — D-13 : matériel existant ou achat]` |
 | Logiciels | Open source ou gratuits |
 | **Total** | `[À DÉFINIR — D-13]` |
