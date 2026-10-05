@@ -31,6 +31,7 @@ Documents de référence (à lire avant toute modification importante) :
 - Décidé aussi (DIAG-6, 25-26/09) : D-24 (confirmation par accompagnant ou EEG « oui »), D-29 (après incident → Suspendu), D-31 (délai réglable par profil), D-77 à D-95 (séquences). Diagrammes DIAG-1 à DIAG-8 et ARCH-0 en mode A (D-96) : Eloge rédige l'analyse, Claude écrit le Mermaid, complète et corrige.
 - Décidé le 27/09–03/10 : D-04 casque = module ADS1299 8 canaux (compatibilité BrainFlow à vérifier, commande bloquée) ; D-97 à D-100 (DIAG-7) ; D-101 = P1 à P8 d'ARCH-0 validées ; D-102 = draw.io/PDF sur Drive seulement.
 - Décidé le 04/10 : D-103 = DIAG-1 à DIAG-8 terminés et validés (DIAG-6, 7, 8 relus par Eloge). Prochaine étape : API-0 (contrat d'API) et maquettes.
+- Décidé le 04–05/10 : D-104, D-106, D-107 = **contrat d'API v1.0** (`docs/08-contrat-api.md`) : conventions, routes REST, `/ws/flux`, canaux locaux — **à respecter dans tout le code** ; D-105 = Drive seulement avec l'accord d'Eloge. Prochaine étape : maquettes (MAQ), puis squelette (S4).
 - Non tranché : D-05 (scénarios de démonstration), D-09 (droits par rôle, conservation, partage), D-19 (qui déclenche l'arrêt), D-30, D-67 à D-71 (parties restantes), D-84. Ne décide pas à la place d'Eloge.
 
 ## Règles de travail
