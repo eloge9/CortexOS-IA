@@ -108,9 +108,16 @@ Chacune répond à un besoin précis ; aucune n'ajoute un nouveau service à ins
 | ROS 2 | Extension (D-11) | Robot et drone simulés |
 | Django, Flutter, Redis, gRPC, Docker | `[À DÉFINIR — D-08]` | Aucun besoin identifié au MVP |
 
-### 3.4 Version de Python `[À VÉRIFIER]`
+### 3.4 Environnement de développement (vérifié le 04/10/2026)
 
-Ton PC a **Python 3.14.3**. BrainFlow, MNE et scikit-learn ne publient pas toujours leurs paquets tout de suite pour la dernière version de Python. **À vérifier en S4** : si l'installation échoue, on crée l'environnement virtuel avec Python 3.12 (installable à côté de 3.14 grâce au lanceur `py -3.12`).
+| Outil | Version sur le PC | Remarque |
+|---|---|---|
+| Git | 2.53.0 | Identité des commits : `eloge9` |
+| Python | **3.14.3** (par défaut) · 3.13.12 (Astral, aussi installé) | Version du projet : 3.14 |
+| Node.js | 24.13.1 (LTS) | Next.js 16 exige Node ≥ 20.9 |
+| VS Code | 1.139.0 | — |
+
+**Python 3.14 : compatibilité vérifiée côté paquets.** Le 04/10/2026, tous les paquets prévus (BrainFlow, MNE, scikit-learn, NumPy, SciPy, FastAPI, Uvicorn, Pydantic, SQLAlchemy, psycopg (binaire), Alembic, argon2-cffi, pynput, websockets, httpx, pytest) publient une version installable pour Python 3.14 sous Windows 64 bits. Confirmation finale lors de la création de l'environnement virtuel (`py -3.14 -m venv .venv`) en S4. Repli si une installation échoue : Python 3.13, déjà présent (proposé).
 
 ---
 
@@ -166,7 +173,7 @@ Correspondance avec DIAG-4 : chaque composant C1 à C24 a un dossier indiqué en
 | Backend → PostgreSQL | SQL | `127.0.0.1:5432` | Mot de passe dans `.env` |
 | Backend → Lampe simulée | Appel de fonction Python (D-56) | — | — |
 
-Le détail des routes et des messages sera fixé dans le **Contrat d'API v0** (API-0, S3). Principes déjà retenus :
+Le détail des routes et des messages est fixé dans le **Contrat d'API** (`08-contrat-api.md`, v1.0 validée le 05/10/2026, D-104 à D-107). Principes déjà retenus :
 
 - **REST** pour les actions ponctuelles (créer une session, activer les commandes, lire le journal) ;
 - **WebSocket `/ws/flux`** pour tout ce qui change en continu (état global, qualité, signal, détections, décisions, commandes, alertes) : le backend pousse, le navigateur ne demande pas ;
@@ -290,4 +297,4 @@ Semaine de réalisation de la page vitrine : `[À DÉFINIR]` (proposition : S4, 
 
 **Décisions qui fondent ce document :** D-54 (orchestrateur) · D-55 (agent en WebSocket) · D-56 (lampe en appel direct) · D-57 (arrêt par raccourci global) · D-58 (PostgreSQL + fichiers) · D-59 (entraînement en tâche de fond) · D-60 (authentification en S25) · D-61 (contrôle qualité séparé) · D-62 (Core Python) · **D-72** (ordinateur + lampe simulée) · **D-73** (Windows) · **D-74** (comptes locaux, tout sur le PC) · **D-75** (canal de l'arrêt d'urgence) · **D-76** (page vitrine) · **D-101** (P1 à P8).
 
-**Encore ouverts :** liaison physique et compatibilité BrainFlow du module ADS1299 (D-04, à vérifier) · D-05 (scénarios de démonstration) · D-09 (droits par rôle, conservation, partage) · D-10 (seuils, latence cible) · D-19 (qui déclenche l'arrêt) · D-67 à D-71 (comportements de DIAG-5) · formats de fichiers · version de Python (section 3.4).
+**Encore ouverts :** liaison physique et compatibilité BrainFlow du module ADS1299 (D-04, à vérifier) · D-05 (scénarios de démonstration) · D-09 (droits par rôle, conservation, partage) · D-10 (seuils, latence cible) · D-19 (qui déclenche l'arrêt) · D-67 à D-71 (comportements de DIAG-5) · formats de fichiers.

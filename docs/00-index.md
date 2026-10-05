@@ -9,7 +9,7 @@
 | 05 | [Décisions](05-decisions.md) | Registre unique des décisions D-xx | à jour |
 | 06 | [Charte graphique](06-charte-graphique.md) | Logo, couleurs, polices, composants, thèmes | v1.0 |
 | 07 | [Architecture technique](07-architecture-technique.md) | Programmes, technologies, communication, dépôt, sécurité (ARCH-0) | Terminé (27/09) · P1–P8 validées (D-101) |
-| 08 | [Contrat d'API](08-contrat-api.md) | Conventions, objets, routes REST, temps réel (API-0) | v0.2 en cours (partie 1 validée D-104 · partie 2 à relire · partie 3 à venir) |
+| 08 | [Contrat d'API](08-contrat-api.md) | Conventions, objets, routes REST, temps réel (API-0) | v1.0 validé (05/10, D-104, D-106, D-107) |
 | — | [Logos](assets/logo/) | 8 versions du logo (voir charte, section 2) | — |
 | — | [Diagrammes](diagrammes/) | Diagrammes Mermaid DIAG-1 à DIAG-14 | DIAG-1 à 8 validés (D-103) · DIAG-9 à 14 à venir |
 

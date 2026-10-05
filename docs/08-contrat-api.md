@@ -4,8 +4,8 @@
 |---|---|
 | **Réf.** | API-0 (Planning MVP, S3, mode B — D-46) |
 | **Sources** | Spécification fonctionnelle (§ 4, § 5 : F-01 à F-44, FW-01 à FW-51) · DIAG-3 (classes, énumérations) · DIAG-5 (états) · DIAG-6 (séquences) · ARCH-0 (§ 5, 7, 8) · Décisions D-24 à D-103 |
-| **Version** | 0.2 — 4 octobre 2026 · **parties 1 et 2 sur 3** |
-| **Statut** | Partie 1 validée (D-104) · partie 2 à relire par Eloge · partie 3 (temps réel, canaux locaux) à venir |
+| **Version** | 0.3 — 5 octobre 2026 · **parties 1 à 3** (document complet) |
+| **Statut** | Parties 1 et 2 validées (D-104, D-106) · partie 3 à relire par Eloge |
 
 ## Rôle de ce document
 
@@ -14,10 +14,10 @@ Le contrat d'API dit **exactement** ce que l'interface Web (Next.js) peut demand
 | Partie | Contenu | Statut |
 |---|---|---|
 | 1 | Conventions communes · format des erreurs · objets échangés (sections 1 à 3) | Validée (D-104) |
-| **2** | Routes REST `/api/v1/…`, domaine par domaine, avec traçabilité FW-xx → route (section 4) | **À relire** |
-| 3 | WebSocket `/ws/flux` · canaux locaux `/ws/agent` et `/api/local/arret-urgence` | À venir |
+| 2 | Routes REST `/api/v1/…`, domaine par domaine, avec traçabilité FW-xx → route (section 4) | Validée (D-106) |
+| **3** | WebSocket `/ws/flux` · canaux locaux `/ws/agent` et `/api/local/arret-urgence` (sections 5 et 6) | **À relire** |
 
-Les **propositions** (P-A1…) sont rassemblées en section 5 ; P-A1 à P-A6 sont validées (D-104). Tant qu'elles ne sont pas validées, elles restent « proposé ».
+Les **propositions** (P-A1…) sont rassemblées en section 7 : P-A1 à P-A10 validées (D-104, D-106), P-A11 à P-A16 à valider. Tant qu'elles ne sont pas validées, elles restent « proposé ».
 
 ---
 
@@ -481,7 +481,7 @@ Modification par l'interface : `[D-20]`.
 | DELETE | `/profils/{id}/consentement` | U (le sien), Acc | — | `Consentement` (`retire_le` rempli) | 404 |
 | DELETE | `/profils/{id}/donnees` | U (le sien), Adm | — | 204 | `[À DÉFINIR — D-38]` (ce qui est supprimé) |
 
-- **Retirer le consentement** (F-41) arrête tout nouvel enregistrement **tout de suite** : une session en cours passe **Interrompue**. Si elle est en expérimentation, les données déjà enregistrées restent, sauf demande de suppression.
+- **Retirer le consentement** (F-41) arrête tout nouvel enregistrement **tout de suite** : une session en cours passe **Interrompue** (DIAG-7 A1). Ce que deviennent les données déjà enregistrées : `[À DÉFINIR — D-38]`.
 - « Le sien » suppose qu'un compte soit lié au profil (D-53) ; les droits exacts restent `[D-09]`.
 
 ### 4.9 Journal et alertes (FW-06, FW-36, FW-37, FW-50 ; F-36, F-37)
@@ -525,15 +525,151 @@ Modification par l'interface : `[D-20]`.
 
 Hors MVP ou non décidés, sans route : FW-13, FW-14, FW-19, FW-21 `[D-20]`, FW-23 `[D-27]`, FW-24 (contenu fixe), FW-33, FW-35, FW-38, FW-43, FW-45 à FW-48.
 
-### 4.11 Codes d'erreur (liste complète des parties 1 et 2)
+### 4.11 Codes d'erreur (liste complète)
 
-`non_connecte` · `identifiants_invalides` · `role_insuffisant` · `consentement_absent` · `introuvable` · `donnees_invalides` · `transition_interdite` · `conditions_non_reunies` · `conditions_reprise_non_reunies` · `deja_traitee` · `qualite_insuffisante` · `modele_absent` · `session_en_cours` · `source_indisponible` · `cible_indisponible` · `identifiant_deja_utilise` · `pseudonyme_deja_utilise` · `erreur_interne`.
+`non_connecte` · `identifiants_invalides` · `role_insuffisant` · `consentement_absent` · `introuvable` · `donnees_invalides` · `transition_interdite` · `conditions_non_reunies` · `conditions_reprise_non_reunies` · `deja_traitee` · `qualite_insuffisante` · `modele_absent` · `session_en_cours` · `source_indisponible` · `cible_indisponible` · `identifiant_deja_utilise` · `pseudonyme_deja_utilise` · `jeton_invalide` (canaux locaux, section 6) · `erreur_interne`.
 
 ---
 
-## 5. Propositions
+## 5. Temps réel : WebSocket `/ws/flux` (partie 3)
 
-### 5.1 Partie 1 — validées le 04/10/2026 (D-104)
+### 5.1 Principe
+
+**Photo de départ, puis changements.** Au chargement d'une page, l'interface lit l'état actuel par REST (`GET /systeme/etat`, `GET /source`…). Ensuite, elle ne redemande plus rien : le backend **pousse** chaque changement sur `/ws/flux`. Pas de *polling*, donc pas de requêtes répétées « y a-t-il du nouveau ? ».
+
+| Étape | Ce qui se passe |
+|---|---|
+| Ouverture | Le navigateur ouvre `ws://localhost:8000/ws/flux` ; le cookie de session est vérifié (D-74). Sans session valide → fermeture avec le code **4401** |
+| En service | Le backend envoie les messages de 5.3 ; le navigateur peut seulement s'abonner ou se désabonner (5.4, P-A12) |
+| Coupure | Le navigateur se reconnecte seul (attente 1 s, 2 s, puis 5 s entre les essais), puis **relit la photo de départ** en REST. Les messages manqués ne sont pas renvoyés : l'historique est dans le journal |
+
+**Les actions ne passent jamais par `/ws/flux`** (P-A12) : activer, confirmer, créer une session… restent des routes REST (section 4). Une seule voie pour les actions = un seul endroit pour vérifier les droits et renvoyer les erreurs (1.5).
+
+### 5.2 Enveloppe commune (P-A11)
+
+Chaque message a la même forme :
+
+```json
+{
+  "type": "decision",
+  "horodatage": "2026-10-04T19:30:00.412Z",
+  "sequence": 18342,
+  "donnees": { "…": "objet de la section 3" }
+}
+```
+
+| Champ | Rôle |
+|---|---|
+| `type` | Dit à l'interface quoi faire du message (tableau 5.3) |
+| `horodatage` | Heure d'envoi : sert à l'indicateur de fraîcheur (FW-49) |
+| `sequence` | Compteur qui augmente de 1 à chaque message : un trou (18342 puis 18345) révèle des messages perdus → relire la photo de départ |
+| `donnees` | Un objet de la section 3, sans changement de format |
+
+### 5.3 Messages du backend vers le navigateur
+
+| `type` | `donnees` | Envoyé quand | FW |
+|---|---|---|---|
+| `etat_systeme` | `EtatSysteme` | Chaque changement d'état global (DIAG-5 ①), y compris le passage automatique en état sûr | FW-01, FW-25 |
+| `source` | `Source` | Changement de connexion (DIAG-5 ⑤ : connexion réussie, échec, signal perdu…) | FW-02, FW-08, FW-09 |
+| `qualite` | `Qualite` | Changement de niveau, et au moins une fois par seconde tant que la source est connectée | FW-10, FW-11 |
+| `signal` | `PaquetSignal` (ci-dessous) | En continu, **seulement aux abonnés** (5.4, P-A13) | FW-12 |
+| `detection` | `Detection` | Chaque détection (en utilisation, sans le repos : D-78) | FW-03 |
+| `decision` | `Decision` | Chaque décision du Core | FW-03 |
+| `commande` | `Commande` | **Chaque changement de statut** : acceptée, en attente (avec `echeance_confirmation`), confirmée, envoyée, exécutée… | FW-04, FW-28 |
+| `cible` | `Cible` | Changement de disponibilité (agent connecté ou non) ou de l'état simulé de la lampe | FW-05, FW-22 |
+| `calibration` | `Calibration` | Nouvel essai (consigne), progression, changement de statut | FW-16, FW-17 |
+| `session` | `Session` | Changement de statut, et `compteurs` toutes les 2 secondes pendant la session | FW-07, FW-30 |
+| `essai` | `Essai` | Début et fin de chaque essai d'expérimentation (intention attendue) | FW-30 |
+| `evenement` | `EvenementJournal` | Chaque événement du journal de gravité ≥ `information` | FW-06, FW-36 |
+| `alerte` | `Alerte` | Nouvelle alerte, ou alerte traitée | FW-06, FW-15 |
+| `battement` | `{}` | Toutes les **5 secondes**, même quand rien ne change (P-A14) | FW-49 |
+
+**`PaquetSignal`**
+
+| Champ | Type | Sens |
+|---|---|---|
+| `debut` | date | Heure du premier échantillon du paquet |
+| `frequence_hz` | entier | Pour placer chaque point sur l'axe du temps |
+| `canaux` | texte[] | Canaux présents (ceux demandés à l'abonnement) |
+| `echantillons` | décimal[][] | Un tableau par canal, en microvolts ; environ 0,1 s de signal par paquet (P-A13) |
+
+**Fraîcheur (FW-49, P-A14)** : si l'interface ne reçoit **aucun message pendant 10 secondes** (pas même un `battement`), elle affiche « données périmées — dernière mise à jour il y a X s » au lieu de laisser croire que l'écran est à jour.
+
+### 5.4 Messages du navigateur vers le backend
+
+Les deux seuls messages possibles (P-A12) :
+
+```json
+{ "type": "abonner", "flux": "signal", "canaux": ["C3", "Cz", "C4"] }
+{ "type": "desabonner", "flux": "signal" }
+```
+
+Le signal est le seul flux à abonnement, parce que c'est le seul lourd (8 canaux × 250 échantillons par seconde). La page « Signal » s'abonne en s'ouvrant et se désabonne en se fermant ; les autres pages ne le reçoivent pas.
+
+### 5.5 Codes de fermeture
+
+| Code | Sens |
+|---|---|
+| 1000 | Fermeture normale (page fermée) |
+| 1001 | Le backend s'arrête |
+| 4401 | Pas de session valide : se reconnecter (`/connexion`) |
+| 4400 | Message du navigateur incompréhensible |
+
+Les codes 4000 à 4999 sont réservés aux applications : on y reprend les codes HTTP connus (4401 ≈ 401).
+
+---
+
+## 6. Canaux locaux (partie 3)
+
+Ces canaux servent aux **programmes du PC**, jamais au navigateur. Ils n'acceptent que les connexions venant de `127.0.0.1`, avec un **jeton local** généré au démarrage du backend dans `data/` (P8, D-101 ; ARCH-0 § 7).
+
+### 6.1 Agent ordinateur : WebSocket `/ws/agent` (D-55, P5)
+
+**Connexion** : l'agent se connecte à `ws://127.0.0.1:8000/ws/agent` et envoie aussitôt sa présentation (P-A15) :
+
+```json
+{ "type": "presentation", "jeton": "…contenu de data/jeton-agent.txt…", "version_agent": "0.1.0",
+  "commandes": ["curseur_gauche", "curseur_droite", "clic"] }
+```
+
+| Réponse du backend | Effet |
+|---|---|
+| `{ "type": "bienvenue" }` | La cible **Ordinateur** devient **disponible** (message `cible` sur `/ws/flux`) |
+| Fermeture **4401** | Jeton faux, ou connexion venant d'une autre adresse que `127.0.0.1` |
+
+**Échanges**
+
+| Sens | `type` | Contenu | Rôle |
+|---|---|---|---|
+| Backend → agent | `executer` | `{ commande_id, type_commande, parametres }` | Ordre d'exécution ; `commande_id` est l'identifiant de la commande (3.6) |
+| Agent → backend | `resultat` | `{ commande_id, succes, message }` | Résultat ; le backend en fait un `Resultat` (3.8), heure t3 |
+| Les deux | *ping / pong* | (automatique, bibliothèque `websockets`) | Si l'agent ne répond plus, la cible passe **indisponible** et les commandes vers elle sont rejetées (F-23) |
+
+- **Liste fermée côté agent** : une commande inconnue n'est **pas exécutée** ; l'agent répond `resultat` avec `succes: false`, `message: "commande inconnue"`. C'est le deuxième contrôle de la liste fermée (DIAG-6 (a)).
+- Pas de réponse dans le délai → commande **Échouée** `[À DÉFINIR — D-68]`.
+- Un résultat qui arrive après un passage en état sûr est enregistré avec `recu_en_etat_sur: true` (D-93).
+
+### 6.2 Arrêt d'urgence : `POST /api/local/arret-urgence` (D-57, D-75)
+
+| | |
+|---|---|
+| Appelant | Le programme `arret_urgence/` (C18), quand le raccourci clavier global est pressé |
+| En-tête | `X-Jeton-Local: <contenu de data/jeton-arret.txt>` (P-A15) |
+| Entrée | `{ "declencheur": "raccourci_clavier" }` |
+| Réponse | **200** `EtatSysteme` (`etat: "etat_sur"`) |
+| Erreur | **403** `jeton_invalide` (jeton faux, ou requête venant d'une autre adresse que `127.0.0.1`) |
+
+**Effets, dans cet ordre** : passage en **État sûr** (T15) · commande en attente annulée (auteur `systeme`) · session en cours **Interrompue** (S7) · alerte **critique** · événement du journal · message `etat_systeme` sur `/ws/flux`.
+
+**Toujours 200, même si CortexOS est déjà en état sûr ou arrêté** (P-A16) : un arrêt d'urgence ne doit jamais « échouer » parce que le système est déjà arrêté. Le programme C18 n'a qu'une chose à vérifier : la réponse est 200.
+
+Qui peut déclencher l'arrêt : `[À DÉFINIR — D-19]`.
+
+---
+
+## 7. Propositions
+
+### 7.1 Partie 1 — validées le 04/10/2026 (D-104)
 
 | N° | Proposition | Alternative écartée | Pourquoi |
 |---|---|---|---|
@@ -544,7 +680,7 @@ Hors MVP ou non décidés, sans route : FW-13, FW-14, FW-19, FW-21 `[D-20]`, FW-
 | **P-A5** | Pagination `limite` / `decalage` | Pagination par curseur | Suffisant pour un seul PC et quelques milliers d'événements ; plus simple à comprendre |
 | **P-A6** | `NiveauQualite` = `suffisante` / `insuffisante` au MVP | 3 ou 5 niveaux, ou un score 0–100 | DIAG-5 ⑤ ne distingue que ces deux états ; un score pourra s'ajouter sans casser le contrat |
 
-### 5.2 Partie 2 — à valider
+### 7.2 Partie 2 — validées le 05/10/2026 (D-106)
 
 | N° | Proposition | Alternative écartée | Pourquoi |
 |---|---|---|---|
@@ -553,8 +689,20 @@ Hors MVP ou non décidés, sans route : FW-13, FW-14, FW-19, FW-21 `[D-20]`, FW-
 | **P-A9** | `/api/health` hors de `/v1` | `/api/v1/health` | Route technique, prévue telle quelle au Planning (S4) ; elle ne dépend pas de la version du contrat |
 | **P-A10** | Rôles minimaux par route (colonnes « Rôle ») en attendant D-09 ; **suspendre** (système et session) permis à **toute personne connectée** | Tout réservé à l'accompagnant | Principe de sûreté : n'importe qui doit pouvoir arrêter, seuls certains peuvent (ré)activer |
 
+### 7.3 Partie 3 — à valider
 
-## 6. Points ouverts
+| N° | Proposition | Alternative écartée | Pourquoi |
+|---|---|---|---|
+| **P-A11** | **Enveloppe commune** `{ type, horodatage, sequence, donnees }` pour tous les messages de `/ws/flux` | Un format différent par message | Un seul code de réception dans l'interface ; `sequence` révèle les messages perdus |
+| **P-A12** | `/ws/flux` **sert à recevoir** : le navigateur n'envoie que `abonner` / `desabonner` ; **toutes les actions passent par REST** | Envoyer aussi les actions (confirmer, activer) par WebSocket | Un seul chemin pour les actions = droits, erreurs (1.5) et tests au même endroit |
+| **P-A13** | Signal envoyé **seulement aux abonnés**, par paquets d'environ 0,1 s ; canaux choisis à l'abonnement (FW-12) | Envoyer tout le signal à toutes les pages | C'est le seul flux lourd ; inutile de le calculer et de l'envoyer à une page qui ne l'affiche pas. Taille exacte des paquets : Documentation technique |
+| **P-A14** | **Battement** toutes les 5 s ; « données périmées » affiché après 10 s sans aucun message | Pas de battement : impossible de distinguer « rien ne change » et « connexion morte » | FW-49 : ne jamais afficher un état périmé comme actuel |
+| **P-A15** | Jeton de l'agent dans son **premier message** `presentation` ; jeton de l'arrêt d'urgence dans l'**en-tête** `X-Jeton-Local` | Jeton dans l'adresse (`?jeton=…`) | Une adresse peut finir dans des journaux techniques ; un message ou un en-tête, non |
+| **P-A16** | Arrêt d'urgence **toujours 200**, même si CortexOS est déjà en état sûr ou arrêté | 409 si déjà arrêté | Le programme C18 doit être le plus simple et le plus fiable possible : appuyer = résultat garanti |
+
+
+
+## 8. Points ouverts
 
 - **D-03** : noms des intentions (`"main_gauche"`… sont des exemples).
 - **D-09** : droits par rôle (partie 2 : rôle proposé par route).
@@ -565,3 +713,5 @@ Hors MVP ou non décidés, sans route : FW-13, FW-14, FW-19, FW-21 `[D-20]`, FW-
 - **D-20** : modification de la correspondance (`PUT …/correspondance`) · **D-23** : qui modifie le seuil · **D-38** : périmètre de la suppression · **D-67** : conditions d'activation · **D-71** : reprise d'une session interrompue.
 - **Protocole** d'expérimentation (Q2 de DIAG-7) : champs à ajouter à `POST /sessions`.
 - **Formats d'export** : Documentation technique.
+- **D-19** : qui peut déclencher l'arrêt d'urgence · **D-68** : délai d'attente du résultat de l'agent.
+- **Extension possible (non retenue au MVP)** : `GET /sessions/{id}/decisions`, liste des objets `Decision` d'une session pour un écran d'analyse détaillée (idée d'Eloge, 05/10) ; en attendant, l'historique est dans `GET /journal?type=decision` et dans l'export.
