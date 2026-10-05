@@ -77,7 +77,7 @@ Documents de référence (à lire avant toute modification importante) :
   3. Créer un nouveau Google Doc (contenu `text/markdown`) dans le même dossier, titre « Nom — CortexOS IA (vX.Y) » (titre actuel conservé si la version ne change pas).
   4. Déplacer l'ancienne copie dans « 99 - Archives » (`176VW8r3qWoZVLFJE3CebzD_XmqItGhI4`), renommée « [Ancienne version JJ/MM] titre ».
   5. Mettre à jour l'ID dans la carte ci-dessous et la ligne « Dernière republication ».
-- **Drive seulement avec l'accord d'Eloge (D-105)** : `docs/` sur le PC se met à jour librement ; **aucune écriture sur Drive sans un « ok » explicite**. Au `fs`, lister d'abord les documents modifiés depuis la dernière republication, attendre l'accord, puis republier en entier ceux qu'Eloge accepte.
+- **Drive seulement avec l'accord d'Eloge (D-105)** : `docs/` sur le PC se met à jour librement ; **aucune écriture sur Drive pendant le travail**. **Taper `fs` vaut accord** : au `fs`, republier directement, en entier, tous les documents modifiés depuis la dernière republication (sans redemander) ; en dehors du `fs`, seulement sur demande explicite d'Eloge.
 - **Une seule synchronisation Drive à la fois** : si `fs` est fait dans Claude Code, ne pas le refaire dans Cowork pour les mêmes documents (et inversement) ; la ligne « Dernière republication » indique ce qui a déjà été fait.
 - Accès à Drive depuis Claude Code : via le connecteur Google Drive de claude.ai (vérifier avec `/mcp`). S'il n'est pas disponible, ne rien republier : le signaler à Eloge (`fs` à faire dans Cowork).
 - L'encadreur commente les documents plutôt que de les modifier (sauf le classeur de suivi).

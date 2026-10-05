@@ -1,4 +1,4 @@
-# Contrat d'API v0 — CortexOS IA
+# Contrat d'API — CortexOS IA
 
 | | |
 |---|---|
@@ -17,7 +17,7 @@ Le contrat d'API dit **exactement** ce que l'interface Web (Next.js) peut demand
 | 2 | Routes REST `/api/v1/…`, domaine par domaine, avec traçabilité FW-xx → route (section 4) | Validée (D-106) |
 | 3 | WebSocket `/ws/flux` · canaux locaux `/ws/agent` et `/api/local/arret-urgence` (sections 5 et 6) | Validée (D-107) |
 
-Les **propositions** (P-A1…) sont rassemblées en section 7 : toutes validées (D-104, D-106, D-107). Tant qu'elles ne sont pas validées, elles restent « proposé ».
+Les **propositions** (P-A1…) sont rassemblées en section 7, toutes validées (D-104, D-106, D-107).
 
 ---
 
@@ -700,8 +700,6 @@ Qui peut déclencher l'arrêt : `[À DÉFINIR — D-19]`.
 | **P-A14** | **Battement** toutes les 5 s ; « données périmées » affiché après 10 s sans aucun message | Pas de battement : impossible de distinguer « rien ne change » et « connexion morte » | FW-49 : ne jamais afficher un état périmé comme actuel |
 | **P-A15** | Jeton de l'agent dans son **premier message** `presentation` ; jeton de l'arrêt d'urgence dans l'**en-tête** `X-Jeton-Local` | Jeton dans l'adresse (`?jeton=…`) | Une adresse peut finir dans des journaux techniques ; un message ou un en-tête, non |
 | **P-A16** | Arrêt d'urgence **toujours 200**, même si CortexOS est déjà en état sûr ou arrêté | 409 si déjà arrêté | Le programme C18 doit être le plus simple et le plus fiable possible : appuyer = résultat garanti |
-
-
 
 ## 8. Points ouverts
 
