@@ -27,7 +27,7 @@ Documents de référence (à lire avant toute modification importante) :
 - Interfaces interchangeables : `SourceEEG` (simulation, fichier, casque) et `Connecteur` (ordinateur, lampe simulée…).
 - Stack : Python (EEG/IA : BrainFlow, MNE, scikit-learn), FastAPI, Next.js/TypeScript.
 - Développement par **tranches verticales**, contrat d'API défini avant le code.
-- Décidé : Core en Python (D-62), PostgreSQL + fichiers (D-58), orchestrateur de la chaîne (D-54), agent en WebSocket local (D-55), arrêt d'urgence par raccourci global (D-57) avec route HTTP locale + jeton (D-75), cible ordinateur + lampe simulée (D-72), Windows (D-73), comptes locaux + cookie, tout sur le PC (D-74), page vitrine publique (D-76). Architecture : `docs/07-architecture-technique.md` (propositions P1–P8 à valider).
+- Décidé : Core en Python (D-62), PostgreSQL + fichiers (D-58), orchestrateur de la chaîne (D-54), agent en WebSocket local (D-55), arrêt d'urgence par raccourci global (D-57) avec route HTTP locale + jeton (D-75), cible ordinateur + lampe simulée (D-72), Windows (D-73), comptes locaux + cookie, tout sur le PC (D-74), page vitrine publique (D-76). Architecture : `docs/07-architecture-technique.md` (propositions P1–P8 validées, D-101).
 - Décidé aussi (DIAG-6, 25-26/09) : D-24 (confirmation par accompagnant ou EEG « oui »), D-29 (après incident → Suspendu), D-31 (délai réglable par profil), D-77 à D-95 (séquences). Diagrammes DIAG-1 à DIAG-8 et ARCH-0 en mode A (D-96) : Eloge rédige l'analyse, Claude écrit le Mermaid, complète et corrige.
 - Décidé le 27/09–03/10 : D-04 casque = module ADS1299 8 canaux (compatibilité BrainFlow à vérifier, commande bloquée) ; D-97 à D-100 (DIAG-7) ; D-101 = P1 à P8 d'ARCH-0 validées ; D-102 = draw.io/PDF sur Drive seulement.
 - Décidé le 04/10 : D-103 = DIAG-1 à DIAG-8 terminés et validés (DIAG-6, 7, 8 relus par Eloge). Prochaine étape : API-0 (contrat d'API) et maquettes.
@@ -39,7 +39,14 @@ Documents de référence (à lire avant toute modification importante) :
 2. **Pas de nouvelle dépendance ou technologie sans raison expliquée.** Pas de sur-ingénierie.
 3. **Deux modes** :
    - **Mode A** (Eloge code) : explique, découpe, donne une étape, laisse-le coder, corrige ses erreurs. Ne donne pas toute la solution.
-   - **Mode B** (tu codes) : avant, dis quoi, pourquoi, quels fichiers. Après, compte rendu : ce que j'ai fait · pourquoi · comment ça fonctionne (entrée → traitement → sortie) · fichiers · code important · comment tester · proposition de commit.
+   - **Mode B** (tu codes) : **avant**, dis quoi, pourquoi, quels fichiers, comment ça s'intègre à l'architecture. Travaille par **petites étapes** (un module ou un fichier à la fois), pas tout d'un coup. **Après chaque étape**, compte rendu pédagogique avec cette structure :
+     - **Ce que j'ai fait** · **Pourquoi** · **Comment ça fonctionne** (entrée → traitement → logique → sortie, et lien avec le reste de CortexOS IA)
+     - **Fichiers concernés** (créés / modifiés, rôle de chacun) · nouvelles fonctions, classes, dépendances
+     - **Code important** expliqué **bloc par bloc ou ligne par ligne** (imports, classes, fonctions, paramètres, types, exceptions, flux de données)
+     - **À retenir** (notions nouvelles, expliquées simplement puis avec le vocabulaire technique) · compromis et erreurs possibles
+     - **Comment tester** (commandes exactes) · **Git** : ce qui a changé, commit proposé, comment revenir en arrière
+     - **Pour aller plus loin** · puis **une question de compréhension**
+   - En mode B, **arrête-toi après chaque compte rendu** et laisse Eloge poser ses questions avant de passer à l'étape suivante.
 4. Tout code produit doit pouvoir être expliqué à Eloge. Explique les notions nouvelles.
 5. **Débogage** : cause → explication → correction (si demandée) → comment l'éviter → test.
 6. **Git** : commits petits et clairs, en français, format `type(portée): description` (ex. `feat(core): ajoute la machine à états`). Ne pousse (`git push`) qu'après accord d'Eloge.
@@ -58,10 +65,19 @@ Documents de référence (à lire avant toute modification importante) :
 
 ## Synchronisation Git / Drive (D-45)
 
-- **« début de séance »** : liste les fichiers Drive (dossier « CortexOS IA ») modifiés depuis la dernière synchronisation et les nouveaux commentaires ; résume-les à Eloge.
+- **`ds` ou « début de séance »** : liste les fichiers Drive (dossier « CortexOS IA ») modifiés depuis la dernière synchronisation et les nouveaux commentaires ; résume-les à Eloge.
 - **Avant de modifier ou de resynchroniser un fichier Drive**, vérifie s'il a été modifié depuis la dernière synchronisation (par Eloge ou l'encadreur). Si oui : ne l'écrase jamais, montre les changements, reporte-les dans `docs/` après accord d'Eloge.
-- **« fin de séance »** : récapitulatif, message de commit proposé (Eloge lance `git`), republication sur Drive des docs modifiées, mise à jour du classeur « Tableau de suivi — CortexOS IA » (dossier « 03 - Planning et suivi », seule source du suivi, n'existe que sur Drive).
+- **`fs` ou « fin de séance »** : récapitulatif, message de commit proposé (Eloge lance `git`), republication sur Drive des docs modifiées, mise à jour du classeur « Tableau de suivi — CortexOS IA » (dossier « 03 - Planning et suivi », seule source du suivi, n'existe que sur Drive).
 - **Claude tient à jour toutes les copies Drive** : un doc modifié dans `docs/` est republié (nouvelle version au même endroit, titre « Nom — CortexOS IA (vX.Y) », ancienne version dans « 99 - Archives »), puis la carte ci-dessous est mise à jour.
+- **Méthode de republication** (identique dans Cowork et dans Claude Code) :
+  1. Vérifier la date de modification de la copie Drive : si elle est postérieure à la dernière republication, **ne pas écraser** ; montrer les changements à Eloge.
+  2. Convertir le `.md` : chaque bloc ` ```mermaid ` est remplacé par la ligne `> *Diagramme : voir le fichier Git `docs/…` (Mermaid, affiché en image dans GitHub ou VS Code) et la version draw.io / PDF du dossier Drive « Diagrammes / V1 (pdf et drawio) ».*` ; les liens relatifs `[texte](fichier.md)` deviennent `texte` ; les images locales sont retirées.
+  3. Créer un nouveau Google Doc (contenu `text/markdown`) dans le même dossier, titre « Nom — CortexOS IA (vX.Y) » (titre actuel conservé si la version ne change pas).
+  4. Déplacer l'ancienne copie dans « 99 - Archives » (`176VW8r3qWoZVLFJE3CebzD_XmqItGhI4`), renommée « [Ancienne version JJ/MM] titre ».
+  5. Mettre à jour l'ID dans la carte ci-dessous et la ligne « Dernière republication ».
+- **Drive seulement avec l'accord d'Eloge (D-105)** : `docs/` sur le PC se met à jour librement ; **aucune écriture sur Drive sans un « ok » explicite**. Au `fs`, lister d'abord les documents modifiés depuis la dernière republication, attendre l'accord, puis republier en entier ceux qu'Eloge accepte.
+- **Une seule synchronisation Drive à la fois** : si `fs` est fait dans Claude Code, ne pas le refaire dans Cowork pour les mêmes documents (et inversement) ; la ligne « Dernière republication » indique ce qui a déjà été fait.
+- Accès à Drive depuis Claude Code : via le connecteur Google Drive de claude.ai (vérifier avec `/mcp`). S'il n'est pas disponible, ne rien republier : le signaler à Eloge (`fs` à faire dans Cowork).
 - L'encadreur commente les documents plutôt que de les modifier (sauf le classeur de suivi).
 
 ### Carte des documents Drive (dossier « CortexOS IA »)

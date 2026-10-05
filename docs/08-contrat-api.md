@@ -4,8 +4,8 @@
 |---|---|
 | **Réf.** | API-0 (Planning MVP, S3, mode B — D-46) |
 | **Sources** | Spécification fonctionnelle (§ 4, § 5 : F-01 à F-44, FW-01 à FW-51) · DIAG-3 (classes, énumérations) · DIAG-5 (états) · DIAG-6 (séquences) · ARCH-0 (§ 5, 7, 8) · Décisions D-24 à D-103 |
-| **Version** | 0.1 — 4 octobre 2026 · **partie 1 sur 3** (conventions et objets) |
-| **Statut** | Partie 1 à relire par Eloge · parties 2 (routes REST) et 3 (temps réel, canaux locaux) à venir |
+| **Version** | 0.2 — 4 octobre 2026 · **parties 1 et 2 sur 3** |
+| **Statut** | Partie 1 validée (D-104) · partie 2 à relire par Eloge · partie 3 (temps réel, canaux locaux) à venir |
 
 ## Rôle de ce document
 
@@ -13,11 +13,11 @@ Le contrat d'API dit **exactement** ce que l'interface Web (Next.js) peut demand
 
 | Partie | Contenu | Statut |
 |---|---|---|
-| **1** | Conventions communes · format des erreurs · objets échangés | **Ce document** |
-| 2 | Routes REST `/api/v1/…`, domaine par domaine, avec traçabilité FW-xx → route | À venir |
+| 1 | Conventions communes · format des erreurs · objets échangés (sections 1 à 3) | Validée (D-104) |
+| **2** | Routes REST `/api/v1/…`, domaine par domaine, avec traçabilité FW-xx → route (section 4) | **À relire** |
 | 3 | WebSocket `/ws/flux` · canaux locaux `/ws/agent` et `/api/local/arret-urgence` | À venir |
 
-Les **propositions** (P-A1…) sont à valider par Eloge ; elles sont rassemblées en section 4. Tant qu'elles ne sont pas validées, elles restent « proposé ».
+Les **propositions** (P-A1…) sont rassemblées en section 5 ; P-A1 à P-A6 sont validées (D-104). Tant qu'elles ne sont pas validées, elles restent « proposé ».
 
 ---
 
@@ -121,7 +121,7 @@ Valeurs exactes reprises de DIAG-3 et DIAG-5, écrites selon P-A1.
 | `EtatGlobal` | `arrete`, `preparation`, `calibration`, `pret`, `actif`, `suspendu`, `etat_sur` | DIAG-5 ① |
 | `TypeSource` | `casque`, `simulation`, `enregistrement` | F-03, F-32 |
 | `EtatConnexionSource` | `deconnectee`, `connexion_en_cours`, `connectee`, `signal_perdu`, `fin_enregistrement` | DIAG-5 ⑤ |
-| `NiveauQualite` | `suffisante`, `insuffisante` **(proposé, P-A6)** ; niveaux plus fins `[À DÉFINIR — Documentation technique]` | DIAG-5 ⑤, F-02 |
+| `NiveauQualite` | `suffisante`, `insuffisante` (D-104) ; niveaux plus fins `[À DÉFINIR — Documentation technique]` | DIAG-5 ⑤, F-02 |
 | `IssueDecision` | `acceptee`, `rejetee`, `en_attente_confirmation`, `confirmation` (« oui » qui confirme, D-85), `repos` (aucune commande attendue) | DIAG-3, DIAG-7 A2 |
 | `MotifRejet` | `systeme_non_actif`, `qualite_insuffisante`, `confiance_insuffisante`, `cible_indisponible`, `commande_non_autorisee`, `delai_non_ecoule`, `confirmation_en_attente` | Spéc. 4.5, D-79, D-85 |
 | `StatutCommande` | `acceptee`, `en_attente_confirmation`, `confirmee`, `annulee`, `expiree`, `envoyee`, `executee`, `echouee` | DIAG-5 ② |
@@ -356,7 +356,184 @@ Modification par l'interface : `[D-20]`.
 
 ---
 
-## 4. Propositions à valider (partie 1)
+## 4. Routes REST (partie 2)
+
+### 4.0 Lire les tableaux
+
+- Toutes les adresses commencent par `/api/v1` (sauf `/api/health`).
+- **Rôle** : rôle minimal **proposé** (P-A10), en attendant D-09. `Connecté` = toute personne connectée · `U` utilisateur · `Acc` accompagnant · `Exp` expérimentateur · `Adm` administrateur.
+- **Réponse** : objet de la section 3 renvoyé en cas de succès. `Page<X>` = liste paginée (1.6).
+- **Erreurs** : codes propres à la route ; 401, 422 et 500 sont possibles partout et ne sont pas répétés.
+- Une **action** qui change un état (DIAG-5) est un `POST` sur `…/{verbe}` (P-A7) : `POST /sessions/{id}/demarrer`. Si la machine à états l'interdit → **409 `transition_interdite`**, avec `details.etat_actuel`.
+
+### 4.1 Santé et authentification (FW-42, D-74)
+
+| Méthode | Route | Rôle | Entrée | Réponse | Erreurs |
+|---|---|---|---|---|---|
+| GET | `/api/health` | Public | — | `{ "statut": "ok", "version": "0.1.0" }` | — |
+| POST | `/auth/connexion` | Public | `{ identifiant, mot_de_passe }` | 200 `Compte` + cookie | 401 `identifiants_invalides` (message volontairement vague : ne dit pas lequel est faux) |
+| POST | `/auth/deconnexion` | Connecté | — | 204 | — |
+| GET | `/auth/moi` | Connecté | — | `Compte` | — |
+| POST | `/auth/mot-de-passe` | Connecté | `{ ancien, nouveau }` | 204 | 401 `identifiants_invalides` |
+| GET | `/comptes` | Adm | — | `Compte[]` | 403 |
+| POST | `/comptes` | Adm | `{ identifiant, nom_affiche, mot_de_passe, roles }` | 201 `Compte` | 403 · 409 `identifiant_deja_utilise` |
+| PATCH | `/comptes/{id}` | Adm | `{ nom_affiche?, roles?, actif? }` | `Compte` | 403 · 404 |
+
+`/api/health` reste hors de `/v1` : c'est une route technique (Planning S4), pas une partie du contrat métier (P-A9). Le premier administrateur est créé en ligne de commande, pas par l'API (P7, D-101).
+
+### 4.2 Système et sûreté (FW-01, FW-25 à FW-27, F-19 ; DIAG-5 ①)
+
+| Méthode | Route | Transition | Rôle | Entrée | Réponse | Erreurs |
+|---|---|---|---|---|---|---|
+| GET | `/systeme/etat` | — | Connecté | — | `EtatSysteme` | — |
+| POST | `/systeme/demarrer` | T1 / T2 | Acc | `{ profil_id }` | `EtatSysteme` (Préparation ou Prêt selon le modèle) | 409 `transition_interdite` · 503 `source_indisponible` · 403 `consentement_absent` |
+| POST | `/systeme/selectionner-modele` | T4 | Acc | `{ version }` | `EtatSysteme` | 404 · 409 |
+| POST | `/systeme/activer` | T7 | U, Acc | — | `EtatSysteme` | 409 `transition_interdite` · 409 `conditions_non_reunies` `[D-67]` |
+| POST | `/systeme/suspendre` | T8 | **Connecté** (P-A10) | — | `EtatSysteme` | 409 si déjà non actif |
+| POST | `/systeme/reprendre` | T9 | U, Acc | — | `EtatSysteme` | 409 `conditions_reprise_non_reunies` (D-91 ; `details.conditions` liste celles qui manquent) |
+| POST | `/systeme/arreter` | T17 | Acc | — | `EtatSysteme` | 409 |
+| GET | `/parametres-surete` | — | Connecté | — | `ParametresSurete` | — |
+| PATCH | `/parametres-surete` | — | `[D-23]` | `{ seuil_confiance?, delai_minimal_ms?, delai_confirmation_s? }` | `ParametresSurete` (journalisé avec l'auteur, FW-50) | 403 · 422 |
+
+- **L'arrêt d'urgence n'est pas ici** : il passe par `/api/local/arret-urgence` (partie 3), justement pour fonctionner sans l'interface (F-20, D-75). « Suspendre » (FW-26) ne le remplace pas.
+- Le passage en **état sûr** (T12 à T15) et la sortie vers **Suspendu** (T16) ne sont pas des routes : ce sont des réactions automatiques, annoncées sur `/ws/flux`.
+
+### 4.3 Source et signal (FW-02, FW-08 à FW-11, FW-15 ; F-01 à F-05 ; DIAG-5 ⑤)
+
+| Méthode | Route | Transition | Rôle | Entrée | Réponse | Erreurs |
+|---|---|---|---|---|---|---|
+| GET | `/source` | — | Connecté | — | `Source` ou `null` | — |
+| GET | `/source/enregistrements` | — | Acc, Exp | — | `[{ id, nom, origine, duree_s, frequence_hz }]` (fichiers de `data/`) | — |
+| POST | `/source/connecter` | E1 | Acc | `{ type, enregistrement_id? }` | **202** `Source` (`connexion_en_cours`) | 409 déjà connectée · 404 enregistrement |
+| POST | `/source/reconnecter` | E5 | Acc | — | **202** `Source` | 409 si le signal n'est pas perdu |
+| POST | `/source/deconnecter` | E6 / E9 | Acc | — | `Source` | 409 |
+
+- **202** (P-A8) : la connexion prend du temps (BrainFlow, Bluetooth). La route répond tout de suite ; la réussite (E2) ou l'échec (E3) arrive sur `/ws/flux`. L'interface n'est jamais bloquée.
+- La **qualité** (FW-10, FW-11) et les **échantillons** du signal (FW-12) changent en continu : ils passent **uniquement** par `/ws/flux` (partie 3). `GET /source` en donne l'état au moment de la lecture (utile au chargement d'une page).
+
+### 4.4 Calibration et modèles (FW-16 à FW-18 ; F-06 à F-09 ; DIAG-5 ④)
+
+| Méthode | Route | Transition | Rôle | Entrée | Réponse | Erreurs |
+|---|---|---|---|---|---|---|
+| POST | `/calibrations` | K2 (+ T3, T10, T11) | Acc | `{ profil_id }` | 201 `Calibration` | 409 `qualite_insuffisante` (F-07, K1) · 403 `consentement_absent` · 409 `transition_interdite` |
+| GET | `/calibrations/{id}` | — | Connecté | — | `Calibration` | 404 |
+| POST | `/calibrations/{id}/interrompre` | K5 | U, Acc | — | `Calibration` | 409 |
+| GET | `/profils/{id}/modeles` | — | Connecté | — | `ModeleResume[]` | 404 |
+
+- **Recommencer** (F-08) = créer une nouvelle calibration (`POST /calibrations`). L'ancienne reste dans l'historique, avec son statut.
+- Les **essais** s'enchaînent tout seuls côté backend : la consigne de l'essai suivant et la progression arrivent sur `/ws/flux`. Aucune route « essai suivant ».
+
+### 4.5 Commandes et confirmation (FW-03, FW-04, FW-28 ; F-14, F-18, F-22 ; DIAG-5 ②)
+
+| Méthode | Route | Transition | Rôle | Entrée | Réponse | Erreurs |
+|---|---|---|---|---|---|---|
+| GET | `/commandes` | — | Connecté | filtres : `session_id`, `statut`, `limite`, `decalage` | `Page<Commande>` | — |
+| GET | `/commandes/{id}` | — | Connecté | — | `Commande` | 404 |
+| POST | `/commandes/{id}/confirmer` | C6 | Acc (U en développement, D-24) | — | `Commande` | **409 `deja_traitee`** (D-87 ; `details.statut`) · 503 `cible_indisponible` `[D-68]` |
+| POST | `/commandes/{id}/annuler` | C7 | Acc, U | — | `Commande` | **409 `deja_traitee`** |
+| POST | `/commandes/manuelles` | C0 | `[D-27]` | `{ cible_id, type_commande }` | 201 `Commande` (`origine: manuelle`) | `[À DÉFINIR — D-27]` |
+
+- La confirmation **par intention EEG « oui »** ne passe pas par REST : c'est une détection, qui suit la chaîne normale (DIAG-6 (c)).
+- **Contrôle « encore en attente ? »** (D-87) : le Core vérifie le statut **et** le change dans la même opération, protégée par un verrou. Si deux demandes arrivent ensemble, une seule trouve `en_attente_confirmation` ; l'autre reçoit 409.
+- Les **détections et décisions** n'ont pas de route de lecture : en direct elles arrivent sur `/ws/flux`, après coup elles sont dans le journal (4.9) et dans les mesures (4.7).
+
+### 4.6 Systèmes cibles et correspondance (FW-05, FW-20 à FW-24 ; F-14, F-23, F-24)
+
+| Méthode | Route | Rôle | Entrée | Réponse | Erreurs |
+|---|---|---|---|---|---|
+| GET | `/cibles` | Connecté | — | `Cible[]` | — |
+| GET | `/cibles/{id}` | Connecté | — | `Cible` | 404 |
+| GET | `/profils/{id}/correspondance` | Connecté | — | `Correspondance` active | 404 |
+| PUT | `/profils/{id}/correspondance` | `[D-20]` | `{ regles }` | `Correspondance` (nouvelle version, journalisée) | `[À DÉFINIR — D-20]` |
+
+- La **disponibilité** d'une cible change toute seule (l'agent se connecte ou se déconnecte, P5) : elle est annoncée sur `/ws/flux`.
+- **FW-24** (types de cibles selon la trajectoire MVP / Ext. / Futur) est un contenu fixe de l'interface : pas de route.
+
+### 4.7 Sessions et mesures (FW-07, FW-29 à FW-34 ; F-27 à F-35 ; DIAG-5 ③)
+
+| Méthode | Route | Transition | Rôle | Entrée | Réponse | Erreurs |
+|---|---|---|---|---|---|---|
+| POST | `/sessions` | S1 | Exp, Acc | `{ type, profil_id, scenario?, conditions?, notes? }` | 201 `Session` | 403 `consentement_absent` (portée) · 409 `modele_absent` (D-99 : calibrer d'abord) |
+| GET | `/sessions` | — | Connecté | filtres : `type`, `profil_id`, `type_source`, `statut`, `limite`, `decalage` | `Page<Session>` (FW-32) | — |
+| GET | `/sessions/{id}` | — | Connecté | — | `Session` | 404 |
+| PATCH | `/sessions/{id}` | — | Exp, Acc | `{ conditions?, notes? }` | `Session` | 404 |
+| POST | `/sessions/{id}/demarrer` | S2 | Exp, Acc | — | `Session` | 409 · 503 `source_indisponible` |
+| POST | `/sessions/{id}/pause` | S3 | Connecté | — | `Session` | 409 |
+| POST | `/sessions/{id}/reprendre` | S4 | Exp, Acc | — | `Session` | 409 |
+| POST | `/sessions/{id}/terminer` | S5 / S6 | Exp, Acc | — | `Session` | 409 |
+| GET | `/sessions/{id}/essais` | — | Connecté | — | `Essai[]` | 404 |
+| GET | `/sessions/{id}/mesures` | — | Connecté | — | `Mesures` | 409 `session_en_cours` (mesures calculées à la fin ; en direct : `Session.compteurs`) |
+| GET | `/sessions/{id}/export` | — | Exp | `format` `[À DÉFINIR — Doc. technique]` | Fichier (téléchargement) | 403 `consentement_absent` (portée `export`, F-35) |
+
+- **Mettre en pause** suspend aussi les commandes (F-28) : la route fait les deux, dans cet ordre.
+- **Protocole** de l'expérimentation (nombre d'essais, ordre des intentions) : `[À DÉFINIR — Q2 de DIAG-7]` ; il s'ajoutera à l'entrée de `POST /sessions`.
+- **Reprendre une session interrompue** : `[À DÉFINIR — D-71]`, pas de route pour l'instant.
+
+### 4.8 Profils, consentement et données (FW-39 à FW-41 ; F-39 à F-41)
+
+| Méthode | Route | Rôle | Entrée | Réponse | Erreurs |
+|---|---|---|---|---|---|
+| GET | `/profils` | Acc, Exp | — | `Profil[]` | — |
+| POST | `/profils` | Acc, Exp | `{ pseudonyme }` | 201 `Profil` | 409 `pseudonyme_deja_utilise` |
+| GET | `/profils/{id}` | Connecté `[D-09]` | — | `Profil` | 404 |
+| PATCH | `/profils/{id}` | U (le sien), Acc | `{ pseudonyme?, preferences? }` | `Profil` | 404 |
+| PUT | `/profils/{id}/consentement` | U (le sien), Acc | `{ portees }` | `Consentement` (journalisé) | 404 · 422 |
+| DELETE | `/profils/{id}/consentement` | U (le sien), Acc | — | `Consentement` (`retire_le` rempli) | 404 |
+| DELETE | `/profils/{id}/donnees` | U (le sien), Adm | — | 204 | `[À DÉFINIR — D-38]` (ce qui est supprimé) |
+
+- **Retirer le consentement** (F-41) arrête tout nouvel enregistrement **tout de suite** : une session en cours passe **Interrompue**. Si elle est en expérimentation, les données déjà enregistrées restent, sauf demande de suppression.
+- « Le sien » suppose qu'un compte soit lié au profil (D-53) ; les droits exacts restent `[D-09]`.
+
+### 4.9 Journal et alertes (FW-06, FW-36, FW-37, FW-50 ; F-36, F-37)
+
+| Méthode | Route | Rôle | Entrée | Réponse | Erreurs |
+|---|---|---|---|---|---|
+| GET | `/journal` | Connecté | filtres : `session_id`, `type`, `gravite`, `depuis`, `jusqua`, `limite`, `decalage` | `Page<EvenementJournal>` | — |
+| GET | `/alertes` | Connecté | filtre : `statut` | `Alerte[]` | — |
+| POST | `/alertes/{id}/traiter` | Connecté | — | `Alerte` (auteur journalisé) | 404 · 409 `deja_traitee` |
+
+**Historique des paramètres** (FW-50) : `GET /journal?type=modification_parametre`, pas de route à part.
+
+### 4.10 Traçabilité : chaque fonctionnalité Web du MVP a ses routes
+
+| FW | Fonctionnalité | REST | `/ws/flux` (partie 3) |
+|---|---|---|---|
+| FW-01 | État de la chaîne | `GET /systeme/etat`, `GET /source`, `GET /cibles` | oui |
+| FW-02 | Source des données | `GET /source` | oui |
+| FW-03 | Détection, confiance, décision | — | oui |
+| FW-04 | Commande et résultat | `GET /commandes` | oui |
+| FW-05 | État de la cible | `GET /cibles` | oui |
+| FW-06 | Événements récents | `GET /journal?limite=20` | oui |
+| FW-07 | Indicateurs de session | `GET /sessions/{id}` | oui |
+| FW-08 à FW-11 | Connexion, caractéristiques, qualité | 4.3 | oui |
+| FW-12 | Signal en temps réel | — | oui |
+| FW-15 | Alertes sur le signal | `GET /alertes` | oui |
+| FW-16 à FW-18 | Calibration, modèle actif | 4.4 | oui |
+| FW-20 | Correspondance | `GET /profils/{id}/correspondance` | — |
+| FW-22 | Liste des cibles | `GET /cibles` | oui |
+| FW-25, FW-26 | État global, suspendre / reprendre | 4.2 | oui |
+| FW-27 | Seuil | `GET /parametres-surete` | — |
+| FW-28 | Confirmation | `POST /commandes/{id}/confirmer`, `…/annuler` | oui (demande, compte à rebours) |
+| FW-29 à FW-32 | Sessions, mesures | 4.7 | oui |
+| FW-34 | Export | `GET /sessions/{id}/export` | — |
+| FW-36, FW-37 | Journal, messages d'erreur | `GET /journal` ; format d'erreur 1.5 | oui |
+| FW-39 à FW-41 | Profil, consentement | 4.8 | — |
+| FW-42 | Comptes | 4.1 | — |
+| FW-44, FW-49 | Accessibilité, fraîcheur | — (interface) | horodatage des messages |
+| FW-50 | Historique des paramètres | `GET /journal?type=modification_parametre` | — |
+| FW-51 | Page vitrine | aucune (publique) | — |
+
+Hors MVP ou non décidés, sans route : FW-13, FW-14, FW-19, FW-21 `[D-20]`, FW-23 `[D-27]`, FW-24 (contenu fixe), FW-33, FW-35, FW-38, FW-43, FW-45 à FW-48.
+
+### 4.11 Codes d'erreur (liste complète des parties 1 et 2)
+
+`non_connecte` · `identifiants_invalides` · `role_insuffisant` · `consentement_absent` · `introuvable` · `donnees_invalides` · `transition_interdite` · `conditions_non_reunies` · `conditions_reprise_non_reunies` · `deja_traitee` · `qualite_insuffisante` · `modele_absent` · `session_en_cours` · `source_indisponible` · `cible_indisponible` · `identifiant_deja_utilise` · `pseudonyme_deja_utilise` · `erreur_interne`.
+
+---
+
+## 5. Propositions
+
+### 5.1 Partie 1 — validées le 04/10/2026 (D-104)
 
 | N° | Proposition | Alternative écartée | Pourquoi |
 |---|---|---|---|
@@ -367,7 +544,17 @@ Modification par l'interface : `[D-20]`.
 | **P-A5** | Pagination `limite` / `decalage` | Pagination par curseur | Suffisant pour un seul PC et quelques milliers d'événements ; plus simple à comprendre |
 | **P-A6** | `NiveauQualite` = `suffisante` / `insuffisante` au MVP | 3 ou 5 niveaux, ou un score 0–100 | DIAG-5 ⑤ ne distingue que ces deux états ; un score pourra s'ajouter sans casser le contrat |
 
-## 5. Points ouverts de la partie 1
+### 5.2 Partie 2 — à valider
+
+| N° | Proposition | Alternative écartée | Pourquoi |
+|---|---|---|---|
+| **P-A7** | Une transition d'état = un **`POST` sur un verbe** (`/sessions/{id}/demarrer`) | `PATCH /sessions/{id}` avec `{ "statut": "en_cours" }` | Une transition n'est pas une simple modification de champ : elle est **vérifiée** par la machine à états et a des effets (journal, suspension des commandes). Un verbe par transition rend chaque règle de DIAG-5 visible et testable |
+| **P-A8** | **202** pour connecter et reconnecter la source ; le résultat arrive par `/ws/flux` | Attendre la fin de la connexion avant de répondre | Une connexion peut durer plusieurs secondes ou échouer ; l'interface ne doit jamais rester figée (FW-49) |
+| **P-A9** | `/api/health` hors de `/v1` | `/api/v1/health` | Route technique, prévue telle quelle au Planning (S4) ; elle ne dépend pas de la version du contrat |
+| **P-A10** | Rôles minimaux par route (colonnes « Rôle ») en attendant D-09 ; **suspendre** (système et session) permis à **toute personne connectée** | Tout réservé à l'accompagnant | Principe de sûreté : n'importe qui doit pouvoir arrêter, seuls certains peuvent (ré)activer |
+
+
+## 6. Points ouverts
 
 - **D-03** : noms des intentions (`"main_gauche"`… sont des exemples).
 - **D-09** : droits par rôle (partie 2 : rôle proposé par route).
@@ -375,3 +562,6 @@ Modification par l'interface : `[D-20]`.
 - **D-24** : liste des commandes sensibles · **D-27** : commandes manuelles · **D-68** : délai du résultat.
 - **D-84** : la décision `repos` compte-t-elle comme un rejet dans les mesures ?
 - Calcul de la qualité et niveaux fins : Documentation technique.
+- **D-20** : modification de la correspondance (`PUT …/correspondance`) · **D-23** : qui modifie le seuil · **D-38** : périmètre de la suppression · **D-67** : conditions d'activation · **D-71** : reprise d'une session interrompue.
+- **Protocole** d'expérimentation (Q2 de DIAG-7) : champs à ajouter à `POST /sessions`.
+- **Formats d'export** : Documentation technique.
