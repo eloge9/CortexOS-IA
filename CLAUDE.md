@@ -16,7 +16,8 @@ Documents de référence (à lire avant toute modification importante) :
 - `docs/03-planning-mvp.md` — tranches, semaines, jalons (planning de référence)
 - `docs/04-developpement-pc-seul.md` — ce qui se fait sans casque
 - `docs/05-decisions.md` — **registre unique** des décisions D-xx (à mettre à jour quand Eloge tranche)
-- `docs/06-charte-graphique.md` — couleurs, polices, composants ; **aucune couleur en dur dans le frontend**, toujours les variables de la charte
+- `docs/06-charte-graphique.md` — couleurs, polices, composants ; **aucune couleur en dur dans le frontend**, toujours les variables de la charte ; **respecter la section 9 « Ce que CortexOS IA ne fait pas » (D-109)** : pas de dégradé décoratif, pas de bouton pilule, pas d'émoji comme icône, pas d'animation au défilement, pas d'image générée par IA, **aucun chiffre / avis / compteur inventé**, aucun texte d'interface non relu par Eloge (proposer un texte, ne jamais le considérer comme définitif)
+- `docs/08-contrat-api.md` — contrat d'API v1.0 (D-104 à D-107) : routes, objets, erreurs, `/ws/flux`
 - `docs/diagrammes/` — diagrammes Mermaid
 
 ## Architecture (décidée)

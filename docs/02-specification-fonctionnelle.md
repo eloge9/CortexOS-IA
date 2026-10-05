@@ -7,7 +7,7 @@
 | **Document de référence** | Cahier des charges — version 2.2 |
 | **Remplace** | « CortexOS AI — Spécification complète des fonctionnalités », version 1.0 |
 | **Auteur** | GOMINA Eloge |
-| **Version du document** | 1.2 — 25 septembre 2026 (rôle Administrateur D-47 ; cible D-72 ; comptes locaux D-74 ; page vitrine FW-51, D-76 ; précisions D-98, D-99 le 27/09) |
+| **Version du document** | 1.2 — 25 septembre 2026 (rôle Administrateur D-47 ; cible D-72 ; comptes locaux D-74 ; page vitrine FW-51, D-76 ; précisions D-98, D-99 le 27/09 ; pages Confidentialité FW-52 et CGU FW-53, D-108, le 05/10) |
 
 > Convention : `[À DÉFINIR — D-xx]` signale une décision non encore prise (voir [05-decisions.md](05-decisions.md)). `[SOURCE À AJOUTER]` signale une affirmation à sourcer. **(Proposé)** signale un élément ajouté par ce document sans décision explicite : il doit être validé ou retiré.
 
@@ -405,7 +405,9 @@ Elle est organisée en **9 types de fonctionnalités**, regroupés en trois fami
 | FW-40 | Recueil et consultation du consentement | Respecter l'utilisateur | MVP | F-40 |
 | FW-41 | Retrait du consentement et suppression des données | Maîtrise de ses données | MVP | F-41 |
 | FW-42 | Authentification, rôles, administration des comptes | Sécuriser l'accès | MVP : comptes locaux, identifiant + mot de passe (D-74) ; droits détaillés `[D-09]` | F-42, F-43 |
-| FW-51 | Page vitrine publique : présente CortexOS IA et mène à la connexion ; seule page accessible sans compte | Présenter le projet sans exposer de données | MVP (D-76) ; contenu `[À DÉFINIR]` | — |
+| FW-51 | Page vitrine publique : présente CortexOS IA et mène à la connexion ; avec FW-52 et FW-53, seules pages accessibles sans compte (D-108) | Présenter le projet sans exposer de données | MVP (D-76) ; contenu `[À DÉFINIR]` | — |
+| FW-52 | Page publique **« Confidentialité et données »** (politique de confidentialité, « page RGPD ») : quelles données sont collectées (dont le signal EEG), dans quel but, où elles sont stockées (sur le PC, D-74), combien de temps (`[D-09]`), qui y accède, comment donner, consulter et retirer son consentement, comment demander la suppression ; lien depuis la vitrine, la connexion et l'écran de consentement | Informer avant tout consentement | MVP (D-108) ; cadre légal applicable `[À VÉRIFIER avec l'encadreur]` | F-40, F-41, F-44 |
+| FW-53 | Page publique **« Conditions d'utilisation » (CGU)** : cadre du projet (projet d'études, prototype de recherche), **CortexOS n'est pas un dispositif médical**, usage prévu et usages interdits, responsabilités, limites (une détection peut être fausse), auteur et contact ; lien depuis la vitrine et la connexion | Fixer le cadre d'usage | MVP (D-108) ; relecture par l'encadreur | F-13, ENF-03 |
 
 ### 5.9 Accessibilité et aide
 
@@ -500,7 +502,7 @@ Le niveau de conformité visé, par exemple un niveau des règles WCAG, est `[À
 | BF-24 Suppression des données | F-41 | FW-41 |
 | BF-25 Journalisation | F-36 | FW-36, FW-50 |
 | ENF-03 / ENF-04 Sûreté | F-04, F-05, F-16, F-17, F-20, F-24 | FW-25, FW-26 |
-| ENF-05 / ENF-06 Sécurité, confidentialité | F-38, F-40 à F-44 | FW-40 à FW-42 |
+| ENF-05 / ENF-06 Sécurité, confidentialité | F-38, F-40 à F-44 | FW-40 à FW-42, FW-52, FW-53 |
 | ENF-09 Utilisabilité et accessibilité | F-03, F-21, F-32 | FW-02, FW-44, FW-49, section 6 |
 | ENF-10 Traçabilité | F-29, F-34, F-36 | FW-35, FW-36 |
 

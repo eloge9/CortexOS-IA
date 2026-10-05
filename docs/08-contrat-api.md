@@ -4,8 +4,8 @@
 |---|---|
 | **Réf.** | API-0 (Planning MVP, S3, mode B — D-46) |
 | **Sources** | Spécification fonctionnelle (§ 4, § 5 : F-01 à F-44, FW-01 à FW-51) · DIAG-3 (classes, énumérations) · DIAG-5 (états) · DIAG-6 (séquences) · ARCH-0 (§ 5, 7, 8) · Décisions D-24 à D-103 |
-| **Version** | 0.3 — 5 octobre 2026 · **parties 1 à 3** (document complet) |
-| **Statut** | Parties 1 et 2 validées (D-104, D-106) · partie 3 à relire par Eloge |
+| **Version** | 1.0 — 5 octobre 2026 · parties 1 à 3 (document complet) |
+| **Statut** | **Validé par Eloge** (05/10/2026 ; D-104, D-106, D-107) · les `[À DÉFINIR]` restants seront complétés au fil des tranches |
 
 ## Rôle de ce document
 
@@ -15,9 +15,9 @@ Le contrat d'API dit **exactement** ce que l'interface Web (Next.js) peut demand
 |---|---|---|
 | 1 | Conventions communes · format des erreurs · objets échangés (sections 1 à 3) | Validée (D-104) |
 | 2 | Routes REST `/api/v1/…`, domaine par domaine, avec traçabilité FW-xx → route (section 4) | Validée (D-106) |
-| **3** | WebSocket `/ws/flux` · canaux locaux `/ws/agent` et `/api/local/arret-urgence` (sections 5 et 6) | **À relire** |
+| 3 | WebSocket `/ws/flux` · canaux locaux `/ws/agent` et `/api/local/arret-urgence` (sections 5 et 6) | Validée (D-107) |
 
-Les **propositions** (P-A1…) sont rassemblées en section 7 : P-A1 à P-A10 validées (D-104, D-106), P-A11 à P-A16 à valider. Tant qu'elles ne sont pas validées, elles restent « proposé ».
+Les **propositions** (P-A1…) sont rassemblées en section 7 : toutes validées (D-104, D-106, D-107). Tant qu'elles ne sont pas validées, elles restent « proposé ».
 
 ---
 
@@ -53,7 +53,7 @@ Pourquoi pas d'accents dans les noms : ils deviennent des noms de variables en P
 - Après `POST /api/v1/auth/connexion`, le backend pose un **cookie de session** `HttpOnly` et `SameSite=Strict`. Le navigateur le renvoie tout seul à chaque requête et à l'ouverture du WebSocket ; le code JavaScript ne le voit jamais.
 - Sans session valide → **401**. Session valide mais rôle insuffisant → **403**.
 - Droits détaillés par rôle : `[À DÉFINIR — D-09]`. En attendant, chaque route de la partie 2 indiquera le rôle **proposé**.
-- Seule exception : la page vitrine (D-76) n'appelle aucune route protégée.
+- Seules exceptions : les pages publiques (vitrine, Confidentialité, CGU — D-76, D-108) n'appellent aucune route protégée.
 
 ### 1.4 Codes HTTP utilisés
 
@@ -522,6 +522,7 @@ Modification par l'interface : `[D-20]`.
 | FW-44, FW-49 | Accessibilité, fraîcheur | — (interface) | horodatage des messages |
 | FW-50 | Historique des paramètres | `GET /journal?type=modification_parametre` | — |
 | FW-51 | Page vitrine | aucune (publique) | — |
+| FW-52, FW-53 | Confidentialité, CGU | aucune (pages statiques publiques) | — |
 
 Hors MVP ou non décidés, sans route : FW-13, FW-14, FW-19, FW-21 `[D-20]`, FW-23 `[D-27]`, FW-24 (contenu fixe), FW-33, FW-35, FW-38, FW-43, FW-45 à FW-48.
 
@@ -689,7 +690,7 @@ Qui peut déclencher l'arrêt : `[À DÉFINIR — D-19]`.
 | **P-A9** | `/api/health` hors de `/v1` | `/api/v1/health` | Route technique, prévue telle quelle au Planning (S4) ; elle ne dépend pas de la version du contrat |
 | **P-A10** | Rôles minimaux par route (colonnes « Rôle ») en attendant D-09 ; **suspendre** (système et session) permis à **toute personne connectée** | Tout réservé à l'accompagnant | Principe de sûreté : n'importe qui doit pouvoir arrêter, seuls certains peuvent (ré)activer |
 
-### 7.3 Partie 3 — à valider
+### 7.3 Partie 3 — validées le 05/10/2026 (D-107)
 
 | N° | Proposition | Alternative écartée | Pourquoi |
 |---|---|---|---|

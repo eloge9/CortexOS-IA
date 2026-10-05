@@ -218,7 +218,7 @@ Les états et transitions sont ceux de **DIAG-5** : `core/etats.py` (① état g
 | Session | Après connexion, le backend crée une session et envoie un **cookie** `HttpOnly` (illisible par JavaScript), `SameSite=Strict` ; la session est vérifiée à chaque requête et à l'ouverture du WebSocket | D-74 |
 | Rôles | Rôles en base (Utilisateur, Accompagnant, Expérimentateur, Administrateur, D-47) ; droits détaillés `[À DÉFINIR — D-09]` | D-47, D-09 |
 | Premier administrateur | Créé par une commande en ligne de commande au premier lancement (pas d'inscription publique, spéc. § 8) | P7, D-101 |
-| Page vitrine | **Seule page publique** ; elle n'appelle aucune route protégée | D-76 |
+| Pages publiques | **Vitrine, Confidentialité, CGU** : seules pages sans compte ; elles n'appellent aucune route protégée | D-76, D-108 |
 | Arrêt d'urgence | Route `/api/local/arret-urgence` : refusée si la requête ne vient pas de `127.0.0.1` ou si le jeton est faux ; le jeton est généré au démarrage du backend dans `data/jeton-arret.txt` (P8, D-101) | D-75 |
 | Agent | Jeton local de l'agent, même principe | P8, D-101 |
 | Secrets | Mots de passe et jetons dans `.env` ou `data/`, **jamais commités** ; `.env.example` montre les clés sans valeurs | — |
@@ -245,10 +245,11 @@ Les états et transitions sont ceux de **DIAG-5** : `core/etats.py` (① état g
 | Page | Accès | Contenu |
 |---|---|---|
 | `/` **Page vitrine** (FW-51) | Public | Présentation de CortexOS IA, lien « Se connecter » ; contenu `[À DÉFINIR — D-76]` |
+| `/confidentialite` (FW-52) · `/conditions` (FW-53) | Public | Politique de confidentialité et CGU (D-108) ; textes dans `docs/` |
 | `/connexion` | Public | Identifiant + mot de passe |
 | `/app/…` | Connecté | Supervision, signal, calibration, commandes, sessions, journal, profil, administration (maquettes : MAQ, S3) |
 
-Next.js (App Router) protège tout ce qui est sous `/app/` : sans session valide, redirection vers `/connexion`. La charte graphique (06) s'applique partout, y compris à la vitrine.
+Next.js (App Router) protège tout ce qui est sous `/app/` : sans session valide, redirection vers `/connexion`. La charte graphique (06) s'applique partout, y compris aux pages publiques, avec ses interdits (§ 9, D-109).
 
 ---
 

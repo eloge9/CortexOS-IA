@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| **Version** | 1.0 — 24/09/2026 |
+| **Version** | 1.1 — 05/10/2026 (section 9 « Ce que CortexOS IA ne fait pas », D-109) |
 | **Choix validés** | Variables CSS + Tailwind v4 · thème sombre par défaut + thème clair · Exo 2 + Inter · ambiance pro et sobre (D-43) |
 | **Fichiers** | `docs/assets/logo/` |
 
@@ -144,7 +144,7 @@ La bordure décorative (`--cx-bordure`) est volontairement peu contrastée : ell
 - **Arrondis :** 6 px (champs, boutons) · 12 px (cartes, panneaux).
 - **Zone cliquable minimale :** 44 × 44 px (accessibilité, usage avec des limitations motrices).
 - **Ombres :** discrètes, surtout en thème clair ; pas d'effet lumineux (« glow ») : ambiance sobre (D-43).
-- **Animations :** courtes (150–250 ms) et désactivées si l'utilisateur a demandé de réduire les animations (`prefers-reduced-motion`).
+- **Animations :** courtes (150–250 ms), **seulement pour signaler un changement** (ouverture d'un panneau, nouvel état) ; désactivées si l'utilisateur a demandé de réduire les animations (`prefers-reduced-motion`). Voir aussi la section 9.
 
 ---
 
@@ -243,3 +243,37 @@ Règle : **aucune couleur écrite en dur dans les composants** (`#19C8FB`, `text
 - Rapport et documents : fond blanc, logo `horizontal-nuit-transparent.png`, titres en Exo 2 bleu nuit, texte en Inter.
 - Diapositives de soutenance : fond bleu nuit, logo `horizontal-blanc-transparent.png`, accents cyan et violet.
 - Diagrammes (draw.io, fin de projet) : boîtes en surface claire, bordures bleu nuit, flux principal en cyan foncé `#0077A8`, IA en violet.
+
+---
+
+## 9. Ce que CortexOS IA ne fait pas (D-109)
+
+CortexOS IA doit avoir l'air de ce qu'il est : un outil de supervision **sérieux, conçu et compris**. Ces interdits évitent l'apparence d'une application générique « faite en cinq minutes » et protègent l'honnêteté scientifique du projet.
+
+### 9.1 Style
+
+| Interdit | À la place |
+|---|---|
+| **Dégradés décoratifs** (fonds, textes, boutons, halos), quelle que soit la couleur | Couleurs **unies** de la charte. Seule exception : une échelle de couleur qui **représente une valeur** dans un graphique (ex. matrice de confusion), toujours avec les chiffres |
+| **Boutons « pilule »** (entièrement arrondis) | Arrondis de 6 px (section 5) |
+| **Émojis** utilisés comme icônes | Icônes dessinées d'une seule bibliothèque, au trait régulier (choix en S4) ; toujours avec un texte (principe 3) |
+| **Animations au défilement** (éléments qui glissent, apparaissent, grossissent en scrollant), **curseur animé** ou personnalisé, effets de parallaxe | Contenu statique ; animations courtes seulement pour un changement d'état (section 5) |
+| **Effets lumineux** (glow, néon, flou en arrière-plan, « verre dépoli ») | Ombres discrètes (section 5) |
+| **Images générées par IA** (illustrations, photos, visages) | **Vraies captures d'écran** de CortexOS, vraies photos du matériel, schémas du projet (diagrammes) |
+| Badge ou mention d'un outil de génération (« Made with … ») | Rien |
+| Lancer une page **sans favicon** | Favicon = `icone-cyan-fond-nuit.png` (section 2.1), dès le squelette (S4) |
+
+### 9.2 Contenu et chiffres
+
+| Interdit | À la place |
+|---|---|
+| **Chiffres inventés** : précision, nombre d'utilisateurs, « +500 sessions », compteurs qui défilent | Seulement des **résultats réels**, avec leur **source** (casque, simulation, données publiques — F-32) et leur **date** ; pas de chiffre tant qu'il n'y a pas de mesure |
+| **Faux avis, témoignages, logos de partenaires** | Rien, tant qu'il n'y a pas de vrai retour (et alors, avec l'accord écrit de la personne) |
+| **Accroche vague** (« Libérez le pouvoir de votre esprit », « L'avenir commence ici ») | Une phrase **concrète** qui dit ce que fait CortexOS : « reconnaît une intention dans un signal EEG et commande un ordinateur, avec des garde-fous de sûreté » |
+| **Promesses** : « lit vos pensées », « contrôle total », « 100 % fiable » | Le vocabulaire de la spécification : « reconnaît une intention définie » (F-13), « niveau de confiance », « peut se tromper » |
+| **Texte de remplissage** : phrases génériques, listes de « fonctionnalités incroyables », lorem ipsum laissé en place | Chaque texte de l'interface est **précis, vérifié et relu par Eloge**, qui doit pouvoir le défendre en soutenance |
+| Présenter une simulation comme un résultat réel | Indicateur de source **toujours visible** (FW-02) |
+
+### 9.3 Vérification avant chaque livraison d'écran
+
+Avant de considérer un écran comme terminé : pas de dégradé · pas d'émoji · aucun chiffre sans source · aucun texte non relu · favicon et titre de page présents · tout fonctionne au clavier · animations coupées avec `prefers-reduced-motion`.

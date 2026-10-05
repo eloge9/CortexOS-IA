@@ -9,7 +9,7 @@
 | **Suivi** | Classeur Google Sheets « Tableau de suivi — CortexOS IA » (Drive, dossier « 03 - Planning et suivi ») : une ligne par tâche de ce planning |
 | **Période** | 28 septembre 2026 → soutenance vers juillet-août 2027 `[À DÉFINIR — D-14]` |
 | **Auteur** | GOMINA Eloge |
-| **Version du document** | 3.2 — 25 septembre 2026 (diagrammes : D-46, D-96 ; Core Python D-62 ; DIAG-5 D-63 ; cible, OS, accès D-72 à D-74 ; page vitrine D-76 ; DIAG-7 : D-97, le 27/09 ; DIAG-1 à DIAG-8 validés le 04/10, D-103) |
+| **Version du document** | 3.2 — 25 septembre 2026 (diagrammes : D-46, D-96 ; Core Python D-62 ; DIAG-5 D-63 ; cible, OS, accès D-72 à D-74 ; page vitrine D-76 ; DIAG-7 : D-97, le 27/09 ; DIAG-1 à DIAG-8 validés le 04/10, D-103 ; pages FW-52, FW-53 en S25, D-108, le 05/10) |
 
 > Situation de départ : aucun code écrit, casque choisi mais pas commandé, un PC seul, environ 8 heures de travail par semaine, développement avec Claude (explications, revue) et Claude Code (écriture de code), la compréhension restant la priorité.
 
@@ -134,7 +134,7 @@ Préparer (tâche et concept, 10 min) → coder (mode A ou B) → tester → com
 
 ## 5. Planning détaillé par fonctionnalité
 
-Chaque ligne correspond à une fonctionnalité ; ses tâches sont reprises une par une dans le classeur de suivi. Les références (F-xx, FW-xx) sont celles de la Spécification fonctionnelle : **les 44 fonctions et les 51 fonctionnalités Web y figurent toutes**, dans ce planning ou dans les extensions (section 10). Seule exception : la page vitrine (FW-51, D-76), ajoutée le 25/09/2026, dont la semaine de réalisation est `[À DÉFINIR]` (proposition : S4, avec le squelette du frontend).
+Chaque ligne correspond à une fonctionnalité ; ses tâches sont reprises une par une dans le classeur de suivi. Les références (F-xx, FW-xx) sont celles de la Spécification fonctionnelle : **les 44 fonctions et les 53 fonctionnalités Web y figurent toutes**, dans ce planning ou dans les extensions (section 10). Seule exception : la page vitrine (FW-51, D-76), ajoutée le 25/09/2026, dont la semaine de réalisation est `[À DÉFINIR]` (proposition : S4, avec le squelette du frontend). Les pages Confidentialité (FW-52) et CGU (FW-53), ajoutées le 05/10/2026 (D-108), sont en S25.
 
 ### Tranche 0 — Démarrage et conception (S1–S4)
 
@@ -236,6 +236,7 @@ Chaque ligne correspond à une fonctionnalité ; ses tâches sont reprises une p
 | Sem. | Dates | Réf. | Fonctionnalité | Tâches | Mode |
 |---|---|---|---|---|---|
 | S25 | 15/03 → 21/03 | F-35 · F-38 à F-44 · FW-34 · FW-39 à FW-42 · FW-50 | **Profils, consentement, données** | Profil · Consentement obligatoire avant enregistrement · Retrait et suppression (D-38) · Export (D-34) · Conservation du journal (D-09) · Authentification minimale (D-09) · Historique des modifications de paramètres | A (consentement) · B |
+| S25 | 15/03 → 21/03 | FW-52 · FW-53 | **Pages Confidentialité et CGU** (D-108) | Rédiger les deux textes dans `docs/` · Faire relire par l'encadreur · Pages publiques et liens (vitrine, connexion, écran de consentement) | A (textes) · B (pages) |
 
 ### Tranche 8 — Calibration (S26)
 
